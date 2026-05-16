@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Đăng ký - MediCore Health</title>
+    <meta name="description" content="Đăng ký tài khoản hệ thống quản lý bệnh viện MediCore Health">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom Auth CSS -->
+    <link th:href="@{/css/auth.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="auth-navbar d-flex justify-content-between align-items-center">
+    <a href="#" class="navbar-brand">
+        <i class="bi bi-hospital"></i>
+        MediCore Health
+    </a>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <a href="#" class="nav-link d-none d-md-inline">Dịch vụ</a>
+        <a href="#" class="nav-link d-none d-md-inline">Tìm bác sĩ</a>
+        <a th:href="@{/login}" class="btn btn-outline-primary btn-sm">
+            Đăng nhập
+        </a>
+        <a href="#" class="btn btn-danger-custom btn-sm">
+            Khẩn cấp
+        </a>
+    </div>
+</nav>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="auth-container">
+    <div class="auth-card">
+
+        <!-- ===== LEFT PANEL ===== -->
+        <div class="auth-left">
+            <!-- Floating Particles -->
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+
+            <div class="auth-left-content text-center">
+                <!-- DNA Helix SVG Illustration -->
+                <svg class="dna-helix-container" viewBox="0 0 260 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- DNA Strand 1 -->
+                    <path d="M60,30 Q130,80 60,130 Q-10,180 60,230 Q130,280 60,330"
+                          stroke="rgba(255,255,255,0.5)" stroke-width="3" fill="none" stroke-linecap="round">
+                        <animate attributeName="d"
+                                 values="M60,30 Q130,80 60,130 Q-10,180 60,230 Q130,280 60,330;
+                                         M60,30 Q140,90 60,130 Q-20,170 60,230 Q140,270 60,330;
+                                         M60,30 Q130,80 60,130 Q-10,180 60,230 Q130,280 60,330"
+                                 dur="4s" repeatCount="indefinite"/>
+                    </path>
+                    <!-- DNA Strand 2 -->
+                    <path d="M200,30 Q130,80 200,130 Q270,180 200,230 Q130,280 200,330"
+                          stroke="rgba(13,110,253,0.6)" stroke-width="3" fill="none" stroke-linecap="round">
+                        <animate attributeName="d"
+                                 values="M200,30 Q130,80 200,130 Q270,180 200,230 Q130,280 200,330;
+                                         M200,30 Q120,90 200,130 Q280,170 200,230 Q120,270 200,330;
+                                         M200,30 Q130,80 200,130 Q270,180 200,230 Q130,280 200,330"
+                                 dur="4s" repeatCount="indefinite"/>
+                    </path>
+                    <!-- Cross bars (base pairs) -->
+                    <line x1="75" y1="55" x2="185" y2="55" stroke="rgba(255,255,255,0.15)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.15;0.4;0.15" dur="2s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="60" y1="80" x2="200" y2="80" stroke="rgba(255,255,255,0.2)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2.5s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="55" y1="105" x2="205" y2="105" stroke="rgba(255,255,255,0.15)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.15;0.45;0.15" dur="3s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="60" y1="130" x2="200" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="70" y1="155" x2="190" y2="155" stroke="rgba(255,255,255,0.15)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.15;0.4;0.15" dur="2.8s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="55" y1="180" x2="205" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.2;0.45;0.2" dur="2.3s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="60" y1="205" x2="200" y2="205" stroke="rgba(255,255,255,0.15)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.15;0.5;0.15" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="70" y1="230" x2="190" y2="230" stroke="rgba(255,255,255,0.2)" stroke-width="2">
+                        <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2.5s" repeatCount="indefinite"/>
+                    </line>
+                    <!-- Nodes on strands -->
+                    <circle cx="60" cy="130" r="5" fill="rgba(255,255,255,0.6)">
+                        <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="200" cy="130" r="5" fill="rgba(13,110,253,0.7)">
+                        <animate attributeName="r" values="4;6;4" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="60" cy="230" r="5" fill="rgba(255,255,255,0.6)">
+                        <animate attributeName="r" values="4;6;4" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="200" cy="230" r="5" fill="rgba(13,110,253,0.7)">
+                        <animate attributeName="r" values="4;6;4" dur="2.5s" begin="0.3s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+
+                <h2>Bắt đầu hành trình<br>chăm sóc sức khỏe<br>của bạn</h2>
+                <p>Tham gia cùng hàng nghìn bệnh nhân đã tin tưởng MediCore Health cho các nhu cầu lâm sàng chính xác và tận tâm.</p>
+
+                <ul class="auth-features">
+                    <li>
+                        <span class="feature-icon"><i class="bi bi-shield-check"></i></span>
+                        Bảo mật thông tin y tế tuyệt đối
+                    </li>
+                    <li>
+                        <span class="feature-icon"><i class="bi bi-calendar-check"></i></span>
+                        Đặt lịch khám nhanh chóng 24/7
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== RIGHT PANEL (REGISTER FORM) ===== -->
+        <div class="auth-right">
+            <div class="stagger-1">
+                <h3>Đăng ký tài khoản</h3>
+                <p class="subtitle">Vui lòng điền đầy đủ thông tin bên dưới</p>
+            </div>
+
+            <form th:action="@{/register}"
+                  th:object="${registerDTO}"
+                  method="post" id="registerForm">
+
+                <!-- Full Name -->
+                <div class="form-floating-custom stagger-2">
+                    <label for="regFullName">Họ và tên</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="regFullName" th:field="*{fullName}"
+                               placeholder="Nguyễn Thanh Tùng" autocomplete="name">
+                    </div>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('fullName')}"
+                           th:errors="*{fullName}">
+                    </small>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-floating-custom stagger-3">
+                    <label for="regPhone">Số điện thoại</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-phone input-icon"></i>
+                        <input type="tel" id="regPhone" th:field="*{phone}"
+                               placeholder="09xx xxx xxx" autocomplete="tel">
+                    </div>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('phone')}"
+                           th:errors="*{phone}">
+                    </small>
+                </div>
+                <div class="form-floating-custom stagger-3">
+                    <label for="regEmail">Email</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-phone input-icon"></i>
+                        <input type="email" id="regEmail" th:field="*{email}"
+                               placeholder="SonTungMtp@gmail.com" >
+                    </div>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('email')}"
+                           th:errors="*{email}">
+                    </small>
+                </div>
+
+                <!-- Username -->
+                <div class="form-floating-custom stagger-4">
+                    <label for="regUsername">Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-at input-icon"></i>
+                        <input type="text" id="regUsername" th:field="*{userName}"
+                               placeholder="user123" autocomplete="userName">
+
+                    </div>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('userName')}"
+                           th:errors="*{userName}">
+                    </small>
+                </div>
+
+                <!-- Password + Confirm -->
+                <div class="form-row-half stagger-5">
+                    <div class="form-floating-custom">
+                        <label for="regPassword">Mật khẩu</label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-lock input-icon"></i>
+                            <input type="password" id="regPassword" th:field="*{password}"
+                                   placeholder="••••••••" autocomplete="new-password">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">
+                                <i class="bi bi-eye-slash"></i>
+                            </button>
+
+                        </div>
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('password')}"
+                               th:errors="*{password}">
+                        </small>
+                    </div>
+                    <div class="form-floating-custom">
+                        <label for="regConfirmPassword">Xác nhận mật khẩu</label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-lock input-icon"></i>
+                            <input type="password" id="regConfirmPassword" th:field="*{confirmPassword}"
+                                   placeholder="••••••••" autocomplete="new-password">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regConfirmPassword', this)">
+                                <i class="bi bi-eye-slash"></i>
+                            </button>
+
+                        </div>
+                        <small class="text-danger"
+                               th:if="${#fields.hasErrors('confirmPassword')}"
+                               th:errors="*{confirmPassword}">
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-check form-check-custom stagger-6">
+                    <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" th:field="*{clause}">
+                    <label class="form-check-label" for="agreeTerms">
+                        Tôi đồng ý với các <a href="#" class="auth-link">Điều khoản</a> và
+                        <a href="#" class="auth-link">Chính sách bảo mật</a>
+                    </label>
+
+                </div>
+                <small class="text-danger"
+                       th:if="${#fields.hasErrors('clause')}"
+                       th:errors="*{clause}">
+                </small>
+
+
+
+
+                <!-- Submit -->
+                <div class="stagger-7">
+                    <button type="submit" class="btn-auth-primary">
+                        ĐĂNG KÝ NGAY
+                    </button>
+                </div>
+            </form>
+
+            <!-- Login Link -->
+            <div class="auth-footer-text stagger-7" style="margin-top: 1.5rem;">
+                Đã có tài khoản?
+                <a th:href="@{/login}" class="auth-link">Đăng nhập</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="auth-page-footer">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div>
+            <span class="footer-brand">
+                <i class="bi bi-hospital"></i> MediCore Health
+            </span>
+            <br>
+            <span class="footer-copy">&copy; 2024 MediCore Healthcare Systems. All rights reserved. Clinical Excellence Guaranteed.</span>
+        </div>
+        <div class="footer-links d-flex gap-3 flex-wrap">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Patient Rights</a>
+            <a href="#">Contact Support</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Toggle password visibility
+    function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        }
+    }
+
+    // Ripple effect on button
+    document.querySelector('.btn-auth-primary').addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        ripple.style.cssText = `
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            width: 100px; height: 100px;
+            left: ${e.clientX - rect.left - 50}px;
+            top: ${e.clientY - rect.top - 50}px;
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+        `;
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+
+    // Ripple keyframe
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes rippleEffect {
+            from { transform: scale(0); opacity: 1; }
+            to { transform: scale(4); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Input focus scale animation
+    document.querySelectorAll('.form-floating-custom input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.form-floating-custom').style.transform = 'scale(1.02)';
+            this.closest('.form-floating-custom').style.transition = 'transform 0.2s ease';
+        });
+        input.addEventListener('blur', function() {
+            this.closest('.form-floating-custom').style.transform = 'scale(1)';
+        });
+    });
+</script>
+
+</body>
+</html>
