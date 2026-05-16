@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #005EB8;
+            --brand-secondary: #00A499;
+            --brand-tertiary: #F0F4F8;
+            --brand-neutral: #4E5969;
+            --brand-dark: #1a2744;
+            --brand-mid: #2c3e6b;
+            --blue: #3b82f6;
+            --blue-hover: #2563eb;
+            --green: #22c55e;
+            --red: #ef4444;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--brand-tertiary);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--brand-neutral);
+            font-size: 20px;
+        }
+
+        /* ── Card shell ── */
+        .dashboard-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 0.5px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.15);
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        /* ── Header ── */
+        .dash-header {
+            background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+            padding: 22px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            border-bottom: 4px solid var(--brand-secondary);
+        }
+
+        .dash-header-left h1 {
+            color: #fff;
+            font-size: 34px;
+            font-weight: 600;
+            margin: 0 0 3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dash-header-left h1 i {
+            color: #ef4444;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+        }
+
+        .dash-header-left p {
+            color: rgba(255, 255, 255, .7);
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .btn-add-doctor {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--brand-primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0, 94, 184, 0.4);
+            animation: pulse-btn 2s infinite;
+        }
+
+        .btn-add-doctor:hover {
+            background: var(--brand-secondary);
+            color: #fff;
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 164, 153, 0.6);
+            animation: none;
+        }
+
+        /* ── Stat bar ── */
+        .stat-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 0.5px solid #e2e8f0;
+        }
+
+        .stat-item {
+            padding: 16px 24px;
+            border-right: 0.5px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item:hover {
+            background: rgba(59, 130, 246, 0.04);
+            transform: translateY(-4px);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #94a3b8;
+            margin: 0 0 4px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 600;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .stat-value.blue {
+            color: var(--blue);
+        }
+
+        .stat-value.green {
+            color: var(--green);
+        }
+
+        .stat-value.red {
+            color: var(--red);
+        }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-bottom: 0.5px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            font-size: 18px;
+            border: 0.5px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            background: #f8fafc;
+            color: #1e293b;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
+            background: #fff;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .filter-btn {
+            padding: 9px 18px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            border: 0.5px solid #cbd5e1;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: pointer;
+            transition: all .12s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--blue);
+            color: #fff;
+            border-color: var(--blue);
+        }
+
+        /* ── Table ── */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 18px;
+        }
+
+        thead tr {
+            background: var(--brand-primary);
+            border-bottom: 0.5px solid #e2e8f0;
+        }
+
+        thead th {
+            padding: 14px 18px;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #ffffff;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 0.5px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(0, 94, 184, 0.03);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 94, 184, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        tbody td {
+            padding: 16px 18px;
+            color: #1e293b;
+            vertical-align: middle;
+        }
+
+        .cell-id {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .cell-spec {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-weight: 500;
+        }
+
+        .spec-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .cell-license {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .exp-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exp-bar {
+            height: 4px;
+            width: 64px;
+            background: #e2e8f0;
+            border-radius: 100px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .exp-fill {
+            height: 100%;
+            background: var(--blue);
+            border-radius: 100px;
+        }
+
+        /* ── Badges ── */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50rem;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .badge-active {
+            background: rgba(0, 164, 153, 0.15);
+            color: var(--brand-secondary);
+        }
+
+        .badge-active:hover {
+            box-shadow: 0 0 10px rgba(0, 164, 153, 0.4);
+            transform: scale(1.05);
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-inactive:hover {
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+            transform: scale(1.05);
+        }
+
+        .badge-unknown {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .badge-unknown:hover {
+            box-shadow: 0 0 10px rgba(100, 116, 139, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* ── Action buttons ── */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .act-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            border: 0.5px solid #cbd5e1;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .act-btn.edit:hover {
+            background: rgba(0, 94, 184, 0.08);
+            color: var(--brand-primary);
+            border-color: rgba(0, 94, 184, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 94, 184, 0.25);
+        }
+
+        .act-btn.del:hover {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fca5a5;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
+        }
+
+        /* ── Footer / Pagination ── */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 20px;
+            border-top: 0.5px solid #e2e8f0;
+            font-size: 16px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 4px;
+            margin: 0;
+        }
+
+        .pg-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            border: 0.5px solid #e2e8f0;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .12s;
+        }
+
+        .pg-btn.active {
+            background: var(--blue);
+            color: #fff;
+            border-color: var(--blue);
+        }
+
+        .pg-btn:hover:not(.active) {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 10px;
+            color: #94a3b8;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .stat-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-item {
+                border-right: none;
+                border-bottom: 0.5px solid #e2e8f0;
+            }
+
+            .dash-header {
+                padding: 18px 20px;
+            }
+        }
+
+        /* ── Premium Modal ── */
+        .premium-modal .modal-content {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .premium-modal .modal-header {
+            background: linear-gradient(135deg, var(--brand-dark) 0%, #3b82f6 100%);
+            color: #fff;
+            padding: 24px 32px;
+            border-bottom: none;
+        }
+
+        .premium-modal .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .premium-modal .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.8;
+        }
+
+        .premium-modal .btn-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+            transition: all 0.3s ease;
+        }
+
+        .premium-modal .modal-body {
+            padding: 32px;
+            background: #f8fafc;
+        }
+
+        .form-floating-custom {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .premium-input-group {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .premium-input-group:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 6px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .premium-input-icon {
+            padding: 14px 20px;
+            color: #64748b;
+            background: #f1f5f9;
+            border-right: 1.5px solid #e2e8f0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-input {
+            flex: 1;
+            border: none;
+            padding: 14px 18px;
+            font-size: 16px;
+            outline: none;
+            color: #1e293b;
+            background: transparent;
+        }
+
+        .premium-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .premium-modal .modal-footer {
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
+            padding: 24px 32px;
+        }
+
+        .btn-premium-save {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-premium-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+            color: #fff;
+        }
+
+        .btn-premium-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-premium-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            14% {
+                transform: scale(1.25);
+            }
+
+            28% {
+                transform: scale(1);
+            }
+
+            42% {
+                transform: scale(1.25);
+            }
+
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse-btn {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 94, 184, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(0, 94, 184, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 94, 184, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid px-5 py-4">
+        <div class="dashboard-card">
+
+            <!-- Header -->
+            <div class="dash-header">
+                <div class="dash-header-left">
+                    <h1>
+                        <i class="bi bi-heart-pulse-fill"></i>
+                        MediCore Heath
+                    </h1>
+                    <p>Manage and monitor all registered doctors</p>
+                </div>
+                <a href="#" class="btn-add-doctor" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
+                    <i class="fas fa-plus-circle"></i> Add New Doctor
+                </a>
+            </div>
+
+            <!-- Stat Bar -->
+            <div class="stat-bar">
+                <div class="stat-item">
+                    <p class="stat-label">Total Doctors</p>
+                    <p class="stat-value blue" th:text="${doctors != null ? #lists.size(doctors) : 0}">48</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-label">Active</p>
+                    <p class="stat-value green"
+                        th:text="${doctors != null ? #lists.size(doctors.?[status != null and status.name() == 'ACTIVE']) : 0}">
+                        41</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-label">Inactive</p>
+                    <p class="stat-value red"
+                        th:text="${doctors != null ? #lists.size(doctors.?[status != null and status.name() == 'INACTIVE']) : 0}">
+                        7</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-label">Specializations</p>
+                    <p class="stat-value" th:text="${specCount != null ? specCount : 0}">12</p>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by ID, specialization, license…"
+                        oninput="searchTable()" />
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="setFilter('ALL', this)">All</button>
+                    <button class="filter-btn" onclick="setFilter('ACTIVE', this)">Active</button>
+                    <button class="filter-btn" onclick="setFilter('INACTIVE', this)">Inactive</button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrap">
+                <table id="doctorTable">
+                    <thead>
+                        <tr>
+                            <th>Doctor ID</th>
+                            <th>Specialization</th>
+                            <th>License No.</th>
+                            <th>Experience</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Thymeleaf rows -->
+                        <tr th:each="doctor : ${doctors}" th:attr="data-status=${doctor.status != null ? doctor.status.name() : 'UNKNOWN'},
+                                 data-search=${doctor.id + ' ' + doctor.specialization + ' ' + doctor.licenseNumber}">
+                            <td class="cell-id" th:text="${doctor.id}">DOC-001</td>
+                            <td>
+                                <div class="cell-spec">
+                                    <span class="spec-dot" style="background:#3b82f6;"></span>
+                                    <span th:text="${doctor.specialization}">Cardiology</span>
+                                </div>
+                            </td>
+                            <td class="cell-license" th:text="${doctor.licenseNumber}">LIC-12345</td>
+                            <td>
+                                <div class="exp-wrap">
+                                    <div class="exp-bar">
+                                        <div class="exp-fill"
+                                            th:style="'width:' + ${doctor.experienceYears != null ? T(java.lang.Math).min(doctor.experienceYears * 4, 100) : 0} + '%'">
+                                        </div>
+                                    </div>
+                                    <span
+                                        th:text="${(doctor.experienceYears != null ? doctor.experienceYears : 0) + ' yrs'}">10
+                                        yrs</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:if="${doctor.status != null and doctor.status.name() == 'ACTIVE'}"
+                                    class="badge-status badge-active">
+                                    <i class="bi bi-check-circle-fill"></i> Active
+                                </span>
+                                <span th:if="${doctor.status != null and doctor.status.name() == 'INACTIVE'}"
+                                    class="badge-status badge-inactive">
+                                    <i class="bi bi-x-circle-fill"></i> Inactive
+                                </span>
+                                <span th:if="${doctor.status == null}" class="badge-status badge-unknown">
+                                    <i class="bi bi-dash-circle"></i> Unknown
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="act-btn edit" data-bs-toggle="modal"
+                                        data-bs-target="#editDoctorModal" th:data-id="${doctor.id}"
+                                        th:data-userid="${doctor.userId}" th:data-deptid="${doctor.departmentId}"
+                                        th:data-spec="${doctor.specialization}" th:data-lic="${doctor.licenseNumber}"
+                                        th:data-exp="${doctor.experienceYears}" th:data-status="${doctor.status}"
+                                        onclick="openEditModal(this)">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="#" class="act-btn del" data-bs-toggle="modal"
+                                        data-bs-target="#deleteDoctorModal" th:data-id="${doctor.id}"
+                                        onclick="openDeleteModal(this)">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Empty state -->
+                        <tr th:if="${doctors == null or #lists.isEmpty(doctors)}" id="emptyRow">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="bi bi-person-x"></i>
+                                    <p>No doctors found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="table-footer">
+                <span id="footerInfo">Showing all doctors</span>
+                <nav aria-label="Pagination">
+                    <ul class="pagination" id="paginationList">
+                    </ul>
+                </nav>
+            </div>
+
+        </div><!-- /.dashboard-card -->
+    </div><!-- /.container-fluid -->
+
+    <!-- Add Doctor Modal -->
+    <div class="modal fade premium-modal" id="addDoctorModal" tabindex="-1" aria-labelledby="addDoctorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form th:action="@{/admin/doctors/add}" method="post" th:object="${newDoctor}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDoctorModalLabel">
+                            <i class="fas fa-user-md"></i> Add New Doctor
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="userId" class="premium-label">User ID <span
+                                        class="text-danger">*</span></label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-id-badge"></i></div>
+                                    <input type="number" class="premium-input" id="userId" th:field="*{userId}"
+                                        placeholder="Enter User ID" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="departmentId" class="premium-label">Department ID</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-building"></i></div>
+                                    <input type="number" class="premium-input" id="departmentId"
+                                        th:field="*{departmentId}" placeholder="Enter Department ID">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating-custom">
+                            <label for="specialization" class="premium-label">Specialization</label>
+                            <div class="premium-input-group">
+                                <div class="premium-input-icon"><i class="fas fa-stethoscope"></i></div>
+                                <input type="text" class="premium-input" id="specialization"
+                                    th:field="*{specialization}" placeholder="e.g. Cardiology, Neurology">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 form-floating-custom">
+                                <label for="licenseNumber" class="premium-label">License Number</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-certificate"></i></div>
+                                    <input type="text" class="premium-input" id="licenseNumber"
+                                        th:field="*{licenseNumber}" placeholder="Enter Medical License Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="experienceYears" class="premium-label">Experience (Years)</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-history"></i></div>
+                                    <input type="number" class="premium-input" id="experienceYears"
+                                        th:field="*{experienceYears}" placeholder="Years of experience">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="status" class="premium-label">Status</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-toggle-on"></i></div>
+                                    <select class="premium-input" id="status" th:field="*{status}">
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-premium-cancel" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn-premium-save"><i class="fas fa-save me-2"></i> Save
+                            Doctor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Doctor Modal -->
+    <div class="modal fade premium-modal" id="editDoctorModal" tabindex="-1" aria-labelledby="editDoctorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <form id="editDoctorForm" method="post" th:action="@{/admin/doctors/update/0}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDoctorModalLabel">
+                            <i class="fas fa-user-edit"></i> Edit Doctor
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="editUserId" class="premium-label">User ID <span class="text-danger">*</span></label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-id-badge"></i></div>
+                                    <input type="number" class="premium-input" id="editUserId" name="userId" placeholder="Enter User ID" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="editDepartmentId" class="premium-label">Department ID</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-building"></i></div>
+                                    <input type="number" class="premium-input" id="editDepartmentId" name="departmentId" placeholder="Enter Department ID">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating-custom">
+                            <label for="editSpecialization" class="premium-label">Specialization</label>
+                            <div class="premium-input-group">
+                                <div class="premium-input-icon"><i class="fas fa-stethoscope"></i></div>
+                                <input type="text" class="premium-input" id="editSpecialization" name="specialization" placeholder="e.g. Cardiology, Neurology">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 form-floating-custom">
+                                <label for="editLicenseNumber" class="premium-label">License Number</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-certificate"></i></div>
+                                    <input type="text" class="premium-input" id="editLicenseNumber" name="licenseNumber" placeholder="Enter Medical License Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="editExperienceYears" class="premium-label">Experience (Years)</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-history"></i></div>
+                                    <input type="number" class="premium-input" id="editExperienceYears" name="experienceYears" placeholder="Years of experience">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-floating-custom">
+                                <label for="editStatus" class="premium-label">Status</label>
+                                <div class="premium-input-group">
+                                    <div class="premium-input-icon"><i class="fas fa-toggle-on"></i></div>
+                                    <select class="premium-input" id="editStatus" name="status">
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-premium-cancel" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn-premium-save"><i class="fas fa-save me-2"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Doctor Modal -->
+    <div class="modal fade premium-modal" id="deleteDoctorModal" tabindex="-1" aria-labelledby="deleteDoctorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="deleteDoctorForm" method="post" th:action="@{/admin/doctors/delete/0}">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%);">
+                        <h5 class="modal-title" id="deleteDoctorModalLabel">
+                            <i class="fas fa-exclamation-triangle"></i> Confirm Deletion
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center" style="padding: 40px 30px;">
+                        <i class="fas fa-trash-alt" style="font-size: 64px; color: #ef4444; margin-bottom: 20px;"></i>
+                        <h4 style="font-size: 24px; font-weight: 600; color: #1e293b; margin-bottom: 10px;">Are you
+                            sure?</h4>
+                        <p style="font-size: 16px; color: #64748b; margin: 0;">Do you really want to delete this doctor?
+                            This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer" style="justify-content: center; gap: 16px; background: #fff;">
+                        <button type="button" class="btn-premium-cancel" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn-premium-save"
+                            style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+                            <i class="fas fa-trash-alt me-2"></i> Yes, Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let activeFilter = 'ALL';
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        function setFilter(state, el) {
+            activeFilter = state;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentPage = 1;
+            filterTable();
+        }
+
+        function searchTable() {
+            currentPage = 1;
+            filterTable();
+        }
+
+        function filterTable() {
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
+            const rows = Array.from(document.querySelectorAll('#tableBody tr[data-status]'));
+
+            const filteredRows = rows.filter(row => {
+                const status = row.getAttribute('data-status') || '';
+                const search = (row.getAttribute('data-search') || '').toLowerCase();
+                const matchQ = !q || search.includes(q);
+                const matchF = activeFilter === 'ALL' || status === activeFilter;
+                return matchQ && matchF;
+            });
+
+            const totalItems = filteredRows.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            rows.forEach(row => row.style.display = 'none');
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            for (let i = startIndex; i < endIndex && i < totalItems; i++) {
+                filteredRows[i].style.display = '';
+            }
+
+            const startDisplay = totalItems === 0 ? 0 : startIndex + 1;
+            const endDisplay = Math.min(endIndex, totalItems);
+            document.getElementById('footerInfo').textContent =
+                `Showing ${startDisplay} to ${endDisplay} of ${totalItems} doctor${totalItems !== 1 ? 's' : ''}`;
+
+            const emptyRow = document.getElementById('emptyRow');
+            if (emptyRow) emptyRow.style.display = totalItems === 0 ? '' : 'none';
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const paginationUl = document.getElementById('paginationList');
+            paginationUl.innerHTML = '';
+
+            const prevLi = document.createElement('li');
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'pg-btn';
+            prevBtn.innerHTML = '<i class="bi bi-chevron-left"></i>';
+            if (currentPage === 1) prevBtn.disabled = true;
+            else prevBtn.onclick = () => { currentPage--; filterTable(); };
+            if (currentPage === 1) prevBtn.style.opacity = '0.5';
+            prevLi.appendChild(prevBtn);
+            paginationUl.appendChild(prevLi);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'pg-btn' + (i === currentPage ? ' active' : '');
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => { currentPage = i; filterTable(); };
+                pageLi.appendChild(pageBtn);
+                paginationUl.appendChild(pageLi);
+            }
+
+            const nextLi = document.createElement('li');
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'pg-btn';
+            nextBtn.innerHTML = '<i class="bi bi-chevron-right"></i>';
+            if (currentPage === totalPages) nextBtn.disabled = true;
+            else nextBtn.onclick = () => { currentPage++; filterTable(); };
+            if (currentPage === totalPages) nextBtn.style.opacity = '0.5';
+            nextLi.appendChild(nextBtn);
+            paginationUl.appendChild(nextLi);
+        }
+
+        document.addEventListener('DOMContentLoaded', filterTable);
+
+        function openEditModal(button) {
+            const id = button.getAttribute('data-id');
+            const userId = button.getAttribute('data-userid');
+            const deptId = button.getAttribute('data-deptid');
+            const spec = button.getAttribute('data-spec');
+            const lic = button.getAttribute('data-lic');
+            const exp = button.getAttribute('data-exp');
+            const status = button.getAttribute('data-status');
+
+            document.getElementById('editDoctorForm').action = '/admin/doctors/update/' + id;
+            document.getElementById('editUserId').value = userId !== 'null' ? userId : '';
+            document.getElementById('editDepartmentId').value = deptId !== 'null' ? deptId : '';
+            document.getElementById('editSpecialization').value = spec !== 'null' ? spec : '';
+            document.getElementById('editLicenseNumber').value = lic !== 'null' ? lic : '';
+            document.getElementById('editExperienceYears').value = exp !== 'null' ? exp : '';
+            document.getElementById('editStatus').value = status !== 'null' ? status : 'ACTIVE';
+        }
+
+        function openDeleteModal(button) {
+            const id = button.getAttribute('data-id');
+            document.getElementById('deleteDoctorForm').action = '/admin/doctors/delete/' + id;
+        }
+    </script>
+</body>
+
+</html>
