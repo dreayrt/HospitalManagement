@@ -2,11 +2,10 @@ package com.example.hospitalManagement.service;
 
 import com.example.hospitalManagement.dto.registerDTO;
 import com.example.hospitalManagement.entity.User;
-import com.example.hospitalManagement.entity.UserStatus;
+import com.example.hospitalManagement.entity.Enum.UserStatus;
 import com.example.hospitalManagement.repository.userRepository;
 import com.example.hospitalManagement.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

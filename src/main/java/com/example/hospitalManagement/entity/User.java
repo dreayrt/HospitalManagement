@@ -1,5 +1,6 @@
 package com.example.hospitalManagement.entity;
 
+import com.example.hospitalManagement.entity.Enum.UserStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Column(name = "username")
     private String userName;
     @Column(name = "email")
@@ -32,6 +33,15 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserRoles> userRoles;
+
+    @OneToOne(mappedBy ="user",fetch = FetchType.LAZY)
+    private Patient patient;
+
+    @OneToMany(mappedBy = "userId",fetch = FetchType.LAZY)
+    private List<PatienHealthMetric> userIds;
+
+    @OneToOne(mappedBy = "user")
+    private Doctor doctor;
 
     public Integer getId() {
         return id;
@@ -111,5 +121,29 @@ public class User {
 
     public void setUserRoles(List<UserRoles> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public List<PatienHealthMetric> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<PatienHealthMetric> userIds) {
+        this.userIds = userIds;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }
