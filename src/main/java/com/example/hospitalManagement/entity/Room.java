@@ -9,7 +9,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "room_number")
     private String roomNumber;
     @Enumerated(EnumType.STRING)
@@ -20,11 +20,11 @@ public class Room {
     @JoinColumn(name = "department_id")
     private Departments department;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "specialization")
     private String specialization;
     @Column(name = "license_number")
@@ -38,11 +38,11 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<MedicalRecords> MedicalRecords;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

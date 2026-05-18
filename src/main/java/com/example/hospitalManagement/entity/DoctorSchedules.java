@@ -12,7 +12,7 @@ public class DoctorSchedules {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "work_date")
     private LocalDate workDate;
     @Column(name = "start_time")
@@ -27,11 +27,11 @@ public class DoctorSchedules {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

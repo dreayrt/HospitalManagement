@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Invoices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(name = "invoice_code")
     private String invoiceCode;
     @Column(name = "total_amount")
@@ -32,11 +32,11 @@ public class Invoices {
     @OneToOne(mappedBy = "invoices")
     private Payment payment;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

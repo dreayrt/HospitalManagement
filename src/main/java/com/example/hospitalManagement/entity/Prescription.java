@@ -11,7 +11,7 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @OneToOne
@@ -21,11 +21,11 @@ public class Prescription {
     private List<Prescription> prescriptionDetail;
 
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

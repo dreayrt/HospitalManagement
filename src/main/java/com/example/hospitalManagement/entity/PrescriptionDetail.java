@@ -9,7 +9,7 @@ public class PrescriptionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private long id;
     @Column(name = "medicine_name")
     private String medicineName;
     @Column(name = "dosage")
@@ -24,11 +24,11 @@ public class PrescriptionDetail {
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -13,7 +13,7 @@ public class Appointments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "appointment_date")
     private LocalDate appointmentDate;
     @Column(name = "appointment_time")
@@ -44,11 +44,11 @@ public class Appointments {
     private MedicalRecords medicalRecords;
 
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

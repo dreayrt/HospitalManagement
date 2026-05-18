@@ -11,7 +11,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "patient_code")
     private String patientCode;
     @Column(name = "dob")
@@ -37,11 +37,11 @@ public class Patient {
     private List<MedicalRecords> medicalRecords;
 
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
