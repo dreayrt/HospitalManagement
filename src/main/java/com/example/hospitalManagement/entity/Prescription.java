@@ -18,7 +18,7 @@ public class Prescription {
     @JoinColumn(name = "medical_record_id")
     private MedicalRecords medicalRecords;
     @OneToMany(mappedBy = "prescription")
-    private List<Prescription> prescriptionDetail;
+    private List<PrescriptionDetail> prescriptionDetail;
 
 
     public long getId() {
@@ -45,11 +45,11 @@ public class Prescription {
         this.medicalRecords = medicalRecords;
     }
 
-    public List<Prescription> getPrescriptionDetail() {
+    public List<PrescriptionDetail> getPrescriptionDetail() {
         return prescriptionDetail;
     }
 
-    public void setPrescriptionDetail(List<Prescription> prescriptionDetail) {
+    public void setPrescriptionDetail(List<PrescriptionDetail> prescriptionDetail) {
         this.prescriptionDetail = prescriptionDetail;
     }
 }
