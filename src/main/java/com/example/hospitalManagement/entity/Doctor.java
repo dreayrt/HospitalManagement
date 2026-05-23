@@ -19,6 +19,7 @@ public class Doctor {
     @Column(name ="experience_years" )
     private Integer experienceYears;
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private UserStatus userStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)

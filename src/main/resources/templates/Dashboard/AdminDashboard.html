@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MediCore Health</title>
+    <meta name="description" content="Bảng điều khiển quản trị hệ thống bệnh viện MediCore Health">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom Dashboard CSS -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- ==================== SIDEBAR OVERLAY (Mobile) ==================== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="sidebar">
+        <!-- Sidebar Toggle -->
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Thu gọn/Mở rộng sidebar">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- Logo -->
+        <div class="sidebar-logo">
+            <div class="logo-icon">
+                <i class="bi bi-hospital"></i>
+            </div>
+            <div class="logo-text">
+                <span class="hospital-name">MediCore Health</span>
+                <span class="hospital-sub">Hospital Admin</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+            <!-- Main Menu -->
+            <div class="sidebar-nav-section">
+                <div class="sidebar-nav-title">Tổng quan</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link active" data-section="overview" data-tooltip="Tổng quan">
+                            <span class="nav-icon"><i class="bi bi-grid-1x2-fill"></i></span>
+                            <span class="nav-label">Tổng quan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Management -->
+            <div class="sidebar-nav-section">
+                <div class="sidebar-nav-title">Quản lý</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="departments" data-tooltip="Quản lý Khoa/Phòng">
+                            <span class="nav-icon"><i class="bi bi-building"></i></span>
+                            <span class="nav-label">Quản lý Khoa/Phòng</span>
+                            <span class="nav-badge badge-primary">12</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="patients" data-tooltip="Quản lý Bệnh nhân">
+                            <span class="nav-icon"><i class="bi bi-people-fill"></i></span>
+                            <span class="nav-label">Quản lý Bệnh nhân</span>
+                            <span class="nav-badge badge-success">248</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="billing" data-tooltip="Hóa đơn Thanh toán">
+                            <span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span>
+                            <span class="nav-label">Hóa đơn Thanh toán</span>
+                            <span class="nav-badge badge-danger">5</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Analytics -->
+            <div class="sidebar-nav-section">
+                <div class="sidebar-nav-title">Phân tích</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="statistics" data-tooltip="Thống kê">
+                            <span class="nav-icon"><i class="bi bi-bar-chart-line-fill"></i></span>
+                            <span class="nav-label">Thống kê</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">AD</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">Admin System</div>
+                    <div class="sidebar-user-role">Quản trị viên</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <div class="main-content">
+
+        <!-- ==================== HEADER ==================== -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Mở menu">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <!-- Search -->
+                <div class="header-search">
+                    <input type="text" id="headerSearch" placeholder="Tìm kiếm bệnh nhân, khoa, phòng..." autocomplete="off">
+                    <i class="bi bi-search search-icon"></i>
+                    <span class="search-shortcut">Ctrl+K</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- Notification Bell -->
+                <div style="position:relative;">
+                    <button class="header-action bell-ring" id="notificationBtn" aria-label="Thông báo">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-dropdown-header">
+                            <h6>Thông báo</h6>
+                            <button class="mark-read">Đánh dấu đã đọc</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-item-icon icon-danger">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                                <div class="notification-item-content">
+                                    <div class="notification-item-title">Ca cấp cứu mới</div>
+                                    <div class="notification-item-desc">Bệnh nhân Nguyễn Văn A cần can thiệp khẩn cấp tại Phòng 301</div>
+                                    <div class="notification-item-time">2 phút trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-item-icon icon-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="notification-item-content">
+                                    <div class="notification-item-title">Thanh toán thành công</div>
+                                    <div class="notification-item-desc">Hóa đơn #HD-2024-0892 đã được thanh toán hoàn tất</div>
+                                    <div class="notification-item-time">15 phút trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-item-icon icon-info">
+                                    <i class="bi bi-info-circle"></i>
+                                </div>
+                                <div class="notification-item-content">
+                                    <div class="notification-item-title">Cập nhật hệ thống</div>
+                                    <div class="notification-item-desc">Phiên bản mới v2.5.1 sẽ được cập nhật vào 22:00 tối nay</div>
+                                    <div class="notification-item-time">1 giờ trước</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-item-icon icon-warning">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                                <div class="notification-item-content">
+                                    <div class="notification-item-title">Lịch hẹn sắp tới</div>
+                                    <div class="notification-item-desc">Có 8 lịch hẹn chờ xác nhận cho ngày mai</div>
+                                    <div class="notification-item-time">3 giờ trước</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-dropdown-footer">
+                            <a href="#">Xem tất cả thông báo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Chuyển đổi giao diện sáng/tối">
+                    <i class="bi bi-sun-fill toggle-icon-sun"></i>
+                    <i class="bi bi-moon-fill toggle-icon-moon"></i>
+                </button>
+
+                <!-- Admin Profile -->
+                <div style="position:relative;">
+                    <div class="header-profile" id="profileBtn">
+                        <div class="header-profile-avatar">AD</div>
+                        <div class="header-profile-info">
+                            <span class="header-profile-name">Admin System</span>
+                            <span class="header-profile-role">Quản trị viên</span>
+                        </div>
+                        <i class="bi bi-chevron-down header-profile-chevron"></i>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="profile-dropdown-item">
+                            <i class="bi bi-person"></i>
+                            Hồ sơ cá nhân
+                        </a>
+                        <a href="#" class="profile-dropdown-item">
+                            <i class="bi bi-gear"></i>
+                            Cài đặt
+                        </a>
+                        <a href="#" class="profile-dropdown-item">
+                            <i class="bi bi-question-circle"></i>
+                            Trợ giúp
+                        </a>
+                        <div class="profile-dropdown-divider"></div>
+                        <a href="#" class="profile-dropdown-item danger">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================== PAGE CONTENT ==================== -->
+        <div class="page-content">
+
+            <!-- ===== SECTION: OVERVIEW (Tổng quan) ===== -->
+            <div class="content-section active" id="section-overview">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Xin chào, Admin 👋</h1>
+                            <p class="page-subtitle">Đây là tổng quan hệ thống bệnh viện hôm nay.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button class="btn-outline-dashboard">
+                                <i class="bi bi-download"></i>
+                                Xuất báo cáo
+                            </button>
+                            <button class="btn-primary-dashboard">
+                                <i class="bi bi-plus-lg"></i>
+                                Thêm mới
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <span class="stat-card-trend up">
+                                <i class="bi bi-arrow-up-short"></i>12.5%
+                            </span>
+                        </div>
+                        <div class="stat-card-value" data-count>1,248</div>
+                        <div class="stat-card-label">Tổng bệnh nhân</div>
+                        <div class="sparkline-container">
+                            <div class="sparkline-bar" style="height:40%"></div>
+                            <div class="sparkline-bar" style="height:65%"></div>
+                            <div class="sparkline-bar" style="height:45%"></div>
+                            <div class="sparkline-bar" style="height:80%"></div>
+                            <div class="sparkline-bar" style="height:55%"></div>
+                            <div class="sparkline-bar" style="height:90%"></div>
+                            <div class="sparkline-bar" style="height:70%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <span class="stat-card-trend up">
+                                <i class="bi bi-arrow-up-short"></i>8.2%
+                            </span>
+                        </div>
+                        <div class="stat-card-value" data-count>356</div>
+                        <div class="stat-card-label">Lịch hẹn hôm nay</div>
+                        <div class="sparkline-container">
+                            <div class="sparkline-bar" style="height:60%"></div>
+                            <div class="sparkline-bar" style="height:45%"></div>
+                            <div class="sparkline-bar" style="height:75%"></div>
+                            <div class="sparkline-bar" style="height:50%"></div>
+                            <div class="sparkline-bar" style="height:85%"></div>
+                            <div class="sparkline-bar" style="height:65%"></div>
+                            <div class="sparkline-bar" style="height:90%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <span class="stat-card-trend down">
+                                <i class="bi bi-arrow-down-short"></i>3.1%
+                            </span>
+                        </div>
+                        <div class="stat-card-value" data-count>₫2.4B</div>
+                        <div class="stat-card-label">Doanh thu tháng</div>
+                        <div class="sparkline-container">
+                            <div class="sparkline-bar" style="height:80%"></div>
+                            <div class="sparkline-bar" style="height:70%"></div>
+                            <div class="sparkline-bar" style="height:60%"></div>
+                            <div class="sparkline-bar" style="height:75%"></div>
+                            <div class="sparkline-bar" style="height:50%"></div>
+                            <div class="sparkline-bar" style="height:40%"></div>
+                            <div class="sparkline-bar" style="height:55%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon">
+                                <i class="bi bi-bed-fill"></i>
+                            </div>
+                            <span class="stat-card-trend up">
+                                <i class="bi bi-arrow-up-short"></i>5.7%
+                            </span>
+                        </div>
+                        <div class="stat-card-value" data-count>89%</div>
+                        <div class="stat-card-label">Tỷ lệ giường sử dụng</div>
+                        <div class="progress-custom">
+                            <div class="progress-custom-bar bar-danger" style="width:89%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & Activity -->
+                <div class="content-grid">
+                    <!-- Revenue Chart -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                Biểu đồ Doanh thu
+                            </div>
+                            <div class="dashboard-card-actions">
+                                <button class="card-action-btn"><i class="bi bi-three-dots-vertical"></i></button>
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <div class="chart-container">
+                                <svg viewBox="0 0 600 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                                    <!-- Grid lines -->
+                                    <line x1="50" y1="30" x2="580" y2="30" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="80" x2="580" y2="80" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="130" x2="580" y2="130" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="180" x2="580" y2="180" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="230" x2="580" y2="230" stroke="var(--border-color)" stroke-width="0.5"/>
+
+                                    <!-- Y-axis labels -->
+                                    <text x="10" y="35" fill="var(--text-muted)" font-size="10" font-family="Inter">5B</text>
+                                    <text x="10" y="85" fill="var(--text-muted)" font-size="10" font-family="Inter">4B</text>
+                                    <text x="10" y="135" fill="var(--text-muted)" font-size="10" font-family="Inter">3B</text>
+                                    <text x="10" y="185" fill="var(--text-muted)" font-size="10" font-family="Inter">2B</text>
+                                    <text x="10" y="235" fill="var(--text-muted)" font-size="10" font-family="Inter">1B</text>
+
+                                    <!-- Gradient fill under line -->
+                                    <defs>
+                                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#0D6EFD" stop-opacity="0.3"/>
+                                            <stop offset="100%" stop-color="#0D6EFD" stop-opacity="0.02"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M80,180 L155,140 L230,160 L305,95 L380,110 L455,65 L530,80 L530,230 L80,230 Z" fill="url(#chartGradient)">
+                                        <animate attributeName="opacity" from="0" to="1" dur="1.5s" fill="freeze"/>
+                                    </path>
+
+                                    <!-- Line chart -->
+                                    <polyline points="80,180 155,140 230,160 305,95 380,110 455,65 530,80"
+                                              stroke="#0D6EFD" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chart-line"/>
+
+                                    <!-- Data points -->
+                                    <circle cx="80" cy="180" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="0.3s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="155" cy="140" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="0.5s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="230" cy="160" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="0.7s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="305" cy="95" r="5" fill="#0D6EFD" stroke="#fff" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="5" dur="0.3s" begin="0.9s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="380" cy="110" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="1.1s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="455" cy="65" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="1.3s" fill="freeze"/>
+                                    </circle>
+                                    <circle cx="530" cy="80" r="4" fill="#fff" stroke="#0D6EFD" stroke-width="2">
+                                        <animate attributeName="r" from="0" to="4" dur="0.3s" begin="1.5s" fill="freeze"/>
+                                    </circle>
+
+                                    <!-- X-axis labels -->
+                                    <text x="80" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T1</text>
+                                    <text x="155" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T2</text>
+                                    <text x="230" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T3</text>
+                                    <text x="305" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T4</text>
+                                    <text x="380" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T5</text>
+                                    <text x="455" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T6</text>
+                                    <text x="530" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T7</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                                Thao tác nhanh
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <div class="quick-actions-grid">
+                                <div class="quick-action-card" data-section="departments">
+                                    <div class="quick-action-icon qa-blue">
+                                        <i class="bi bi-building"></i>
+                                    </div>
+                                    <div>
+                                        <div class="quick-action-text">Quản lý Khoa</div>
+                                        <div class="quick-action-sub">12 khoa đang hoạt động</div>
+                                    </div>
+                                </div>
+                                <div class="quick-action-card" data-section="patients">
+                                    <div class="quick-action-icon qa-green">
+                                        <i class="bi bi-person-plus-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="quick-action-text">Thêm bệnh nhân</div>
+                                        <div class="quick-action-sub">Đăng ký bệnh nhân mới</div>
+                                    </div>
+                                </div>
+                                <div class="quick-action-card" data-section="billing">
+                                    <div class="quick-action-icon qa-orange">
+                                        <i class="bi bi-receipt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="quick-action-text">Tạo hóa đơn</div>
+                                        <div class="quick-action-sub">5 hóa đơn chờ xử lý</div>
+                                    </div>
+                                </div>
+                                <div class="quick-action-card" data-section="statistics">
+                                    <div class="quick-action-icon qa-red">
+                                        <i class="bi bi-file-earmark-bar-graph"></i>
+                                    </div>
+                                    <div>
+                                        <div class="quick-action-text">Xem thống kê</div>
+                                        <div class="quick-action-sub">Báo cáo chi tiết</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Patients Table -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">
+                            <i class="bi bi-clock-history"></i>
+                            Bệnh nhân gần đây
+                        </div>
+                        <div class="dashboard-card-actions">
+                            <button class="card-action-btn"><i class="bi bi-funnel"></i></button>
+                            <button class="card-action-btn"><i class="bi bi-arrow-clockwise"></i></button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body" style="padding:0;">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Bệnh nhân</th>
+                                    <th>Mã BN</th>
+                                    <th>Khoa</th>
+                                    <th>Bác sĩ phụ trách</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày nhập viện</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-1">NV</div>
+                                            <div>
+                                                <div class="patient-name">Nguyễn Văn An</div>
+                                                <div class="patient-id">Nam, 45 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0892</td>
+                                    <td>Tim mạch</td>
+                                    <td>BS. Trần Minh Đức</td>
+                                    <td><span class="status-badge status-danger">Cấp cứu</span></td>
+                                    <td>22/05/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-2">TT</div>
+                                            <div>
+                                                <div class="patient-name">Trần Thị Bích</div>
+                                                <div class="patient-id">Nữ, 32 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0891</td>
+                                    <td>Sản khoa</td>
+                                    <td>BS. Lê Thị Hoa</td>
+                                    <td><span class="status-badge status-warning">Điều trị</span></td>
+                                    <td>21/05/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-3">PH</div>
+                                            <div>
+                                                <div class="patient-name">Phạm Hoàng Cường</div>
+                                                <div class="patient-id">Nam, 58 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0890</td>
+                                    <td>Nội tiết</td>
+                                    <td>BS. Nguyễn Quốc Bảo</td>
+                                    <td><span class="status-badge status-info">Khám ngoại trú</span></td>
+                                    <td>21/05/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-4">LM</div>
+                                            <div>
+                                                <div class="patient-name">Lê Minh Đạt</div>
+                                                <div class="patient-id">Nam, 27 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0889</td>
+                                    <td>Chấn thương chỉnh hình</td>
+                                    <td>BS. Võ Thanh Hùng</td>
+                                    <td><span class="status-badge status-success">Xuất viện</span></td>
+                                    <td>20/05/2024</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-5">HN</div>
+                                            <div>
+                                                <div class="patient-name">Hoàng Ngọc Ema</div>
+                                                <div class="patient-id">Nữ, 19 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0888</td>
+                                    <td>Da liễu</td>
+                                    <td>BS. Đặng Thu Hà</td>
+                                    <td><span class="status-badge status-success">Xuất viện</span></td>
+                                    <td>20/05/2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: DEPARTMENTS (Quản lý Khoa/Phòng) ===== -->
+            <div class="content-section" id="section-departments">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Quản lý Khoa/Phòng 🏥</h1>
+                            <p class="page-subtitle">Quản lý tất cả các khoa và phòng bệnh trong bệnh viện.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button class="btn-primary-dashboard">
+                                <i class="bi bi-plus-lg"></i>
+                                Thêm khoa mới
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="department-grid">
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(13,110,253,0.1);color:#0D6EFD;">
+                            <i class="bi bi-heart-pulse-fill"></i>
+                        </div>
+                        <div class="department-name">Khoa Tim mạch</div>
+                        <div class="department-info">Chẩn đoán và điều trị các bệnh lý về tim mạch</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">24</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">18</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">6</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">
+                            <i class="bi bi-lungs-fill"></i>
+                        </div>
+                        <div class="department-name">Khoa Hô hấp</div>
+                        <div class="department-info">Điều trị các bệnh lý về đường hô hấp, phổi</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">20</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">15</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">5</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b;">
+                            <i class="bi bi-bandaid-fill"></i>
+                        </div>
+                        <div class="department-name">Khoa Ngoại tổng hợp</div>
+                        <div class="department-info">Phẫu thuật và can thiệp ngoại khoa tổng hợp</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">32</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">28</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">8</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(239,68,68,0.1);color:#ef4444;">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                        <div class="department-name">Khoa Cấp cứu</div>
+                        <div class="department-info">Tiếp nhận và xử lý các ca cấp cứu 24/7</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">16</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">12</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">10</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(99,102,241,0.1);color:#6366f1;">
+                            <i class="bi bi-egg-fill"></i>
+                        </div>
+                        <div class="department-name">Khoa Sản</div>
+                        <div class="department-info">Chăm sóc sức khỏe bà mẹ và trẻ sơ sinh</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">28</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">22</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">7</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="department-card">
+                        <div class="department-icon" style="background:rgba(6,182,212,0.1);color:#06b6d4;">
+                            <i class="bi bi-eye-fill"></i>
+                        </div>
+                        <div class="department-name">Khoa Mắt</div>
+                        <div class="department-info">Khám và điều trị các bệnh lý về mắt</div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">12</div>
+                                <div class="department-stat-label">Giường</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">8</div>
+                                <div class="department-stat-label">Bệnh nhân</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">4</div>
+                                <div class="department-stat-label">Bác sĩ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: PATIENTS (Quản lý Bệnh nhân) ===== -->
+            <div class="content-section" id="section-patients">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Quản lý Bệnh nhân 👥</h1>
+                            <p class="page-subtitle">Theo dõi và quản lý toàn bộ hồ sơ bệnh nhân.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button class="btn-outline-dashboard">
+                                <i class="bi bi-upload"></i>
+                                Nhập Excel
+                            </button>
+                            <button class="btn-primary-dashboard">
+                                <i class="bi bi-person-plus"></i>
+                                Thêm bệnh nhân
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-body">
+                        <div class="patient-list-header">
+                            <div class="patient-search">
+                                <i class="bi bi-search"></i>
+                                <input type="text" placeholder="Tìm kiếm bệnh nhân theo tên, mã BN...">
+                            </div>
+                            <div class="filter-chips">
+                                <button class="filter-chip active">Tất cả</button>
+                                <button class="filter-chip">Nội trú</button>
+                                <button class="filter-chip">Ngoại trú</button>
+                                <button class="filter-chip">Cấp cứu</button>
+                                <button class="filter-chip">Xuất viện</button>
+                            </div>
+                        </div>
+
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Bệnh nhân</th>
+                                    <th>Mã BN</th>
+                                    <th>SĐT</th>
+                                    <th>Khoa</th>
+                                    <th>Phòng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-1">NV</div>
+                                            <div>
+                                                <div class="patient-name">Nguyễn Văn An</div>
+                                                <div class="patient-id">Nam, 45 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0892</td>
+                                    <td>0912 345 678</td>
+                                    <td>Tim mạch</td>
+                                    <td>P.301</td>
+                                    <td><span class="status-badge status-danger">Cấp cứu</span></td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-2">TT</div>
+                                            <div>
+                                                <div class="patient-name">Trần Thị Bích</div>
+                                                <div class="patient-id">Nữ, 32 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0891</td>
+                                    <td>0987 654 321</td>
+                                    <td>Sản khoa</td>
+                                    <td>P.205</td>
+                                    <td><span class="status-badge status-warning">Điều trị</span></td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-3">PH</div>
+                                            <div>
+                                                <div class="patient-name">Phạm Hoàng Cường</div>
+                                                <div class="patient-id">Nam, 58 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0890</td>
+                                    <td>0909 123 456</td>
+                                    <td>Nội tiết</td>
+                                    <td>—</td>
+                                    <td><span class="status-badge status-info">Ngoại trú</span></td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar bg-4">LM</div>
+                                            <div>
+                                                <div class="patient-name">Lê Minh Đạt</div>
+                                                <div class="patient-id">Nam, 27 tuổi</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>BN-2024-0889</td>
+                                    <td>0938 765 432</td>
+                                    <td>Chấn thương</td>
+                                    <td>P.108</td>
+                                    <td><span class="status-badge status-success">Xuất viện</span></td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: BILLING (Hóa đơn Thanh toán) ===== -->
+            <div class="content-section" id="section-billing">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Hóa đơn Thanh toán 💳</h1>
+                            <p class="page-subtitle">Quản lý hóa đơn và thanh toán của bệnh nhân.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button class="btn-primary-dashboard">
+                                <i class="bi bi-plus-lg"></i>
+                                Tạo hóa đơn
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Summary -->
+                <div class="billing-summary">
+                    <div class="billing-summary-card">
+                        <div class="billing-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div>
+                            <div class="billing-summary-value">₫1.8B</div>
+                            <div class="billing-summary-label">Đã thanh toán</div>
+                        </div>
+                    </div>
+                    <div class="billing-summary-card">
+                        <div class="billing-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b;">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div>
+                            <div class="billing-summary-value">₫420M</div>
+                            <div class="billing-summary-label">Chờ thanh toán</div>
+                        </div>
+                    </div>
+                    <div class="billing-summary-card">
+                        <div class="billing-icon" style="background:rgba(239,68,68,0.1);color:#ef4444;">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                        </div>
+                        <div>
+                            <div class="billing-summary-value">₫180M</div>
+                            <div class="billing-summary-label">Quá hạn</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Table -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">
+                            <i class="bi bi-receipt-cutoff"></i>
+                            Danh sách hóa đơn
+                        </div>
+                        <div class="dashboard-card-actions">
+                            <button class="card-action-btn"><i class="bi bi-funnel"></i></button>
+                            <button class="card-action-btn"><i class="bi bi-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body" style="padding:0;">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã HĐ</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Dịch vụ</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight:600;color:var(--accent);">HD-2024-0892</td>
+                                    <td>Nguyễn Văn An</td>
+                                    <td>Khám + Xét nghiệm</td>
+                                    <td style="font-weight:700;">₫3,500,000</td>
+                                    <td><span class="status-badge status-success">Đã thanh toán</span></td>
+                                    <td>22/05/2024</td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-printer"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600;color:var(--accent);">HD-2024-0891</td>
+                                    <td>Trần Thị Bích</td>
+                                    <td>Phẫu thuật + Nằm viện</td>
+                                    <td style="font-weight:700;">₫45,000,000</td>
+                                    <td><span class="status-badge status-warning">Chờ thanh toán</span></td>
+                                    <td>21/05/2024</td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-printer"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600;color:var(--accent);">HD-2024-0890</td>
+                                    <td>Phạm Hoàng Cường</td>
+                                    <td>Khám ngoại trú</td>
+                                    <td style="font-weight:700;">₫850,000</td>
+                                    <td><span class="status-badge status-danger">Quá hạn</span></td>
+                                    <td>18/05/2024</td>
+                                    <td>
+                                        <div class="dashboard-card-actions">
+                                            <button class="card-action-btn"><i class="bi bi-eye"></i></button>
+                                            <button class="card-action-btn"><i class="bi bi-printer"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: STATISTICS (Thống kê) ===== -->
+            <div class="content-section" id="section-statistics">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Thống kê 📊</h1>
+                            <p class="page-subtitle">Phân tích dữ liệu và báo cáo chi tiết hoạt động bệnh viện.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button class="btn-outline-dashboard">
+                                <i class="bi bi-calendar3"></i>
+                                Tháng 5, 2024
+                            </button>
+                            <button class="btn-primary-dashboard">
+                                <i class="bi bi-download"></i>
+                                Xuất PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-overview">
+                    <!-- Bar Chart -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-bar-chart-fill"></i>
+                                Lượt khám theo ngày (7 ngày gần nhất)
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <div class="chart-container">
+                                <svg viewBox="0 0 600 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+                                    <!-- Grid -->
+                                    <line x1="50" y1="30" x2="580" y2="30" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="80" x2="580" y2="80" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="130" x2="580" y2="130" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="180" x2="580" y2="180" stroke="var(--border-color)" stroke-width="0.5" stroke-dasharray="4"/>
+                                    <line x1="50" y1="230" x2="580" y2="230" stroke="var(--border-color)" stroke-width="0.5"/>
+
+                                    <!-- Bars -->
+                                    <rect class="chart-bar" x="75" y="120" width="50" height="110" rx="6" fill="url(#barGrad1)" style="animation-delay:0.1s"/>
+                                    <rect class="chart-bar" x="150" y="80" width="50" height="150" rx="6" fill="url(#barGrad1)" style="animation-delay:0.2s"/>
+                                    <rect class="chart-bar" x="225" y="100" width="50" height="130" rx="6" fill="url(#barGrad1)" style="animation-delay:0.3s"/>
+                                    <rect class="chart-bar" x="300" y="55" width="50" height="175" rx="6" fill="#0D6EFD" style="animation-delay:0.4s"/>
+                                    <rect class="chart-bar" x="375" y="90" width="50" height="140" rx="6" fill="url(#barGrad1)" style="animation-delay:0.5s"/>
+                                    <rect class="chart-bar" x="450" y="140" width="50" height="90" rx="6" fill="url(#barGrad1)" style="animation-delay:0.6s"/>
+                                    <rect class="chart-bar" x="525" y="110" width="50" height="120" rx="6" fill="url(#barGrad1)" style="animation-delay:0.7s"/>
+
+                                    <defs>
+                                        <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#0D6EFD" stop-opacity="0.7"/>
+                                            <stop offset="100%" stop-color="#0D6EFD" stop-opacity="0.2"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Labels -->
+                                    <text x="100" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T2</text>
+                                    <text x="175" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T3</text>
+                                    <text x="250" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T4</text>
+                                    <text x="325" y="250" fill="var(--text-dark)" font-size="10" font-family="Inter" text-anchor="middle" font-weight="700">T5</text>
+                                    <text x="400" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T6</text>
+                                    <text x="475" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">T7</text>
+                                    <text x="550" y="250" fill="var(--text-muted)" font-size="10" font-family="Inter" text-anchor="middle">CN</text>
+
+                                    <!-- Values on bars -->
+                                    <text x="100" y="115" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">42</text>
+                                    <text x="175" y="75" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">58</text>
+                                    <text x="250" y="95" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">51</text>
+                                    <text x="325" y="50" fill="var(--accent)" font-size="12" font-family="Inter" text-anchor="middle" font-weight="800">67</text>
+                                    <text x="400" y="85" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">54</text>
+                                    <text x="475" y="135" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">35</text>
+                                    <text x="550" y="105" fill="var(--text-dark)" font-size="11" font-family="Inter" text-anchor="middle" font-weight="700">46</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Donut Chart -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-pie-chart-fill"></i>
+                                Phân bổ bệnh nhân theo khoa
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <div class="donut-chart-container">
+                                <svg viewBox="0 0 42 42">
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--border-color)" stroke-width="4"/>
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#0D6EFD" stroke-width="4"
+                                            stroke-dasharray="30 70" stroke-dashoffset="0" class="donut-segment" style="--segment-value:30; animation-delay:0.2s"/>
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#10b981" stroke-width="4"
+                                            stroke-dasharray="22 78" stroke-dashoffset="-30" class="donut-segment" style="--segment-value:22; animation-delay:0.4s"/>
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f59e0b" stroke-width="4"
+                                            stroke-dasharray="18 82" stroke-dashoffset="-52" class="donut-segment" style="--segment-value:18; animation-delay:0.6s"/>
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#ef4444" stroke-width="4"
+                                            stroke-dasharray="15 85" stroke-dashoffset="-70" class="donut-segment" style="--segment-value:15; animation-delay:0.8s"/>
+                                    <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#6366f1" stroke-width="4"
+                                            stroke-dasharray="15 85" stroke-dashoffset="-85" class="donut-segment" style="--segment-value:15; animation-delay:1s"/>
+                                </svg>
+                                <div class="donut-center-text">
+                                    <div class="donut-value">248</div>
+                                    <div class="donut-label">Bệnh nhân</div>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <div class="legend-dot" style="background:#0D6EFD;"></div>
+                                    Tim mạch (30%)
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-dot" style="background:#10b981;"></div>
+                                    Hô hấp (22%)
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-dot" style="background:#f59e0b;"></div>
+                                    Ngoại khoa (18%)
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-dot" style="background:#ef4444;"></div>
+                                    Cấp cứu (15%)
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-dot" style="background:#6366f1;"></div>
+                                    Khác (15%)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Stats Row -->
+                <div class="content-grid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-graph-up"></i>
+                                Hiệu suất hoạt động
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <div style="margin-bottom:1.25rem;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+                                    <span style="font-size:0.82rem;font-weight:600;color:var(--text-dark);">Tỷ lệ giường sử dụng</span>
+                                    <span style="font-size:0.82rem;font-weight:700;color:var(--accent);">89%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-custom-bar bar-accent" style="width:89%"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:1.25rem;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+                                    <span style="font-size:0.82rem;font-weight:600;color:var(--text-dark);">Tỷ lệ hài lòng</span>
+                                    <span style="font-size:0.82rem;font-weight:700;color:var(--success);">94%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-custom-bar bar-success" style="width:94%"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:1.25rem;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+                                    <span style="font-size:0.82rem;font-weight:600;color:var(--text-dark);">Tỷ lệ tái khám</span>
+                                    <span style="font-size:0.82rem;font-weight:700;color:var(--warning);">72%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-custom-bar bar-warning" style="width:72%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
+                                    <span style="font-size:0.82rem;font-weight:600;color:var(--text-dark);">Tỷ lệ thanh toán đúng hạn</span>
+                                    <span style="font-size:0.82rem;font-weight:700;color:var(--danger);">65%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-custom-bar bar-danger" style="width:65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <div class="dashboard-card-title">
+                                <i class="bi bi-trophy-fill"></i>
+                                Top Bác sĩ tháng này
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body" style="padding:0;">
+                            <table class="activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bác sĩ</th>
+                                        <th>Lượt khám</th>
+                                        <th>Đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span style="font-weight:800;color:var(--warning);">🥇</span></td>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <div class="patient-avatar bg-1">TĐ</div>
+                                                <div>
+                                                    <div class="patient-name">BS. Trần Minh Đức</div>
+                                                    <div class="patient-id">Tim mạch</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="font-weight:700;">156</td>
+                                        <td><span style="color:var(--warning);">⭐ 4.9</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-weight:800;color:var(--text-muted);">🥈</span></td>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <div class="patient-avatar bg-2">LH</div>
+                                                <div>
+                                                    <div class="patient-name">BS. Lê Thị Hoa</div>
+                                                    <div class="patient-id">Sản khoa</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="font-weight:700;">142</td>
+                                        <td><span style="color:var(--warning);">⭐ 4.8</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span style="font-weight:800;color:var(--warning);">🥉</span></td>
+                                        <td>
+                                            <div class="patient-cell">
+                                                <div class="patient-avatar bg-3">NB</div>
+                                                <div>
+                                                    <div class="patient-name">BS. Nguyễn Quốc Bảo</div>
+                                                    <div class="patient-id">Nội tiết</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="font-weight:700;">128</td>
+                                        <td><span style="color:var(--warning);">⭐ 4.7</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ==================== CHAT BUBBLE ==================== -->
+<div class="chat-bubble" id="chatBubble">
+    <button class="chat-bubble-btn" id="chatBubbleBtn" aria-label="Mở khung chat">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span class="chat-bubble-badge">2</span>
+    </button>
+
+    <!-- Chat Window -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-window-header">
+            <div class="chat-avatar">
+                <i class="bi bi-robot"></i>
+            </div>
+            <div class="chat-info">
+                <div class="chat-name">MediCore Assistant</div>
+                <div class="chat-status">Đang hoạt động</div>
+            </div>
+            <button class="chat-window-close" id="chatClose" aria-label="Đóng chat">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message incoming">
+                Xin chào Admin! 👋 Tôi là trợ lý ảo MediCore. Tôi có thể giúp gì cho bạn hôm nay?
+                <div class="chat-message-time">10:30 AM</div>
+            </div>
+            <div class="chat-message outgoing">
+                Cho tôi xem tổng quan bệnh nhân nhập viện hôm nay.
+                <div class="chat-message-time">10:32 AM</div>
+            </div>
+            <div class="chat-message incoming">
+                Hôm nay có <strong>12 bệnh nhân</strong> nhập viện mới, trong đó <strong>3 ca cấp cứu</strong>. Khoa Tim mạch đang có tải cao nhất. Bạn muốn xem chi tiết không?
+                <div class="chat-message-time">10:32 AM</div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." autocomplete="off">
+            <button class="chat-send-btn" id="chatSendBtn" aria-label="Gửi tin nhắn">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // ==================== SIDEBAR NAVIGATION ====================
+    const sidebarLinks = document.querySelectorAll('.sidebar-nav-link[data-section]');
+    const contentSections = document.querySelectorAll('.content-section');
+    const quickActionCards = document.querySelectorAll('.quick-action-card[data-section]');
+
+    function switchSection(sectionId) {
+        // Update sidebar active state
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.sidebar-nav-link[data-section="${sectionId}"]`);
+        if (activeLink) activeLink.classList.add('active');
+
+        // Switch content
+        contentSections.forEach(section => {
+            section.classList.remove('active');
+            section.style.animation = 'none';
+        });
+        const targetSection = document.getElementById(`section-${sectionId}`);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            // Re-trigger animation
+            void targetSection.offsetWidth;
+            targetSection.style.animation = 'fadeInContent 0.5s ease-out';
+        }
+
+        // Close sidebar on mobile
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('mobile-open');
+            sidebarOverlay.classList.remove('active');
+        }
+    }
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.getAttribute('data-section');
+            switchSection(section);
+        });
+    });
+
+    // Quick action cards also navigate
+    quickActionCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const section = card.getAttribute('data-section');
+            switchSection(section);
+        });
+    });
+
+    // ==================== SIDEBAR TOGGLE ====================
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // ==================== MOBILE SIDEBAR ====================
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    mobileMenuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('mobile-open');
+        sidebarOverlay.classList.toggle('active');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+        sidebarOverlay.classList.remove('active');
+    });
+
+    // ==================== THEME TOGGLE ====================
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('dashboard-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('dashboard-theme', next);
+    });
+
+    // ==================== NOTIFICATION DROPDOWN ====================
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notificationDropdown.classList.toggle('show');
+        profileDropdown.classList.remove('show');
+    });
+
+    // ==================== PROFILE DROPDOWN ====================
+    const profileBtn = document.getElementById('profileBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+        notificationDropdown.classList.remove('show');
+    });
+
+    // Close dropdowns on click outside
+    document.addEventListener('click', () => {
+        notificationDropdown.classList.remove('show');
+        profileDropdown.classList.remove('show');
+    });
+
+    // Prevent dropdown close when clicking inside
+    notificationDropdown.addEventListener('click', (e) => e.stopPropagation());
+    profileDropdown.addEventListener('click', (e) => e.stopPropagation());
+
+    // ==================== CHAT BUBBLE ====================
+    const chatBubbleBtn = document.getElementById('chatBubbleBtn');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatClose = document.getElementById('chatClose');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+
+    chatBubbleBtn.addEventListener('click', () => {
+        chatWindow.classList.toggle('open');
+        if (chatWindow.classList.contains('open')) {
+            chatInput.focus();
+        }
+    });
+
+    chatClose.addEventListener('click', () => {
+        chatWindow.classList.remove('open');
+    });
+
+    // Send message
+    function sendChatMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // Create outgoing message
+        const msg = document.createElement('div');
+        msg.className = 'chat-message outgoing';
+        const now = new Date();
+        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        msg.innerHTML = `${text}<div class="chat-message-time">${time}</div>`;
+        chatMessages.appendChild(msg);
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Auto reply (UI demo only)
+        setTimeout(() => {
+            const reply = document.createElement('div');
+            reply.className = 'chat-message incoming';
+            reply.innerHTML = `Cảm ơn bạn! Tôi đã nhận được yêu cầu. Vui lòng đợi trong giây lát... 🏥<div class="chat-message-time">${time}</div>`;
+            chatMessages.appendChild(reply);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+
+    chatSendBtn.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // ==================== FILTER CHIPS ====================
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            chip.closest('.filter-chips').querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
+
+    // ==================== KEYBOARD SHORTCUT (Ctrl+K) ====================
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('headerSearch').focus();
+        }
+    });
+
+    // ==================== RIPPLE EFFECT ON BUTTONS ====================
+    document.querySelectorAll('.btn-primary-dashboard').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.3);
+                width: 100px; height: 100px;
+                left: ${e.clientX - rect.left - 50}px;
+                top: ${e.clientY - rect.top - 50}px;
+                animation: rippleEffect 0.6s ease-out;
+                pointer-events: none;
+            `;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
+    // ==================== COUNTER ANIMATION ====================
+    function animateCounters() {
+        document.querySelectorAll('.stat-card-value[data-count]').forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = 'countUp 1s ease-out both';
+        });
+    }
+    animateCounters();
+</script>
+
+</body>
+</html>

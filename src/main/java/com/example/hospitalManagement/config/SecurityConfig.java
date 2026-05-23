@@ -1,11 +1,15 @@
 package com.example.hospitalManagement.config;
 
+import com.example.hospitalManagement.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -29,11 +33,10 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/api/auth/**"
                         ).permitAll()
-
-
+                        .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
 
-                ) .formLogin(form -> form.disable())
+                )
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -44,5 +47,29 @@ public class SecurityConfig {
 
 
         return http.build();
+    }
+
+    //tao ra bean AuthenticationManager dung de kiem tra username password account
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config
+    ) throws Exception {
+
+        return config.getAuthenticationManager();
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                // Hash password bằng SHA-256 (giống MySQL SHA2(..., 256))
+                return HashUtil.sha256(rawPassword.toString());
+            }
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                // So sánh: hash password người nhập vs password đã hash trong DB
+                return HashUtil.sha256(rawPassword.toString()).equals(encodedPassword);
+            }
+        };
     }
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationApi {
+    @Autowired
     private AuthenticationManager  authenticationManager;
     @Autowired
     private userRolesRepository userRolesRepository;
@@ -58,6 +59,7 @@ public class AuthenticationApi {
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("access_token", accessToken);
         responseData.put("roles",roles);
+        System.out.println("ROLEEEEE: "+roles);
         if (Boolean.TRUE.equals(loginDTO.isRememberMe())) {
             String refreshToken = jwtUtil.generateRefreshToken(loginDTO.getUserName());
             responseData.put("refreshToken", refreshToken);

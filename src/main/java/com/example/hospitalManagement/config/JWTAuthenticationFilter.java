@@ -29,7 +29,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path=request.getRequestURI();
-        if(path.equals("/login")||path.equals("/auth")){
+        if(path.equals("/login")||path.equals("/auth")||path.startsWith("/api/auth")){
             filterChain.doFilter(request,response);//cho request chạy tiếp xuống controller
             return;
         }
@@ -48,7 +48,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                SecurityContextHolder.clearContext();
             }
         }
         filterChain.doFilter(request, response);

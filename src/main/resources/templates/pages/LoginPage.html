@@ -103,7 +103,7 @@
                 <p class="subtitle">Vui lòng đăng nhập để tiếp tục quản lý sức khỏe của bạn.</p>
             </div>
 
-            <form th:action="@{/api/auth/login}" th:object="${LoginDTO}" method="post" id="loginForm">
+            <form th:action="@{/api/AuthenticationApi/login}" th:object="${LoginDTO}" method="post" id="loginForm">
 
                 <!-- Username / Email -->
                 <div class="form-floating-custom stagger-2">
@@ -278,11 +278,30 @@
 
             if(response.ok){
 
-                const token = await response.text();
+                const data = await response.json();
 
-                localStorage.setItem("token", token);
+                const roles = data.roles;
 
-                window.location.href="/dashboard";
+                // Lưu token vào cookie để server đọc được khi redirect
+                document.cookie = "access_token=" + data.access_token + "; path=/;";
+
+                localStorage.setItem("token", data.access_token);
+
+                if(roles.length === 1){
+                    if(roles.includes("ADMIN")){
+                        window.location.href="/DashBoard/AdminDashboard";
+                    }
+                    else if(roles.includes("DOCTOR")){
+                        window.location.href="/DashBoard/Doctor";
+                    }
+                    else{
+                        window.location.href="index.html";
+                    }
+
+                }else{
+                    localStorage.setItem("roles", JSON.stringify(roles));
+                    window.location.href="/select-role";
+                }
             }
         });
 </script>
