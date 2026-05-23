@@ -108,6 +108,7 @@
             </div>
 
             <form th:action="@{/api/AuthenticationApi/login}" th:object="${LoginDTO}" method="post" id="loginForm">
+                <small id="generalError" class="text-danger d-block mb-3 text-center fw-bold"></small>
 
                 <!-- Username / Email -->
                 <div class="form-floating-custom stagger-2">
@@ -275,32 +276,51 @@
 <script>
     document.getElementById("loginForm")
         .addEventListener("submit", async function (e) {
-
             e.preventDefault();
+
+            const errorElement = document.getElementById("generalError");
+            errorElement.innerText = "";
 
             const formData = new FormData(this);
 
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                body: formData
-            });
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    body: formData
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                const role = data.role;
+                if (response.ok) {
+                    const data = await response.json();
+                    const role = data.role;
 
-                // Lưu token vào cookie để server đọc được khi redirect
-                document.cookie = "access_token=" + data.access_token + "; path=/;";
+                    // Lưu token vào cookie để server đọc được khi redirect
+                    document.cookie = "access_token=" + data.access_token + "; path=/;";
 
-                localStorage.setItem("token", data.access_token);
+                    localStorage.setItem("token", data.access_token);
 
-                if (role.includes("ADMIN")) {
-                    window.location.href = "/DashBoard/AdminDashboard";
-                } else if (role.includes("DOCTOR")) {
-                    window.location.href = "/DashBoard/Doctor";
+                    if (role.includes("ADMIN")) {
+                        window.location.href = "/DashBoard/AdminDashboard";
+                    } else if (role.includes("DOCTOR")) {
+                        window.location.href = "/DashBoard/Doctor";
+                    } else {
+                        window.location.href = "index";
+                    }
                 } else {
-                    window.location.href = "index.html";
+                    const errorData = await response.json();
+                    if (response.status === 400) {
+                        // Lỗi validation từ DTO
+                        let errorMsg = "";
+                        if (errorData.userName) errorMsg += errorData.userName + "\n";
+                        if (errorData.password) errorMsg += errorData.password + "\n";
+                        errorElement.innerText = errorMsg.trim() || "Vui lòng nhập đầy đủ thông tin!";
+                    } else if (errorData && errorData.message) {
+                        errorElement.innerText = errorData.message;
+                    } else {
+                        errorElement.innerText = "Đăng nhập thất bại. Vui lòng kiểm tra lại!";
+                    }
                 }
+            } catch (error) {
+                errorElement.innerText = "Có lỗi xảy ra kết nối tới máy chủ!";
             }
         });
 </script>

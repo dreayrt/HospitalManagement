@@ -31,7 +31,9 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/index",
+                                "/"
                         ).permitAll()
                         .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
@@ -57,6 +59,7 @@ public class SecurityConfig {
 
         return config.getAuthenticationManager();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder() {
@@ -65,6 +68,7 @@ public class SecurityConfig {
                 // Hash password bằng SHA-256 (giống MySQL SHA2(..., 256))
                 return HashUtil.sha256(rawPassword.toString());
             }
+
             @Override
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
                 // So sánh: hash password người nhập vs password đã hash trong DB
