@@ -31,8 +31,9 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserRoles> userRoles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToOne(mappedBy ="user",fetch = FetchType.LAZY)
     private Patient patient;
@@ -115,12 +116,12 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public List<UserRoles> getUserRoles() {
-        return userRoles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setUserRoles(List<UserRoles> userRoles) {
-        this.userRoles = userRoles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Patient getPatient() {

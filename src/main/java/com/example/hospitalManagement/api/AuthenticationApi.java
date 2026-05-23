@@ -3,7 +3,6 @@ package com.example.hospitalManagement.api;
 import com.example.hospitalManagement.dto.LoginDTO;
 import com.example.hospitalManagement.entity.User;
 import com.example.hospitalManagement.repository.userRepository;
-import com.example.hospitalManagement.repository.userRolesRepository;
 import com.example.hospitalManagement.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,6 @@ import java.util.Map;
 public class AuthenticationApi {
     @Autowired
     private AuthenticationManager  authenticationManager;
-    @Autowired
-    private userRolesRepository userRolesRepository;
     @Autowired
     private userRepository userRepository;
     @Autowired
@@ -52,14 +49,13 @@ public class AuthenticationApi {
         }
 
         User user = userRepository.findByUserName(loginDTO.getUserName()).orElseThrow(() -> new RuntimeException("Username not found"));
-        List<String> roles=user.getUserRoles().stream().map(ur->ur.getRole().getName()).toList();
-
-        String accessToken = jwtUtil.generateToken(loginDTO.getUserName(), roles);
+        String role = user.getRole().getName();
+        String accessToken = jwtUtil.generateToken(loginDTO.getUserName(), role);
 
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("access_token", accessToken);
-        responseData.put("roles",roles);
-        System.out.println("ROLEEEEE: "+roles);
+        responseData.put("role",role);
+        System.out.println("ROLEEEEE: "+role);
         if (Boolean.TRUE.equals(loginDTO.isRememberMe())) {
             String refreshToken = jwtUtil.generateRefreshToken(loginDTO.getUserName());
             responseData.put("refreshToken", refreshToken);

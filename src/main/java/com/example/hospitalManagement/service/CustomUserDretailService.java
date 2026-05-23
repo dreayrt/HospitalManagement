@@ -22,15 +22,13 @@ public class CustomUserDretailService implements UserDetailsService {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
-        List<String> roles = user.getUserRoles().stream()
-                .map(ur -> ur.getRole().getName())
-                .toList();
+        String role = user.getRole().getName();
 
         return org.springframework.security.core.userdetails.User
                 .builder()
                 .username(user.getUserName())
                 .password(user.getPassword())
-                .authorities(roles.toArray(new String[0]))
+                .authorities(role)
                 .build();
 
 

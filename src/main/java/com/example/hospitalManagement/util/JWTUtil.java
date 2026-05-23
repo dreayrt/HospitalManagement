@@ -16,13 +16,13 @@ public class JWTUtil {
     private final String secret="kho-doan-lam-doan-kho-jwt-secret-key-123456";
     private final Long experationTime=30L * 60 * 1000;
     private final Long longRefreshTimeToken=7L*24*60*1000;
-    public String generateToken(String username, List<String> roles){
+    public String generateToken(String username, String role){
         return Jwts.builder()//tao jwt
                 .setSubject(username)//gan username vao vao sub vao payload
                 .setIssuedAt(new Date())//gan thoi gian duoc tao cua token
                 .setExpiration(new Date(System.currentTimeMillis()+experationTime))//gan thoi gian het han token
                 .claim("type","access_token")//them custom data vao jwt
-                .claim("roles",roles)//gan role vao token
+                .claim("role",role)//gan role vao token
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))//tao chu ky
                 .compact();//build lai thanh string
     }
