@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - MediCore Health</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom Dashboard CSS -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    
+    <!-- Add some specific nice animations for this dashboard -->
+    <style>
+        /* Modern micro-animations and aesthetics for Doctor Dashboard */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0D6EFD 0%, #0dcaf0 100%);
+            --sidebar-bg: #ffffff;
+            --main-bg: #f8f9fe;
+            --text-dark: #2b3452;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .sidebar-nav-item {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-nav-item:hover {
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav-link {
+            border-radius: 10px;
+            margin: 0 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+        
+        .sidebar-nav-link.active .nav-icon {
+            color: white;
+        }
+
+        .dashboard-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            background: white;
+            overflow: hidden;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .header-action {
+            transition: all 0.2s ease;
+            background: #fff;
+            border: 1px solid #eef0f7;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+        }
+        
+        .header-action:hover {
+            transform: scale(1.1);
+            color: #0D6EFD;
+            border-color: #0D6EFD;
+        }
+
+        .fade-in-section {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-text .hospital-name {
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Table Styling */
+        .table-custom th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: #8f9bb3;
+            border-bottom: 2px solid #eef0f7;
+        }
+        
+        .table-custom td {
+            vertical-align: middle;
+            border-bottom: 1px solid #eef0f7;
+        }
+        
+        .table-custom tbody tr {
+            transition: all 0.2s ease;
+        }
+        
+        .table-custom tbody tr:hover {
+            background-color: #f8f9fe;
+            transform: scale(1.01);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* --- Dark Mode Styles --- */
+        [data-theme="dark"] {
+            --sidebar-bg: #1e1e2d;
+            --main-bg: #151521;
+            --text-dark: #e4e6eb;
+            --bs-body-bg: #151521;
+            --bs-body-color: #e4e6eb;
+        }
+
+        [data-theme="dark"] .dashboard-card,
+        [data-theme="dark"] .card-header,
+        [data-theme="dark"] .card-footer {
+            background-color: #1e1e2d !important;
+            border-color: #2b2b40 !important;
+        }
+        
+        [data-theme="dark"] .glass-panel {
+            background: rgba(30, 30, 45, 0.85) !important;
+            border-color: #2b2b40 !important;
+        }
+
+        [data-theme="dark"] .text-dark {
+            color: #e4e6eb !important;
+        }
+
+        [data-theme="dark"] .text-muted {
+            color: #a1a5b7 !important;
+        }
+
+        [data-theme="dark"] .bg-white {
+            background-color: #1e1e2d !important;
+        }
+
+        [data-theme="dark"] .bg-light {
+            background-color: #2b2b40 !important;
+            color: #e4e6eb !important;
+        }
+        
+        [data-theme="dark"] .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #e4e6eb;
+            --bs-table-striped-bg: rgba(255,255,255,0.05);
+            --bs-table-hover-bg: #26263a;
+            color: #e4e6eb;
+        }
+        
+        [data-theme="dark"] .table-custom th {
+            color: #a1a5b7 !important;
+            border-bottom-color: #2b2b40 !important;
+            background-color: transparent !important;
+        }
+
+        [data-theme="dark"] .table-custom td {
+            border-bottom-color: #2b2b40 !important;
+            color: #e4e6eb !important;
+            background-color: transparent !important;
+        }
+        
+        [data-theme="dark"] .table-custom tbody tr {
+            background-color: transparent !important;
+        }
+        
+        [data-theme="dark"] .table-custom tbody tr:hover {
+            background-color: #26263a !important;
+        }
+
+        [data-theme="dark"] .header-action {
+            background: #1e1e2d;
+            border-color: #2b2b40;
+            color: #e4e6eb;
+        }
+        
+        [data-theme="dark"] .header-action:hover {
+            background: #2b2b40;
+        }
+        
+        [data-theme="dark"] .form-control {
+            background-color: #2b2b40 !important;
+            border-color: #2b2b40 !important;
+            color: #e4e6eb !important;
+        }
+        
+        [data-theme="dark"] .form-control::placeholder {
+            color: #a1a5b7 !important;
+        }
+        
+        [data-theme="dark"] .sidebar-nav-link {
+            color: #e4e6eb;
+        }
+
+        [data-theme="dark"] .sidebar-nav-link:not(.active):hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        [data-theme="dark"] .border-top,
+        [data-theme="dark"] .border-bottom {
+            border-color: #2b2b40 !important;
+        }
+        
+        [data-theme="dark"] .btn-light {
+            background-color: #2b2b40 !important;
+            border-color: #2b2b40 !important;
+            color: #e4e6eb !important;
+        }
+        
+        [data-theme="dark"] .btn-light:hover {
+            background-color: #3b3b54 !important;
+        }
+
+        [data-theme="dark"] .page-link {
+            background-color: #2b2b40 !important;
+            border-color: #2b2b40 !important;
+            color: #e4e6eb !important;
+        }
+
+        [data-theme="dark"] .page-item.disabled .page-link {
+            background-color: #1e1e2d !important;
+            color: #6c757d !important;
+        }
+
+        [data-theme="dark"] .page-item.active .page-link {
+            background-color: #0D6EFD !important;
+            border-color: #0D6EFD !important;
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .sidebar-footer {
+            background: #1e1e2d !important;
+            border-top-color: #2b2b40 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar glass-panel" id="sidebar">
+        <!-- Sidebar Toggle -->
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Thu gọn/Mở rộng sidebar">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- Logo -->
+        <div class="sidebar-logo">
+            <div class="logo-icon" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <i class="bi bi-hospital-fill"></i>
+            </div>
+            <div class="logo-text">
+                <span class="hospital-name">MediCore Health</span>
+                <span class="hospital-sub fw-medium text-muted">Cổng Bác Sĩ</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav mt-3">
+            <div class="sidebar-nav-section">
+                <div class="sidebar-nav-title px-4 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 10px;">Chức Năng Chính</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link active" data-section="patient-records">
+                            <span class="nav-icon"><i class="bi bi-person-vcard"></i></span>
+                            <span class="nav-label">Quản lý hồ sơ bệnh án</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="prescriptions">
+                            <span class="nav-icon"><i class="bi bi-capsule"></i></span>
+                            <span class="nav-label">Kê đơn thuốc</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="rooms">
+                            <span class="nav-icon"><i class="bi bi-door-open"></i></span>
+                            <span class="nav-label">Danh sách phòng</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="schedule">
+                            <span class="nav-icon"><i class="bi bi-calendar-check"></i></span>
+                            <span class="nav-label">Lịch làm hôm nay</span>
+                            <span class="badge rounded-pill ms-auto" style="background: var(--primary-gradient);">4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-nav-section mt-4">
+                <div class="sidebar-nav-title px-4 text-uppercase text-muted" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 10px;">Hệ Thống</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="settings">
+                            <span class="nav-icon"><i class="bi bi-gear"></i></span>
+                            <span class="nav-label">Cài đặt</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-nav-item mt-2">
+                        <a href="#" class="sidebar-nav-link text-danger" style="background: rgba(220, 53, 69, 0.05);">
+                            <span class="nav-icon text-danger"><i class="bi bi-box-arrow-right"></i></span>
+                            <span class="nav-label">Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer mt-auto p-3 border-top" style="background: rgba(248, 249, 254, 0.5);">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Nam&background=0D6EFD&color=fff" alt="Avatar" class="rounded-circle shadow-sm" style="width: 40px; height: 40px;">
+                </div>
+                <div class="flex-grow-1 ms-3 overflow-hidden">
+                    <h6 class="mb-0 text-truncate fw-bold text-dark" style="font-size: 0.9rem;">BS. Trần Hoàng Nam</h6>
+                    <small class="text-muted text-truncate d-block">Trưởng khoa Tim Mạch</small>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <div class="main-content">
+        <!-- HEADER -->
+        <header class="dashboard-header glass-panel d-flex justify-content-between align-items-center px-4 py-3 sticky-top z-3">
+            <div class="header-left d-flex align-items-center">
+                <!-- Mobile Menu Toggle -->
+                <button class="btn btn-light d-md-none me-3" id="mobileMenuToggle" style="border-radius: 50%;">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                
+                <div class="d-none d-md-block">
+                    <h5 class="mb-0 fw-bold" style="color: var(--text-dark); letter-spacing: 0.5px;">Trung Tâm Bác Sĩ</h5>
+                    <small class="text-muted">Chào ngày mới, chúc bạn làm việc hiệu quả!</small>
+                </div>
+            </div>
+
+            <div class="header-right d-flex align-items-center gap-3">
+                <!-- Search Input (Optional for header) -->
+                <div class="d-none d-lg-flex position-relative">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" class="form-control bg-light border-0 ps-5 rounded-pill" placeholder="Tìm kiếm nhanh..." style="width: 250px;">
+                </div>
+
+                <!-- Messages -->
+                <div class="position-relative">
+                    <button class="header-action position-relative" aria-label="Tin nhắn">
+                        <i class="bi bi-chat-dots fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info border border-light">
+                            3
+                            <span class="visually-hidden">tin nhắn chưa đọc</span>
+                        </span>
+                    </button>
+                </div>
+                
+                <!-- Notification Bell -->
+                <div class="position-relative">
+                    <button class="header-action position-relative bell-ring" id="notificationBtn" aria-label="Thông báo">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+                            5
+                            <span class="visually-hidden">thông báo mới</span>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="header-action" id="themeToggle" aria-label="Chuyển giao diện">
+                    <i class="bi bi-moon-stars-fill text-primary fs-5 toggle-icon-moon"></i>
+                    <i class="bi bi-sun-fill text-warning fs-5 toggle-icon-sun" style="display: none;"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT AREA -->
+        <div class="page-content" style="padding: 2rem;">
+            
+            <!-- SECTION 1: Quản lý hồ sơ bệnh án -->
+            <div class="content-section fade-in-section active" id="section-patient-records">
+                <!-- Section Header -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+                    <div>
+                        <h3 class="fw-bold mb-1" style="color: var(--text-dark);">Hồ Sơ Bệnh Án</h3>
+                        <p class="text-muted mb-0">Quản lý và cập nhật thông tin bệnh nhân đang theo dõi.</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary px-4 py-2 shadow-sm rounded-pill d-flex align-items-center gap-2" style="background: var(--primary-gradient); border: none;">
+                            <i class="bi bi-plus-circle-fill"></i> Tạo Hồ Sơ Mới
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="dashboard-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted fw-medium mb-1 fs-6">Tổng Bệnh Nhân</p>
+                                    <h2 class="fw-bold mb-0 text-dark">1,248</h2>
+                                </div>
+                                <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-people fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1"><i class="bi bi-arrow-up-short"></i> 12%</span>
+                                <span class="text-muted ms-2" style="font-size: 0.85rem;">so với tháng trước</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="dashboard-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted fw-medium mb-1 fs-6">Đang Điều Trị</p>
+                                    <h2 class="fw-bold mb-0 text-dark">45</h2>
+                                </div>
+                                <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-activity fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-2 py-1"><i class="bi bi-arrow-down-short"></i> 2%</span>
+                                <span class="text-muted ms-2" style="font-size: 0.85rem;">so với tuần trước</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="dashboard-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted fw-medium mb-1 fs-6">Chờ Khám Hôm Nay</p>
+                                    <h2 class="fw-bold mb-0 text-dark">12</h2>
+                                </div>
+                                <div class="bg-info bg-opacity-10 text-info p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-clock-history fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-muted" style="font-size: 0.85rem;">3 bệnh nhân ưu tiên</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="dashboard-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="text-muted fw-medium mb-1 fs-6">Lịch Hẹn Mới</p>
+                                    <h2 class="fw-bold mb-0 text-dark">8</h2>
+                                </div>
+                                <div class="bg-success bg-opacity-10 text-success p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-calendar-plus fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="#" class="text-decoration-none text-primary" style="font-size: 0.85rem; font-weight: 500;">Xem tất cả lịch hẹn <i class="bi bi-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Table Area -->
+                <div class="dashboard-card">
+                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                            <h5 class="fw-bold mb-0">Danh Sách Bệnh Nhân</h5>
+                            <div class="d-flex gap-2">
+                                <div class="position-relative">
+                                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                    <input type="text" class="form-control bg-light border-0 ps-5 rounded-pill" placeholder="Tìm theo tên, mã BN..." style="width: 250px;">
+                                </div>
+                                <button class="btn btn-light rounded-circle" data-bs-toggle="tooltip" title="Lọc"><i class="bi bi-funnel"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 mt-3">
+                        <div class="table-responsive">
+                            <table class="table table-custom mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Mã BN</th>
+                                        <th>Thông Tin Bệnh Nhân</th>
+                                        <th>Chẩn Đoán / Triệu Chứng</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Ngày Cập Nhật</th>
+                                        <th class="text-end pe-4">Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="ps-4"><span class="badge bg-light text-dark border">BN-2024-001</span></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-primary bg-opacity-10 text-primary fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">LA</div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0 fw-bold text-dark">Lê Văn Anh</h6>
+                                                    <span class="text-muted" style="font-size: 0.8rem;">Nam, 45 tuổi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="d-block text-dark fw-medium">Tăng huyết áp vô căn</span>
+                                            <span class="text-muted" style="font-size: 0.8rem;">Đau đầu, chóng mặt nhẹ</span>
+                                        </td>
+                                        <td><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Đang điều trị</span></td>
+                                        <td><span class="text-muted"><i class="bi bi-clock me-1"></i> Hôm nay, 08:30</span></td>
+                                        <td class="text-end pe-4">
+                                            <button class="btn btn-sm btn-light rounded-circle text-primary me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-secondary me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-info" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-4"><span class="badge bg-light text-dark border">BN-2024-042</span></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-danger bg-opacity-10 text-danger fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">TH</div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0 fw-bold text-dark">Trần Thị Hoa</h6>
+                                                    <span class="text-muted" style="font-size: 0.8rem;">Nữ, 62 tuổi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="d-block text-dark fw-medium">Suy tim độ 2</span>
+                                            <span class="text-muted" style="font-size: 0.8rem;">Khó thở khi gắng sức</span>
+                                        </td>
+                                        <td><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2">Chờ tái khám</span></td>
+                                        <td><span class="text-muted"><i class="bi bi-clock me-1"></i> 20/05/2024</span></td>
+                                        <td class="text-end pe-4">
+                                            <button class="btn btn-sm btn-light rounded-circle text-primary me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-secondary me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-info" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-4"><span class="badge bg-light text-dark border">BN-2024-089</span></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-info bg-opacity-10 text-info fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">MQ</div>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h6 class="mb-0 fw-bold text-dark">Nguyễn Minh Quân</h6>
+                                                    <span class="text-muted" style="font-size: 0.8rem;">Nam, 28 tuổi</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="d-block text-dark fw-medium">Rối loạn nhịp tim</span>
+                                            <span class="text-muted" style="font-size: 0.8rem;">Hồi hộp, đánh trống ngực</span>
+                                        </td>
+                                        <td><span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 py-2">Khám mới</span></td>
+                                        <td><span class="text-muted"><i class="bi bi-clock me-1"></i> Hôm qua, 14:15</span></td>
+                                        <td class="text-end pe-4">
+                                            <button class="btn btn-sm btn-light rounded-circle text-primary me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-secondary me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-light rounded-circle text-info" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 p-4">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm justify-content-end mb-0 gap-1">
+                                <li class="page-item disabled">
+                                    <a class="page-link rounded-circle border-0" href="#" tabindex="-1" aria-disabled="true"><i class="bi bi-chevron-left"></i></a>
+                                </li>
+                                <li class="page-item active"><a class="page-link rounded-circle border-0 bg-primary" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link rounded-circle border-0 text-dark" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link rounded-circle border-0 text-dark" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link rounded-circle border-0 text-dark" href="#"><i class="bi bi-chevron-right"></i></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: Kê đơn thuốc -->
+            <div class="content-section" id="section-prescriptions" style="display:none;">
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3024/3024310.png" alt="Prescription" style="width: 120px; opacity: 0.7; margin-bottom: 20px;">
+                    <h3 class="fw-bold text-dark">Kê Đơn Thuốc</h3>
+                    <p class="text-muted">Khu vực tạo và quản lý đơn thuốc sẽ được hiển thị ở đây.</p>
+                </div>
+            </div>
+            
+            <!-- SECTION: Danh sách phòng -->
+            <div class="content-section" id="section-rooms" style="display:none;">
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2833/2833446.png" alt="Rooms" style="width: 120px; opacity: 0.7; margin-bottom: 20px;">
+                    <h3 class="fw-bold text-dark">Danh Sách Phòng</h3>
+                    <p class="text-muted">Giao diện quản lý phòng bệnh và giường bệnh.</p>
+                </div>
+            </div>
+            
+            <!-- SECTION: Lịch làm hôm nay -->
+            <div class="content-section" id="section-schedule" style="display:none;">
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2693/2693507.png" alt="Schedule" style="width: 120px; opacity: 0.7; margin-bottom: 20px;">
+                    <h3 class="fw-bold text-dark">Lịch Trình Hôm Nay</h3>
+                    <p class="text-muted">Danh sách ca trực và lịch khám của bác sĩ.</p>
+                </div>
+            </div>
+            
+            <!-- SECTION: Cài đặt -->
+            <div class="content-section" id="section-settings" style="display:none;">
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="Settings" style="width: 120px; opacity: 0.7; margin-bottom: 20px;">
+                    <h3 class="fw-bold text-dark">Cài Đặt Hệ Thống</h3>
+                    <p class="text-muted">Cấu hình tài khoản và tùy chọn giao diện.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Basic Script for UI interaction -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle Sidebar Navigation
+        const navLinks = document.querySelectorAll('.sidebar-nav-link[data-section]');
+        const sections = document.querySelectorAll('.content-section');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Remove active class from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all sections
+                sections.forEach(s => {
+                    s.classList.remove('active', 'fade-in-section');
+                    s.style.display = 'none';
+                });
+                
+                // Show target section with animation
+                const targetId = 'section-' + this.getAttribute('data-section');
+                const targetSection = document.getElementById(targetId);
+                if(targetSection) {
+                    targetSection.style.display = 'block';
+                    // Trigger reflow to restart animation
+                    void targetSection.offsetWidth;
+                    targetSection.classList.add('active', 'fade-in-section');
+                }
+            });
+        });
+
+        // Toggle Sidebar on Mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebar = document.getElementById('sidebar');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            if (window.innerWidth < 992) { // Mobile/Tablet behavior
+                sidebar.classList.toggle('show');
+                if(sidebarOverlay) {
+                    sidebarOverlay.classList.toggle('show');
+                    sidebarOverlay.style.display = sidebarOverlay.classList.contains('show') ? 'block' : 'none';
+                }
+            }
+        }
+
+        if(sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebar);
+        if(mobileMenuToggle) mobileMenuToggle.addEventListener('click', toggleSidebar);
+        if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Dark/Light Mode Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const iconMoon = document.querySelector('.toggle-icon-moon');
+        const iconSun = document.querySelector('.toggle-icon-sun');
+        
+        // Check local storage for theme preference
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            iconMoon.style.display = 'none';
+            iconSun.style.display = 'block';
+        }
+
+        if(themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.body.getAttribute('data-theme') === 'dark';
+                
+                if (isDark) {
+                    document.body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    iconMoon.style.display = 'block';
+                    iconSun.style.display = 'none';
+                } else {
+                    document.body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    iconMoon.style.display = 'none';
+                    iconSun.style.display = 'block';
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

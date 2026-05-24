@@ -297,14 +297,8 @@
                     document.cookie = "access_token=" + data.access_token + "; path=/;";
 
                     localStorage.setItem("token", data.access_token);
-
-                    if (role.includes("ADMIN")) {
-                        window.location.href = "/DashBoard/AdminDashboard";
-                    } else if (role.includes("DOCTOR")) {
-                        window.location.href = "/DashBoard/Doctor";
-                    } else {
-                        window.location.href = "index";
-                    }
+                    
+                    window.location.href = "/";
                 } else {
                     const errorData = await response.json();
                     if (response.status === 400) {

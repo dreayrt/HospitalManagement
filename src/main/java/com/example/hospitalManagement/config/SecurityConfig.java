@@ -32,14 +32,20 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/api/auth/**",
-                                "/index",
-                                "/"
+                                "/error"
                         ).permitAll()
                         .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
+                        .requestMatchers("/DashBoard/DoctorDashboard").hasAuthority("DOCTOR")
                         .anyRequest().authenticated()
 
-                )
 
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/login");
+                        })
+                        .accessDeniedPage("/DeniedAccessPage")
+                )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
