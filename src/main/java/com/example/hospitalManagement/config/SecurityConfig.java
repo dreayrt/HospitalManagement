@@ -33,9 +33,10 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/api/auth/**",
                                 "/index",
-                                "/"
+                                "/",
+                                "/api/doctors/**"
                         ).permitAll()
-                        .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
+                        .requestMatchers("/DashBoard/AdminDashboard", "/api/doctors/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
                         .anyRequest().authenticated()
 
                 )

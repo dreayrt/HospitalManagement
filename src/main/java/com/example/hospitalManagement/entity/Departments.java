@@ -20,7 +20,7 @@ public class Departments {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private DepartmentStatus status;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private LocalDateTime createAt;
 
     @OneToMany(mappedBy = "department")

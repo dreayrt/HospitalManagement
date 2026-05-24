@@ -11,9 +11,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import javax.naming.Binding;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +31,13 @@ public class AuthenticationApi {
     private JWTUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> Login(@Valid @ModelAttribute LoginDTO loginDTO, org.springframework.validation.BindingResult bindingResult) {
+    public ResponseEntity<?> Login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> 
+            bindingResult.getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
             );
+            System.out.println("Error login post: "+errors);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
 

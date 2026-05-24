@@ -71,10 +71,10 @@ public class Doctor {
         this.experienceYears = experienceYears;
     }
 
+
     public UserStatus getUserStatus() {
         return userStatus;
     }
-
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }

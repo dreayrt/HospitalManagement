@@ -12,6 +12,87 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom Dashboard CSS -->
     <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <!-- Added: Doctors modal/notification polish -->
+    <style>
+        .doctor-modal-card .modal-content {
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+            overflow: hidden;
+        }
+
+        .doctor-modal-card .modal-header {
+            background: linear-gradient(135deg, #0d6efd, #0f766e);
+            color: #fff;
+            border: 0;
+            padding: 1.1rem 1.4rem;
+        }
+
+        .doctor-modal-card .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .doctor-form-section {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--bg-card);
+        }
+
+        .doctor-form-section-title {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            margin-bottom: .85rem;
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .doctor-center-notice {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, .38);
+            padding: 1rem;
+        }
+
+        .doctor-center-notice.show {
+            display: flex;
+        }
+
+        .doctor-center-box {
+            width: min(420px, 100%);
+            border-radius: 14px;
+            background: var(--bg-card);
+            color: var(--text-dark);
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .28);
+            padding: 1.35rem;
+            text-align: center;
+        }
+
+        .doctor-center-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: .8rem;
+            font-size: 1.45rem;
+            color: #fff;
+            background: var(--success);
+        }
+
+        .doctor-center-notice.error .doctor-center-icon,
+        .doctor-center-notice.confirm .doctor-center-icon {
+            background: var(--danger);
+        }
+    </style>
 </head>
 <body>
 
@@ -76,6 +157,22 @@
                             <span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span>
                             <span class="nav-label">Hóa đơn Thanh toán</span>
                             <span class="nav-badge badge-danger">5</span>
+                        </a>
+                    </li>
+                    <!-- Added: Menu quản lý bác sĩ chạy SPA bằng Fetch API -->
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="doctors" data-tooltip="Quản lý Bác sĩ">
+                            <span class="nav-icon"><i class="bi bi-person-vcard-fill"></i></span>
+                            <span class="nav-label">Quản lý Bác sĩ</span>
+                            <span class="nav-badge badge-primary" id="doctor-nav-badge">0</span>
+                        </a>
+                    </li>
+                    <!-- Added: Menu quản lý lịch khám (Appointment) -->
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="appointments" data-tooltip="Quản lý Lịch khám">
+                            <span class="nav-icon"><i class="bi bi-calendar2-week-fill"></i></span>
+                            <span class="nav-label">Quản lý Lịch khám</span>
+                            <span class="nav-badge badge-warning" id="appointment-nav-badge">0</span>
                         </a>
                     </li>
                 </ul>
@@ -999,6 +1096,164 @@
                 </div>
             </div>
 
+            <!-- Added: SECTION DOCTORS - quản lý bác sĩ dạng Single Page, không reload trang -->
+            <div class="content-section" id="section-doctors">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Quản lý Bác sĩ</h1>
+                            <p class="page-subtitle">Quản lý hồ sơ bác sĩ theo khoa/phòng phụ trách.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <button type="button" class="btn-outline-dashboard" onclick="loadDoctorData()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Làm mới
+                            </button>
+                            <button type="button" class="btn-primary-dashboard" onclick="openCreateDoctorModal()">
+                                <i class="bi bi-plus-lg"></i>
+                                Thêm bác sĩ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">
+                            <i class="bi bi-person-vcard-fill"></i>
+                            Danh sách bác sĩ
+                        </div>
+                        <div class="dashboard-card-actions">
+                            <button type="button" class="card-action-btn" onclick="loadDoctorData()" title="Làm mới">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body" style="padding:0;overflow-x:auto;">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Bác sĩ</th>
+                                    <th>Mã Chứng Chỉ</th>
+                                    <th>SĐT / Email</th>
+                                    <th>Khoa/Phòng phụ trách</th>
+                                    <th>Chuyên Môn</th>
+                                    <th>Kinh Nghiệm</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doctor-table-body">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-muted);">
+                                        Chọn menu Quản lý Bác sĩ để tải dữ liệu.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: APPOINTMENTS (Quản lý Lịch khám) ===== -->
+            <div class="content-section" id="section-appointments">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Quản lý Lịch khám 📅</h1>
+                            <p class="page-subtitle">Xác nhận, hủy, dời lịch và theo dõi trạng thái lịch hẹn của bệnh nhân.</p>
+                        </div>
+                        <div class="page-header-actions">
+                            <!-- Tìm kiếm nhanh -->
+                            <input type="text" class="form-control" id="apptFilterSearch" placeholder="Tìm bệnh nhân..." style="width:180px;display:inline-block;" oninput="loadAppointmentData(0)">
+                            <!-- Bộ lọc ngày -->
+                            <input type="date" class="form-control" id="apptFilterFrom" style="width:auto;display:inline-block;" title="Từ ngày" onchange="loadAppointmentData(0)">
+                            <input type="date" class="form-control" id="apptFilterTo" style="width:auto;display:inline-block;" title="Đến ngày" onchange="loadAppointmentData(0)">
+                            <!-- Lọc trạng thái -->
+                            <select class="form-select" id="apptFilterStatus" style="width:auto;display:inline-block;" onchange="loadAppointmentData(0)">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="PENDING">⏳ Chờ xác nhận</option>
+                                <option value="CONFIRMED">✅ Đã xác nhận</option>
+                                <option value="IN_PROGRESS">🔵 Đang khám</option>
+                                <option value="COMPLETED">🟢 Hoàn thành</option>
+                                <option value="CANCELLED">🔴 Đã hủy</option>
+                            </select>
+                            <button type="button" class="btn-outline-dashboard" onclick="loadAppointmentData(0)">
+                                <i class="bi bi-arrow-clockwise"></i> Làm mới
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ thống kê nhanh -->
+                <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.5rem;">
+                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('PENDING')">
+                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="apptCountPending">-</div>
+                            <div class="stat-card-label">Chờ xác nhận</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('CONFIRMED')">
+                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="bi bi-calendar-check"></i></div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="apptCountConfirmed">-</div>
+                            <div class="stat-card-label">Đã xác nhận</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('COMPLETED')">
+                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);"><i class="bi bi-check2-all"></i></div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="apptCountCompleted">-</div>
+                            <div class="stat-card-label">Hoàn thành</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('CANCELLED')">
+                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);"><i class="bi bi-x-circle"></i></div>
+                        <div class="stat-card-content">
+                            <div class="stat-card-value" id="apptCountCancelled">-</div>
+                            <div class="stat-card-label">Đã hủy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">
+                            <i class="bi bi-calendar2-week-fill"></i>
+                            Danh sách lịch khám
+                        </div>
+                        <!-- Phân trang -->
+                        <div class="dashboard-card-actions" id="apptPaginationControls" style="display:flex;gap:.4rem;align-items:center;">
+                            <button type="button" class="card-action-btn" id="apptPrevBtn" onclick="changeApptPage(-1)" title="Trang trước"><i class="bi bi-chevron-left"></i></button>
+                            <span id="apptPageInfo" style="font-size:.85rem;color:var(--text-muted);">Trang 1</span>
+                            <button type="button" class="card-action-btn" id="apptNextBtn" onclick="changeApptPage(1)" title="Trang sau"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body" style="padding:0;overflow-x:auto;">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Bệnh nhân</th>
+                                    <th>Bác sĩ phụ trách</th>
+                                    <th>Khoa/Phòng</th>
+                                    <th>Ngày khám</th>
+                                    <th>Giờ khám</th>
+                                    <th>Lý do</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointment-table-body">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-muted);">Chọn menu Quản lý Lịch khám để tải dữ liệu.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <!-- ===== SECTION: STATISTICS (Thống kê) ===== -->
             <div class="content-section" id="section-statistics">
                 <div class="page-header">
@@ -1295,6 +1550,256 @@
     </div>
 </div>
 
+<!-- Added: Modal thêm mới bác sĩ -->
+<div class="modal fade doctor-modal-card" id="createDoctorModal" tabindex="-1" aria-labelledby="createDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <form id="createDoctorForm" onsubmit="submitCreateDoctor(event)">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createDoctorModalLabel"><i class="bi bi-person-plus-fill me-2"></i>Thêm bác sĩ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="doctor-form-section">
+                        <div class="doctor-form-section-title"><i class="bi bi-shield-lock"></i>Tài khoản đăng nhập mới</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="createDoctorUserName" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="createDoctorUserName" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorPassword" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" id="createDoctorPassword" minlength="6" autocomplete="new-password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doctor-form-section">
+                        <div class="doctor-form-section-title"><i class="bi bi-person-vcard"></i>Hồ sơ bác sĩ</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="createDoctorDepartmentId" class="form-label">Chọn Khoa</label>
+                                <select class="form-select" id="createDoctorDepartmentId" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorFullName" class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" id="createDoctorFullName" maxlength="120" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="createDoctorEmail" maxlength="120">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorPhone" class="form-label">SĐT</label>
+                                <input type="text" class="form-control" id="createDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
+                                <input type="text" class="form-control" id="createDoctorLicenseNumber" minlength="6" maxlength="30" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorExperienceYears" class="form-label">Số năm kinh nghiệm</label>
+                                <input type="number" class="form-control" id="createDoctorExperienceYears" min="0" max="60" value="0" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorSpecialization" class="form-label">Chuyên môn</label>
+                                <input type="text" class="form-control" id="createDoctorSpecialization" maxlength="120">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorStatus" class="form-label">Trạng thái</label>
+                                <select class="form-select" id="createDoctorStatus" required>
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="INACTIVE">INACTIVE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu bác sĩ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Added: Modal sửa bác sĩ -->
+<div class="modal fade doctor-modal-card" id="editDoctorModal" tabindex="-1" aria-labelledby="editDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editDoctorForm" onsubmit="submitUpdateDoctor(event)">
+                <input type="hidden" id="editDoctorId">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDoctorModalLabel"><i class="bi bi-pencil-square me-2"></i>Sửa bác sĩ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="editDoctorUserId" class="form-label">Chọn tài khoản</label>
+                            <select class="form-select" id="editDoctorUserId" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorDepartmentId" class="form-label">Chọn Khoa</label>
+                            <select class="form-select" id="editDoctorDepartmentId" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorFullName" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="editDoctorFullName" maxlength="120" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editDoctorEmail" maxlength="120">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorPhone" class="form-label">SĐT</label>
+                            <input type="text" class="form-control" id="editDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
+                            <input type="text" class="form-control" id="editDoctorLicenseNumber" minlength="6" maxlength="30" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorExperienceYears" class="form-label">Số năm kinh nghiệm</label>
+                            <input type="number" class="form-control" id="editDoctorExperienceYears" min="0" max="60" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorSpecialization" class="form-label">Chuyên môn</label>
+                            <input type="text" class="form-control" id="editDoctorSpecialization" maxlength="120">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="editDoctorStatus" required>
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Added: Thông báo và xác nhận giữa màn hình cho thao tác bác sĩ -->
+<div class="doctor-center-notice" id="doctorCenterNotice" aria-live="polite">
+    <div class="doctor-center-box">
+        <div class="doctor-center-icon" id="doctorCenterIcon"><i class="bi bi-check-lg"></i></div>
+        <h5 id="doctorCenterTitle" style="font-weight:800;margin-bottom:.45rem;">Thành công</h5>
+        <p id="doctorCenterMessage" style="margin:0;color:var(--text-muted);"></p>
+        <div id="doctorCenterActions" style="display:none;margin-top:1rem;gap:.6rem;justify-content:center;">
+            <button type="button" class="btn btn-secondary" id="doctorCenterCancelBtn">Hủy</button>
+            <button type="button" class="btn btn-danger" id="doctorCenterConfirmBtn">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Lịch làm việc của Bác sĩ (Xem lịch khám theo tuần) ===== -->
+<div class="modal fade" id="doctorScheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-calendar2-week"></i> Lịch làm việc: <span id="scheduleModalDoctorName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thanh chọn khoảng ngày -->
+                <div class="d-flex gap-2 align-items-center mb-3">
+                    <label class="form-label mb-0">Từ ngày:</label>
+                    <input type="date" class="form-control" id="scheduleFromDate" style="width:auto;">
+                    <label class="form-label mb-0">Đến ngày:</label>
+                    <input type="date" class="form-control" id="scheduleToDate" style="width:auto;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="loadDoctorScheduleModal()">
+                        <i class="bi bi-search"></i> Xem
+                    </button>
+                </div>
+                <!-- Bảng lịch làm việc -->
+                <div style="overflow-x:auto;">
+                    <table class="activity-table" id="doctorScheduleTable">
+                        <thead>
+                            <tr>
+                                <th>Ngày khám</th>
+                                <th>Giờ khám</th>
+                                <th>Bệnh nhân</th>
+                                <th>Mã BN</th>
+                                <th>Lý do</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctor-schedule-modal-body">
+                            <tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chọn khoảng ngày và nhấn Xem.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Hủy lịch khám (Admin nhập lý do) ===== -->
+<div class="modal fade" id="cancelAppointmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-x-circle-fill text-danger me-2"></i>Hủy lịch khám</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="cancelApptId">
+                <div class="alert" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:.75rem;padding:1rem;margin-bottom:1rem;">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                    Hành động này <strong>không thể hoàn tác</strong>. Lịch khám sẽ chuyển sang trạng thái <strong>CANCELLED</strong>.
+                </div>
+                <div id="cancelApptInfo" style="margin-bottom:1rem;padding:.75rem;background:var(--bg-secondary);border-radius:.6rem;font-size:.9rem;color:var(--text-muted);"></div>
+                <label for="cancelReason" class="form-label fw-semibold">Lý do hủy <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="cancelReason" rows="3" maxlength="300" placeholder="Nhập lý do hủy lịch khám..." required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" onclick="submitCancelAppointment()">
+                    <i class="bi bi-x-circle"></i> Xác nhận hủy lịch
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Dời lịch khám ===== -->
+<div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-calendar-arrow-right"></i> Dời lịch khám</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="rescheduleApptId">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="rescheduleDate" class="form-label">Ngày mới <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="rescheduleDate" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="rescheduleTime" class="form-label">Giờ mới <span class="text-danger">*</span></label>
+                        <input type="time" class="form-control" id="rescheduleTime" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-warning" onclick="submitReschedule()"><i class="bi bi-arrow-repeat"></i> Xác nhận dời lịch</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ==================== SCRIPTS ==================== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1346,6 +1851,26 @@
         });
     });
 
+    // Added: Event Delegation bổ sung cho các phần tử data-section được thêm động, không sửa logic cũ.
+    function handleDynamicSectionNavigation(event) {
+        const trigger = event.target.closest('[data-section]');
+        if (!trigger) return;
+
+        const section = trigger.getAttribute('data-section');
+        event.preventDefault();
+        switchSection(section);
+
+        // Added: Tự động load dữ liệu khi chuyển tab
+        if (section === 'doctors') {
+            loadDoctorData();
+        } else if (section === 'appointments') {
+            loadAppointmentData();
+        }
+    }
+
+    document.querySelector('.sidebar')?.addEventListener('click', handleDynamicSectionNavigation);
+    document.querySelector('.page-content')?.addEventListener('click', handleDynamicSectionNavigation);
+
     // ==================== SIDEBAR TOGGLE ====================
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
@@ -1367,6 +1892,664 @@
         sidebar.classList.remove('mobile-open');
         sidebarOverlay.classList.remove('active');
     });
+
+    // ==================== DOCTOR MANAGEMENT SPA ====================
+    // Added: Module quản lý bác sĩ dùng Fetch API, chỉ dùng Department và không reload trang.
+    const doctorState = {
+        doctors: [],
+        departments: [],
+        users: []
+    };
+
+    function getDoctorCookie(name) {
+        return document.cookie
+            .split(';')
+            .map(part => part.trim())
+            .find(part => part.startsWith(`${name}=`))
+            ?.substring(name.length + 1) || '';
+    }
+
+    async function doctorFetchJson(url, options = {}) {
+        const requestHeaders = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        const authToken = getDoctorCookie('access_token') || localStorage.getItem('token');
+        if (authToken) {
+            requestHeaders.Authorization = `Bearer ${authToken}`;
+        }
+
+        let response = await fetch(url, {
+            credentials: 'same-origin',
+            headers: requestHeaders,
+            ...options
+        });
+
+        // Added: Chỉ fallback localStorage khi không có cookie token trong phiên hiện tại.
+        if (response.status === 401 || response.status === 403) {
+            const token = localStorage.getItem('token');
+            if (!getDoctorCookie('access_token') && token) {
+                response = await fetch(url, {
+                    credentials: 'same-origin',
+                    headers: { ...requestHeaders, Authorization: `Bearer ${token}` },
+                    ...options
+                });
+            }
+        }
+
+        if (response.status === 204) return null;
+
+        const rawBody = await response.text();
+        let data = {};
+        try {
+            data = rawBody ? JSON.parse(rawBody) : {};
+        } catch (error) {
+            data = {};
+        }
+        if (!response.ok) {
+            throw new Error(data.message || `Yêu cầu xử lý bác sĩ thất bại (HTTP ${response.status})`);
+        }
+        return data;
+    }
+
+    function doctorText(value, fallback = '-') {
+        return value === null || value === undefined || value === '' ? fallback : String(value);
+    }
+
+    function escapeHtml(value) {
+        return doctorText(value, '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
+    function buildDoctorInitials(name) {
+        const parts = doctorText(name, 'BS').trim().split(/\s+/).filter(Boolean);
+        return parts.slice(-2).map(part => part.charAt(0).toUpperCase()).join('') || 'BS';
+    }
+
+    function doctorWorkingBadge(workingStatus) {
+        const label = doctorText(workingStatus, 'Chưa xếp lịch');
+        if (label === 'Dang lam viec') {
+            return '<span class="status-badge status-success">Dang lam viec</span>';
+        }
+        if (label === 'Co lich hom nay') {
+            return '<span class="status-badge status-warning">Co lich hom nay</span>';
+        }
+        if (label === 'Bi khoa') {
+            return '<span class="status-badge status-danger">Bi khoa</span>';
+        }
+        return `<span class="status-badge status-info">${escapeHtml(label)}</span>`;
+    }
+
+    function doctorSystemBadge(status) {
+        if (status === 'ACTIVE') {
+            return '<span class="status-badge status-success">ACTIVE</span>';
+        }
+        if (status === 'INACTIVE') {
+            return '<span class="status-badge status-warning">INACTIVE</span>';
+        }
+        return `<span class="status-badge status-danger">${escapeHtml(status || 'LOCKED')}</span>`;
+    }
+
+    // Added: renderDoctorRows - cập nhật bảng bác sĩ, đã bỏ cột workingStatus riêng và thêm nút Lịch làm việc
+    function renderDoctorRows(doctors) {
+        const tableBody = document.getElementById('doctor-table-body');
+        const navBadge = document.getElementById('doctor-nav-badge');
+        if (!tableBody) return;
+
+        if (navBadge) navBadge.textContent = doctors.length;
+
+        if (!doctors.length) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-muted);">Không có bác sĩ nào.</td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = doctors.map((doctor, index) => `
+            <tr>
+                <td>
+                    <div class="patient-cell">
+                        <div class="patient-avatar bg-${(index % 5) + 1}">${escapeHtml(buildDoctorInitials(doctor.fullName))}</div>
+                        <div>
+                            <div class="patient-name">${escapeHtml(doctor.fullName)}</div>
+                            <div class="patient-id">ID: ${escapeHtml(doctor.id)} · ${doctorWorkingBadge(doctor.workingStatus)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-weight:600;color:var(--accent);">${escapeHtml(doctor.licenseNumber)}</td>
+                <td>
+                    <div>${escapeHtml(doctor.phone)}</div>
+                    <div class="patient-id">${escapeHtml(doctor.email)}</div>
+                </td>
+                <td>${escapeHtml(doctor.departmentName)}</td>
+                <td>${escapeHtml(doctor.specialization || '-')}</td>
+                <td>${escapeHtml(doctor.experienceYears ?? 0)} năm</td>
+                <td>${doctorSystemBadge(doctor.status)}</td>
+                <td>
+                    <div class="dashboard-card-actions">
+                        <!-- Nút xem lịch làm việc bác sĩ -->
+                        <button type="button" class="card-action-btn" style="color:var(--info,#0ea5e9);" onclick="openDoctorScheduleModal(${doctor.id}, '${escapeHtml(doctor.fullName)}')" title="Xem lịch làm việc">
+                            <i class="bi bi-calendar2-week"></i>
+                        </button>
+                        <button type="button" class="card-action-btn" onclick="openEditDoctorModal(${doctor.id})" title="Sửa bác sĩ">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="card-action-btn text-danger" title="Xóa bác sĩ" onclick="deleteDoctor(${doctor.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function loadDoctorData() {
+        const tableBody = document.getElementById('doctor-table-body');
+        if (!tableBody) return;
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align:center;padding:1.5rem;">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></div>
+                    <span style="margin-left:.5rem;color:var(--text-muted);">Đang tải dữ liệu bác sĩ...</span>
+                </td>
+            </tr>
+        `;
+
+        try {
+            doctorState.doctors = await doctorFetchJson('/api/doctors/findAll');
+            renderDoctorRows(doctorState.doctors);
+        } catch (error) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align:center;padding:1.5rem;color:var(--danger);">
+                        ${escapeHtml(error.message)}
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    async function loadDoctorDropdownData(doctorId = null) {
+        const userQuery = doctorId ? `?doctorId=${doctorId}` : '';
+        const [departments, users] = await Promise.all([
+            doctorFetchJson('/api/doctors/departments'),
+            doctorFetchJson(`/api/doctors/users/available${userQuery}`)
+        ]);
+        doctorState.departments = departments || [];
+        doctorState.users = users || [];
+    }
+
+    function fillDoctorSelect(selectId, items, placeholder, labelBuilder, selectedValue = '') {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+        items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = labelBuilder(item);
+            select.appendChild(option);
+        });
+        select.value = selectedValue ? String(selectedValue) : '';
+    }
+
+    function renderDoctorDropdowns(prefix, doctor = {}) {
+        if (prefix !== 'create') {
+            fillDoctorSelect(
+                `${prefix}DoctorUserId`,
+                doctorState.users,
+                'Chọn tài khoản',
+                user => `${user.fullName || 'Không tên'}${user.email ? ' - ' + user.email : ''}`,
+                doctor.userId
+            );
+        }
+        fillDoctorSelect(
+            `${prefix}DoctorDepartmentId`,
+            doctorState.departments,
+            'Chọn khoa/phòng',
+            department => department.name || 'Không tên',
+            doctor.departmentId
+        );
+    }
+
+    function attachDoctorUserAutofill(prefix) {
+        const userSelect = document.getElementById(`${prefix}DoctorUserId`);
+        if (!userSelect || userSelect.dataset.autofillReady === 'true') return;
+
+        userSelect.dataset.autofillReady = 'true';
+        userSelect.addEventListener('change', () => {
+            const user = doctorState.users.find(item => String(item.id) === userSelect.value);
+            if (!user) return;
+
+            document.getElementById(`${prefix}DoctorFullName`).value = user.fullName || '';
+            document.getElementById(`${prefix}DoctorEmail`).value = user.email || '';
+            document.getElementById(`${prefix}DoctorPhone`).value = user.phone || '';
+        });
+    }
+
+    async function openCreateDoctorModal() {
+        const form = document.getElementById('createDoctorForm');
+        form.reset();
+        document.getElementById('createDoctorStatus').value = 'ACTIVE';
+        document.getElementById('createDoctorExperienceYears').value = 0;
+
+        await loadDoctorDropdownData();
+        renderDoctorDropdowns('create');
+        attachDoctorUserAutofill('create');
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('createDoctorModal')).show();
+    }
+
+    function collectDoctorFormPayload(prefix) {
+        const payload = {
+            departmentId: Number(document.getElementById(`${prefix}DoctorDepartmentId`).value),
+            fullName: document.getElementById(`${prefix}DoctorFullName`).value.trim(),
+            email: document.getElementById(`${prefix}DoctorEmail`).value.trim(),
+            phone: document.getElementById(`${prefix}DoctorPhone`).value.trim(),
+            licenseNumber: document.getElementById(`${prefix}DoctorLicenseNumber`).value.trim(),
+            experienceYears: Number(document.getElementById(`${prefix}DoctorExperienceYears`).value),
+            specialization: document.getElementById(`${prefix}DoctorSpecialization`).value.trim(),
+            status: document.getElementById(`${prefix}DoctorStatus`).value
+        };
+
+        if (prefix === 'create') {
+            payload.userName = document.getElementById('createDoctorUserName').value.trim();
+            payload.password = document.getElementById('createDoctorPassword').value;
+        } else {
+            payload.userId = Number(document.getElementById(`${prefix}DoctorUserId`).value);
+        }
+
+        return payload;
+    }
+
+    function showDoctorCenterNotice(type, title, message, timeout = 2200) {
+        const notice = document.getElementById('doctorCenterNotice');
+        const icon = document.getElementById('doctorCenterIcon');
+        document.getElementById('doctorCenterTitle').textContent = title;
+        document.getElementById('doctorCenterMessage').textContent = message;
+        document.getElementById('doctorCenterActions').style.display = 'none';
+        notice.className = `doctor-center-notice show ${type || 'success'}`;
+        icon.innerHTML = type === 'error'
+            ? '<i class="bi bi-exclamation-triangle-fill"></i>'
+            : '<i class="bi bi-check-lg"></i>';
+
+        window.clearTimeout(showDoctorCenterNotice.timer);
+        showDoctorCenterNotice.timer = window.setTimeout(() => {
+            notice.classList.remove('show');
+        }, timeout);
+    }
+
+    function confirmDoctorCenter(title, message) {
+        return new Promise(resolve => {
+            const notice = document.getElementById('doctorCenterNotice');
+            const actions = document.getElementById('doctorCenterActions');
+            const confirmBtn = document.getElementById('doctorCenterConfirmBtn');
+            const cancelBtn = document.getElementById('doctorCenterCancelBtn');
+            document.getElementById('doctorCenterTitle').textContent = title;
+            document.getElementById('doctorCenterMessage').textContent = message;
+            document.getElementById('doctorCenterIcon').innerHTML = '<i class="bi bi-trash-fill"></i>';
+            actions.style.display = 'flex';
+            notice.className = 'doctor-center-notice show confirm';
+
+            const cleanup = result => {
+                confirmBtn.onclick = null;
+                cancelBtn.onclick = null;
+                notice.classList.remove('show');
+                resolve(result);
+            };
+
+            confirmBtn.onclick = () => cleanup(true);
+            cancelBtn.onclick = () => cleanup(false);
+        });
+    }
+
+    async function submitCreateDoctor(event) {
+        event.preventDefault();
+
+        try {
+            await doctorFetchJson('/api/doctors', {
+                method: 'POST',
+                body: JSON.stringify(collectDoctorFormPayload('create'))
+            });
+            bootstrap.Modal.getInstance(document.getElementById('createDoctorModal'))?.hide();
+            await loadDoctorData();
+            showDoctorCenterNotice('success', 'Đã thêm bác sĩ', 'Tài khoản mới và hồ sơ bác sĩ đã được tạo.');
+        } catch (error) {
+            showDoctorCenterNotice('error', 'Không thể thêm bác sĩ', error.message, 3200);
+        }
+    }
+
+    async function openEditDoctorModal(id) {
+        try {
+            const doctor = await doctorFetchJson(`/api/doctors/${id}`);
+            await loadDoctorDropdownData(id);
+            renderDoctorDropdowns('edit', doctor);
+            attachDoctorUserAutofill('edit');
+
+            document.getElementById('editDoctorId').value = doctor.id;
+            document.getElementById('editDoctorFullName').value = doctor.fullName || '';
+            document.getElementById('editDoctorEmail').value = doctor.email || '';
+            document.getElementById('editDoctorPhone').value = doctor.phone || '';
+            document.getElementById('editDoctorLicenseNumber').value = doctor.licenseNumber || '';
+            document.getElementById('editDoctorExperienceYears').value = doctor.experienceYears ?? 0;
+            document.getElementById('editDoctorSpecialization').value = doctor.specialization || '';
+            document.getElementById('editDoctorStatus').value = doctor.status || 'ACTIVE';
+
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('editDoctorModal')).show();
+        } catch (error) {
+            showDoctorCenterNotice('error', 'Không thể mở form sửa', error.message, 3200);
+        }
+    }
+
+    async function submitUpdateDoctor(event) {
+        event.preventDefault();
+
+        const id = document.getElementById('editDoctorId').value;
+        try {
+            await doctorFetchJson(`/api/doctors/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(collectDoctorFormPayload('edit'))
+            });
+            bootstrap.Modal.getInstance(document.getElementById('editDoctorModal'))?.hide();
+            await loadDoctorData();
+            showDoctorCenterNotice('success', 'Đã cập nhật bác sĩ', 'Thông tin bác sĩ đã được lưu.');
+        } catch (error) {
+            showDoctorCenterNotice('error', 'Không thể cập nhật', error.message, 3200);
+        }
+    }
+
+    async function deleteDoctor(id) {
+    console.log("==> Đang tiến hành xóa bác sĩ có ID thực tế là:", id);
+        const confirmed = await confirmDoctorCenter('Xóa bác sĩ', 'Bạn có chắc muốn xóa bác sĩ này?');
+        if (!confirmed) return;
+
+        try {
+            await doctorFetchJson(`/api/doctors/${id}`, { method: 'DELETE' });
+            await loadDoctorData();
+            showDoctorCenterNotice('success', 'Đã xóa bác sĩ', 'Hồ sơ bác sĩ đã được xóa.');
+        } catch (error) {
+            showDoctorCenterNotice('error', 'Không thể xóa bác sĩ', error.message, 3200);
+        }
+    }
+
+    // ==================== APPOINTMENT MANAGEMENT (Quản lý Lịch khám - Admin) ====================
+    const apptState = { currentPage: 0, totalPages: 0, totalElements: 0 };
+
+    // Helper: Format ngày yyyy-MM-dd → dd/MM/yyyy
+    function fmtDate(dateStr) {
+        if (!dateStr) return '-';
+        const parts = String(dateStr).split('-');
+        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        return dateStr;
+    }
+
+    // Helper: Format giờ HH:mm:ss → HH:mm
+    function fmtTime(timeStr) {
+        if (!timeStr) return '-';
+        return String(timeStr).substring(0, 5);
+    }
+
+    // Badge trạng thái lịch khám
+    function apptStatusBadge(status) {
+        const map = {
+            'PENDING':     { cls: 'status-warning',  label: '⏳ Chờ XN' },
+            'CONFIRMED':   { cls: 'status-success',  label: '✅ Đã XN' },
+            'IN_PROGRESS': { cls: 'status-info',     label: '🔵 Đang khám' },
+            'COMPLETED':   { cls: 'status-success',  label: '🟢 Hoàn thành' },
+            'CANCELLED':   { cls: 'status-danger',   label: '🔴 Đã hủy' }
+        };
+        const m = map[status] || { cls: 'status-info', label: escapeHtml(status || '-') };
+        return `<span class="status-badge ${m.cls}">${m.label}</span>`;
+    }
+
+    // Lọc nhanh bằng click vào thẻ thống kê
+    function filterApptByStatus(status) {
+        document.getElementById('apptFilterStatus').value = status;
+        loadAppointmentData(0);
+    }
+
+    // Load thống kê nhanh (4 thẻ)
+    async function loadApptStats() {
+        const statuses = ['PENDING','CONFIRMED','COMPLETED','CANCELLED'];
+        const ids      = ['apptCountPending','apptCountConfirmed','apptCountCompleted','apptCountCancelled'];
+        for (let i = 0; i < statuses.length; i++) {
+            try {
+                const res = await doctorFetchJson(`/api/appointments?page=0&size=1&status=${statuses[i]}`);
+                const el = document.getElementById(ids[i]);
+                if (el) el.textContent = res.totalElements ?? 0;
+            } catch { /* bỏ qua nếu lỗi */ }
+        }
+    }
+
+    // Mở modal xem lịch làm việc của bác sĩ
+    async function openDoctorScheduleModal(doctorId, doctorName) {
+        document.getElementById('scheduleModalDoctorName').textContent = doctorName;
+        const today    = new Date().toISOString().split('T')[0];
+        const nextWeek = new Date(Date.now() + 6 * 86400000).toISOString().split('T')[0];
+        document.getElementById('scheduleFromDate').value = today;
+        document.getElementById('scheduleToDate').value   = nextWeek;
+        document.getElementById('doctorScheduleModal').dataset.doctorId = doctorId;
+        await loadDoctorScheduleModal();
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('doctorScheduleModal')).show();
+    }
+
+    // Load lịch làm việc bác sĩ theo khoảng ngày
+    async function loadDoctorScheduleModal() {
+        const modal    = document.getElementById('doctorScheduleModal');
+        const doctorId = modal.dataset.doctorId;
+        const fromDate = document.getElementById('scheduleFromDate').value;
+        const toDate   = document.getElementById('scheduleToDate').value;
+        const tbody    = document.getElementById('doctor-schedule-modal-body');
+        
+        if (!doctorId || !fromDate || !toDate) return;
+        
+        // Ràng buộc: Từ ngày phải <= Đến ngày
+        if (new Date(fromDate) > new Date(toDate)) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--danger);"><i class="bi bi-exclamation-triangle-fill" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Ngày bắt đầu không được lớn hơn ngày kết thúc!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Đang tải lịch làm việc...</td></tr>`;
+        try {
+            const data = await doctorFetchJson(`/api/appointments/doctor/${doctorId}/schedule?fromDate=${fromDate}&toDate=${toDate}`);
+            if (!data || !data.length) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="bi bi-calendar2-x" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Không có lịch khám trong khoảng thời gian này.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = data.map(appt => `
+                <tr>
+                    <td><strong>${fmtDate(appt.appointmentDate)}</strong></td>
+                    <td>${fmtTime(appt.appointmentTime)}</td>
+                    <td>
+                        <div class="patient-name">${escapeHtml(appt.patientName || '-')}</div>
+                        <div class="patient-id">${escapeHtml(appt.patientPhone || '')}</div>
+                    </td>
+                    <td><span style="font-weight:600;color:var(--accent);">${escapeHtml(appt.patientCode || '-')}</span></td>
+                    <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(appt.reason || '')}">${escapeHtml(appt.reason || '-')}</td>
+                    <td>${apptStatusBadge(appt.status)}</td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--danger);"><i class="bi bi-exclamation-triangle me-1"></i>Lỗi: ${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    // Load danh sách lịch khám (section Appointments) - Admin view
+    async function loadAppointmentData(page = 0) {
+        const tbody = document.getElementById('appointment-table-body');
+        if (!tbody) return;
+
+        const fromDate = document.getElementById('apptFilterFrom')?.value || '';
+        const toDate   = document.getElementById('apptFilterTo')?.value   || '';
+        const status   = document.getElementById('apptFilterStatus')?.value || '';
+        const search   = document.getElementById('apptFilterSearch')?.value || '';
+
+        // Ràng buộc: Từ ngày phải <= Đến ngày
+        if (fromDate && toDate && new Date(fromDate) > new Date(toDate)) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--danger);"><i class="bi bi-exclamation-triangle-fill" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Ngày bắt đầu không được lớn hơn ngày kết thúc!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;"><div class="spinner-border spinner-border-sm text-primary" role="status"></div><span style="margin-left:.6rem;color:var(--text-muted);">Đang tải dữ liệu...</span></td></tr>`;
+        try {
+            let url = `/api/appointments?page=${page}&size=10`;
+            if (fromDate) url += `&fromDate=${fromDate}`;
+            if (toDate)   url += `&toDate=${toDate}`;
+            if (status)   url += `&status=${status}`;
+            if (search)   url += `&search=${encodeURIComponent(search)}`;
+
+            const pageData = await doctorFetchJson(url);
+            apptState.currentPage   = pageData.number;
+            apptState.totalPages    = pageData.totalPages;
+            apptState.totalElements = pageData.totalElements;
+
+            // Badge sidebar
+            const badge = document.getElementById('appointment-nav-badge');
+            if (badge) badge.textContent = pageData.totalElements;
+
+            // Phân trang
+            document.getElementById('apptPageInfo').textContent =
+                `Trang ${pageData.number + 1} / ${pageData.totalPages || 1} (${pageData.totalElements} lịch)`;
+            document.getElementById('apptPrevBtn').disabled = pageData.first;
+            document.getElementById('apptNextBtn').disabled = pageData.last;
+
+            const appts = pageData.content || [];
+            if (!appts.length) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="bi bi-calendar2-x" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Không tìm thấy lịch khám nào phù hợp.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = appts.map((appt, idx) => {
+                // Xác định nhóm nút thao tác theo trạng thái
+                let actions = '';
+                if (appt.status === 'PENDING') {
+                    actions = `
+                        <button class="card-action-btn" style="color:#10b981;" onclick="confirmAppointment(${appt.id})" title="Xác nhận lịch hẹn"><i class="bi bi-check-circle-fill"></i></button>
+                        <button class="card-action-btn" style="color:#f59e0b;" onclick="openRescheduleModal(${appt.id})" title="Dời lịch"><i class="bi bi-arrow-repeat"></i></button>
+                        <button class="card-action-btn text-danger" onclick="openCancelModal(${appt.id},'${escapeHtml(appt.patientName||'')}','${fmtDate(appt.appointmentDate)} ${fmtTime(appt.appointmentTime)}')" title="Hủy lịch"><i class="bi bi-x-circle"></i></button>`;
+                } else if (appt.status === 'CONFIRMED') {
+                    actions = `
+                        <button class="card-action-btn" style="color:#f59e0b;" onclick="openRescheduleModal(${appt.id})" title="Dời lịch"><i class="bi bi-arrow-repeat"></i></button>
+                        <button class="card-action-btn text-danger" onclick="openCancelModal(${appt.id},'${escapeHtml(appt.patientName||'')}','${fmtDate(appt.appointmentDate)} ${fmtTime(appt.appointmentTime)}')" title="Hủy lịch"><i class="bi bi-x-circle"></i></button>`;
+                } else {
+                    actions = `<span style="color:var(--text-muted);font-size:.8rem;">—</span>`;
+                }
+
+                return `
+                <tr>
+                    <td>
+                        <div class="patient-cell">
+                            <div class="patient-avatar bg-${(idx % 5) + 1}" style="width:34px;height:34px;font-size:.75rem;">
+                                ${escapeHtml((appt.patientName||'BN').trim().split(/\s+/).slice(-1)[0].charAt(0).toUpperCase())}
+                            </div>
+                            <div>
+                                <div class="patient-name">${escapeHtml(appt.patientName || '-')}</div>
+                                <div class="patient-id">${escapeHtml(appt.patientCode || '')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight:600;">${escapeHtml(appt.doctorName || '-')}</div>
+                        <div class="patient-id">${escapeHtml(appt.doctorLicenseNumber || '')}</div>
+                    </td>
+                    <td>${escapeHtml(appt.departmentName || '-')}</td>
+                    <td><strong>${fmtDate(appt.appointmentDate)}</strong></td>
+                    <td>${fmtTime(appt.appointmentTime)}</td>
+                    <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(appt.reason||'')}">${escapeHtml(appt.reason || '-')}</td>
+                    <td>${apptStatusBadge(appt.status)}</td>
+                    <td><div class="dashboard-card-actions">${actions}</div></td>
+                </tr>`;
+            }).join('');
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--danger);"><i class="bi bi-exclamation-triangle me-1"></i>Lỗi: ${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    // Thay đổi trang phân trang
+    function changeApptPage(delta) {
+        const newPage = apptState.currentPage + delta;
+        if (newPage < 0 || newPage >= apptState.totalPages) return;
+        loadAppointmentData(newPage);
+    }
+
+    // Admin: Xác nhận lịch khám (PENDING → CONFIRMED)
+    async function confirmAppointment(apptId) {
+        const confirmed = await confirmDoctorCenter('Xác nhận lịch hẹn', 'Xác nhận lịch khám này? Trạng thái sẽ chuyển sang CONFIRMED.');
+        if (!confirmed) return;
+        try {
+            await doctorFetchJson(`/api/appointments/${apptId}/confirm`, { method: 'PUT' });
+            await loadAppointmentData(apptState.currentPage);
+            await loadApptStats();
+            showDoctorCenterNotice('success', 'Đã xác nhận lịch', 'Lịch khám đã được chuyển sang trạng thái CONFIRMED.');
+        } catch (err) {
+            showDoctorCenterNotice('error', 'Không thể xác nhận', err.message, 3500);
+        }
+    }
+
+    // Admin: Mở modal hủy lịch (có nhập lý do)
+    function openCancelModal(apptId, patientName, dateTime) {
+        document.getElementById('cancelApptId').value = apptId;
+        document.getElementById('cancelReason').value = '';
+        document.getElementById('cancelApptInfo').innerHTML =
+            `<i class="bi bi-person-fill me-1"></i> <strong>${escapeHtml(patientName)}</strong> &nbsp;|&nbsp; <i class="bi bi-clock me-1"></i> ${escapeHtml(dateTime)}`;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('cancelAppointmentModal')).show();
+    }
+
+    // Admin: Submit hủy lịch với lý do
+    async function submitCancelAppointment() {
+        const apptId = document.getElementById('cancelApptId').value;
+        const reason = document.getElementById('cancelReason').value.trim();
+        if (!reason) {
+            document.getElementById('cancelReason').classList.add('is-invalid');
+            return;
+        }
+        document.getElementById('cancelReason').classList.remove('is-invalid');
+        try {
+            await doctorFetchJson(`/api/appointments/${apptId}/cancel`, {
+                method: 'PUT',
+                body: JSON.stringify({ reason })
+            });
+            bootstrap.Modal.getInstance(document.getElementById('cancelAppointmentModal'))?.hide();
+            await loadAppointmentData(apptState.currentPage);
+            await loadApptStats();
+            showDoctorCenterNotice('success', 'Đã hủy lịch khám', 'Lịch khám đã được hủy và thông báo đã gửi.');
+        } catch (err) {
+            showDoctorCenterNotice('error', 'Không thể hủy lịch', err.message, 3500);
+        }
+    }
+
+    // Admin: Mở modal dời lịch khám
+    function openRescheduleModal(apptId) {
+        document.getElementById('rescheduleApptId').value = apptId;
+        document.getElementById('rescheduleDate').value   = new Date().toISOString().split('T')[0];
+        document.getElementById('rescheduleTime').value   = '08:00';
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('rescheduleModal')).show();
+    }
+
+    // Admin: Submit dời lịch khám
+    async function submitReschedule() {
+        const apptId  = document.getElementById('rescheduleApptId').value;
+        const newDate = document.getElementById('rescheduleDate').value;
+        const newTime = document.getElementById('rescheduleTime').value;
+        if (!newDate || !newTime) {
+            showDoctorCenterNotice('error', 'Thiếu thông tin', 'Vui lòng chọn ngày và giờ mới!', 2500);
+            return;
+        }
+        try {
+            await doctorFetchJson(`/api/appointments/${apptId}/reschedule`, {
+                method: 'PUT',
+                body: JSON.stringify({ newDate, newTime })
+            });
+            bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'))?.hide();
+            await loadAppointmentData(apptState.currentPage);
+            showDoctorCenterNotice('success', 'Dời lịch thành công', `Lịch đã được cập nhật sang ${fmtDate(newDate)} lúc ${fmtTime(newTime)}.`);
+        } catch (err) {
+            showDoctorCenterNotice('error', 'Không thể dời lịch', err.message, 3500);
+        }
+    }
 
     // ==================== THEME TOGGLE ====================
     const themeToggle = document.getElementById('themeToggle');
