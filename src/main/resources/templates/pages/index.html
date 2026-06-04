@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>MediCore Health</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4fbff;
+            overflow-x:hidden;
+        }
+
+        /* ANIMATION */
+        @keyframes fadeDown{
+            from{opacity:0; transform:translateY(-40px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+
+        @keyframes fadeUp{
+            from{opacity:0; transform:translateY(45px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+
+        @keyframes zoomIn{
+            from{opacity:0; transform:scale(0.85);}
+            to{opacity:1; transform:scale(1);}
+        }
+
+        @keyframes floatIcon{
+            0%,100%{transform:translateY(0);}
+            50%{transform:translateY(-10px);}
+        }
+
+        @keyframes pulse{
+            0%{box-shadow:0 0 0 0 rgba(10,111,183,0.55);}
+            70%{box-shadow:0 0 0 18px rgba(10,111,183,0);}
+            100%{box-shadow:0 0 0 0 rgba(10,111,183,0);}
+        }
+
+        @keyframes heroZoom{
+            from{background-size:100%;}
+            to{background-size:110%;}
+        }
+
+        /* TOP BAR */
+        .topbar{
+            background:#0a6fb7;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            padding:12px 10%;
+            font-weight:bold;
+            animation:fadeDown 0.8s ease;
+        }
+
+        .topbar span{
+            margin-right:25px;
+        }
+
+        /* HEADER */
+        .header{
+            background:white;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:18px 10%;
+            box-shadow:0 3px 10px rgba(0,0,0,0.15);
+            position:sticky;
+            top:0;
+            z-index:99;
+            animation:fadeDown 1s ease;
+        }
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+            color:#0a6fb7;
+        }
+
+        .logo span{
+            color:#00a6ff;
+        }
+
+        .menu a{
+            text-decoration:none;
+            color:#0a6fb7;
+            margin-left:25px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .menu a:hover{
+            color:#00a6ff;
+        }
+
+        /* HERO */
+        .hero{
+            height:420px;
+            background:
+                    linear-gradient(rgba(0,108,180,0.5),rgba(0,108,180,0.8)),
+                    url("https://images.unsplash.com/photo-1588776814546-ec7e1a94d4d2?auto=format&fit=crop&w=1600&q=80");
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            align-items:center;
+            padding-left:10%;
+            color:white;
+            animation:heroZoom 8s ease-in-out infinite alternate;
+        }
+
+        .hero h1{
+            font-size:50px;
+            margin-bottom:15px;
+            animation:fadeUp 1s ease;
+        }
+
+        .hero p{
+            font-size:20px;
+            margin-bottom:25px;
+            animation:fadeUp 1.3s ease;
+        }
+
+        .hero button{
+            background:white;
+            color:#0a6fb7;
+            padding:15px 40px;
+            border:none;
+            border-radius:10px;
+            font-weight:bold;
+            cursor:pointer;
+            animation:zoomIn 1.5s ease, pulse 2s infinite;
+            transition:0.3s;
+        }
+
+        .hero button:hover{
+            transform:scale(1.08);
+            background:#0a6fb7;
+            color:white;
+        }
+
+        /* HEALTH */
+        .health{
+            background:white;
+            padding:60px 10%;
+            display:flex;
+            justify-content:space-between;
+            gap:40px;
+            animation:fadeUp 1s ease;
+        }
+
+        .health h2{
+            color:#0a6fb7;
+            margin-bottom:20px;
+        }
+
+        .tags button{
+            border:2px solid #0a6fb7;
+            color:#0a6fb7;
+            background:white;
+            padding:10px 15px;
+            border-radius:8px;
+            margin:5px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .tags button:hover{
+            background:#0a6fb7;
+            color:white;
+            transform:translateY(-5px);
+        }
+
+        /* SEARCH */
+        .search{
+            display:flex;
+            border:1px solid #ccc;
+            border-radius:10px;
+            overflow:hidden;
+        }
+
+        .search input{
+            flex:1;
+            padding:15px;
+            border:none;
+            outline:none;
+        }
+
+        .search button{
+            width:60px;
+            background:#0a6fb7;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        /* SERVICE */
+        .service{
+            background:linear-gradient(to bottom,#e8f8ff,#c9f2ff);
+            padding:60px 10%;
+            text-align:center;
+        }
+
+        .service h1{
+            color:#0a6fb7;
+            margin-bottom:30px;
+            font-size:42px;
+            animation:fadeUp 1s ease;
+        }
+
+        .service-box{
+            background:white;
+            border-radius:20px;
+            display:flex;
+            padding:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.12);
+            animation:zoomIn 1s ease;
+        }
+
+        .item{
+            flex:1;
+            border-right:1px solid #ddd;
+            cursor:pointer;
+            transition:0.4s;
+        }
+
+        .item:last-child{
+            border:none;
+        }
+
+        .item:hover{
+            transform:translateY(-12px) scale(1.05);
+        }
+
+        .icon{
+            width:80px;
+            height:80px;
+            background:#eaf5ff;
+            border-radius:50%;
+            margin:auto;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:35px;
+            transition:0.4s;
+        }
+
+        .item:hover .icon{
+            animation:floatIcon 1s infinite;
+            background:#d8efff;
+        }
+
+        .item p{
+            margin-top:15px;
+            font-weight:bold;
+            color:#0a6fb7;
+        }
+
+        /* AI */
+        .ai{
+            position:fixed;
+            right:20px;
+            bottom:100px;
+            background:white;
+            padding:15px;
+            border-radius:12px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.2);
+            animation:fadeUp 1s ease, pulse 2.5s infinite;
+            z-index:999;
+        }
+
+        .call{
+            position:fixed;
+            right:20px;
+            bottom:30px;
+            background:#0a6fb7;
+            color:white;
+            width:55px;
+            height:55px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:24px;
+            animation:pulse 1.8s infinite;
+            transition:0.3s;
+            z-index:999;
+        }
+
+        .call:hover{
+            transform:scale(1.15) rotate(10deg);
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:900px){
+            .topbar,
+            .header,
+            .health{
+                flex-direction:column;
+                gap:20px;
+            }
+
+            .menu a{
+                display:inline-block;
+                margin:8px;
+            }
+
+            .hero{
+                padding:40px;
+                height:360px;
+            }
+
+            .hero h1{
+                font-size:36px;
+            }
+
+            .service-box{
+                flex-wrap:wrap;
+            }
+
+            .item{
+                flex:0 0 50%;
+                border:none;
+                margin-bottom:25px;
+            }
+        }
+
+        @media(max-width:500px){
+            .hero h1{
+                font-size:30px;
+            }
+
+            .item{
+                flex:0 0 100%;
+            }
+
+            .ai{
+                width:220px;
+                right:10px;
+            }
+        }
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4fbff;
+        }
+
+        /* ANIMATION */
+        @keyframes fadeUp{
+            from{opacity:0; transform:translateY(40px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+
+        @keyframes zoomBg{
+            from{background-size:100%;}
+            to{background-size:110%;}
+        }
+
+        /* HERO */
+        .hero{
+            position:relative;
+            overflow:hidden;
+            height:420px;
+            display:flex;
+            align-items:center;
+            padding-left:10%;
+
+            background: linear-gradient(
+                    120deg,
+                    #7ec8e3,
+                    #3aa0d8,
+                    #1f78c1,
+                    #0f5fa8,
+                    #7ec8e3
+            );
+            background-size: 400% 400%;
+
+            animation: gradientMove 5s linear infinite;
+        }
+        /* 🔥 DIV CÓ BACKGROUND */
+        .hero-box{
+            padding:50px;
+            border-radius:20px;
+            color:white;
+            max-width:600px;
+
+            background:
+                    linear-gradient(rgba(0,45,80,0.6),rgba(0,90,150,0.8)),
+                    url("/images/PK.jpg");/* ảnh bạn */
+
+            background-size:cover;
+            background-position:center;
+
+            animation:zoomBg 8s infinite alternate;
+        }
+
+        /* TEXT */
+        .hero-box h1{
+            font-size:45px;
+            margin-bottom:15px;
+            text-shadow:0 5px 15px rgba(0,0,0,0.6);
+            animation:fadeUp 1s ease;
+        }
+
+        .hero-box p{
+            font-size:20px;
+            margin-bottom:20px;
+            text-shadow:0 3px 10px rgba(0,0,0,0.5);
+            animation:fadeUp 1.3s ease;
+        }
+
+        .hero-box button{
+            background:white;
+            color:#0a6fb7;
+            padding:15px 35px;
+            border:none;
+            border-radius:10px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+            animation:fadeUp 1.6s ease;
+        }
+
+        .hero-box button:hover{
+            transform:scale(1.1);
+            background:#0a6fb7;
+            color:white;
+        }
+        @keyframes gradientMove{
+            0%{
+                background-position: 0% 50%;
+            }
+            25%{
+                background-position: 50% 50%;
+            }
+            50%{
+                background-position: 100% 50%;
+            }
+            75%{
+                background-position: 50% 50%;
+            }
+            100%{
+                background-position: 0% 50%;
+            }
+        }
+        .hero::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%);
+        }
+        .footer-med{background:#eaf9ff;margin-top:60px;padding-top:40px}
+        .footer-wrap{width:86%;margin:auto;background:#eaf9ff}
+        .footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;align-items:start;padding:10px 40px 55px}
+        .footer-logo{color:#0a6fb7;font-size:36px;font-weight:900}
+        .footer-logo span{color:#00a6ff}
+        .footer-top p{font-size:17px;color:#0b3760;margin-top:8px}
+        .social{display:flex;gap:14px;margin-top:20px}
+        .social span{width:40px;height:40px;border-radius:50%;background:#0a6fb7;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold}
+        .social span:nth-child(2){background:red}
+        .social span:nth-child(3){background:white;color:#0a6fb7}
+        .social span:nth-child(4){background:black}
+        .store{display:flex;gap:12px;margin-top:18px}
+        .store button{background:black;color:white;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;font-size:16px}
+        .footer-wrap hr{border:none;height:1px;background:#d1edf8}
+        .facility-main{background:#c8f3ff;display:grid;grid-template-columns:1fr 1fr;padding:45px 55px;border-radius:20px 20px 0 0}
+        .facility-main h3,.facility-grid h3{font-size:24px;margin-bottom:25px}
+        .facility-main p,.facility-grid p{font-size:19px;line-height:1.6;margin-bottom:12px}
+        .building-box{background:#b9ecf8;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:120px}
+        .facility-grid{display:grid;grid-template-columns:repeat(3,1fr);background:#f7fdff;padding:45px 55px;gap:45px;border-radius:0 0 20px 20px}
+        .facility-grid>div{border-right:1px solid #d9e9ef;padding-right:35px}
+        .facility-grid>div:last-child{border-right:none}
+        .round-icons{display:flex;gap:15px;margin-top:35px}
+        .round-icons span{width:42px;height:42px;background:#0a6fb7;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center}
+        .footer-bottom{background:#005fa8;color:white;text-align:center;padding:25px 10px;margin-top:45px}
+        .footer-bottom span{margin:0 22px}
+        .footer-bottom p{margin:10px 0}
+
+        @media(max-width:900px){
+            .footer-top,
+            .facility-main,
+            .facility-grid{
+                grid-template-columns:1fr;
+            }
+        }
+        .modal-overlay{
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,.6);
+            justify-content:center;
+            align-items:center;
+            z-index:99999;
+        }
+
+        .login-box{
+            width:500px;
+            background:white;
+            border-radius:15px;
+            padding:30px;
+            position:relative;
+        }
+
+        .close-btn{
+            position:absolute;
+            right:20px;
+            top:15px;
+            font-size:30px;
+            cursor:pointer;
+        }
+
+        .login-box label{
+            display:block;
+            margin-top:15px;
+            margin-bottom:5px;
+            font-weight:bold;
+        }
+
+        .login-box input{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:8px;
+        }
+
+        .login-btn{
+            width:100%;
+            margin-top:20px;
+            padding:14px;
+            background:#0a6fb7;
+            color:white;
+            border:none;
+            border-radius:8px;
+            font-size:18px;
+            cursor:pointer;
+        }
+        .why-choose{
+            background:linear-gradient(135deg,#0d5ea8,#1976d2);
+            padding:80px 10%;
+        }
+
+        .why-choose h2{
+            text-align:center;
+            color:white;
+            font-size:55px;
+            margin-bottom:40px;
+        }
+
+        .stats{
+            display:flex;
+            gap:30px;
+            justify-content:center;
+            margin-bottom:50px;
+        }
+
+        .stat-box{
+            background:#eef8ff;
+            flex:1;
+            padding:40px;
+            border-radius:10px;
+        }
+
+        .stat-box h3{
+            color:#0a6fb7;
+            font-size:60px;
+        }
+
+        .stat-box p{
+            font-size:28px;
+            font-weight:bold;
+        }
+
+        .feature-box{
+            background:white;
+            border-radius:15px;
+            padding:40px;
+            display:flex;
+            gap:40px;
+            align-items:center;
+        }
+
+        .feature-text{
+            flex:1;
+        }
+
+        .feature-text h3{
+            color:#0a6fb7;
+            font-size:45px;
+            margin-bottom:20px;
+        }
+
+        .feature-text p{
+            font-size:22px;
+            line-height:1.8;
+        }
+
+        .feature-text h4{
+            color:#0a6fb7;
+            margin:25px 0;
+            font-size:30px;
+        }
+
+        .feature-image{
+            flex:1;
+        }
+
+        .feature-image img{
+            width:100%;
+            border-radius:15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div>
+        <span>Bệnh nhân</span>
+        <span>Chuyên gia</span>
+    </div>
+    <div>
+        <span>Đặt lịch</span>
+        <span>Liên hệ</span>
+    </div>
+</div>
+
+<div class="header">
+    <div class="logo">
+        MediCore <span>Health</span>
+    </div>
+
+    <div class="menu">
+
+        <a href="http://localhost:8081/chuyen-khoa">Chuyên khoa</a>
+        <a href="http://localhost:8081/bac-si">Bác sĩ</a>
+        <a href="http://localhost:8081/dich-vu">Dịch vụ</a>
+
+    </div>
+</div>
+
+<section class="hero">
+    <div class="hero-box">
+        <h1>Chăm sóc sức khỏe<br>Chuẩn mực - An toàn</h1>
+        <p>Giải pháp y tế hiện đại, tận tâm và chuyên nghiệp</p>
+        <button>Đặt lịch khám</button>
+    </div>
+</section>
+
+<section class="health">
+    <div>
+        <h2>Bạn đang quan tâm</h2>
+        <div class="tags">
+            <button>Bệnh lý</button>
+            <button>Triệu chứng</button>
+            <button>Cảnh báo sức khỏe</button>
+        </div>
+    </div>
+
+    <div style="flex:1">
+        <h2>Tìm kiếm thông tin sức khỏe</h2>
+        <div class="search">
+            <input placeholder="Nhập thông tin cần tìm...">
+            <button>🔍</button>
+        </div>
+    </div>
+</section>
+
+<section class="service">
+    <h1>Bạn cần khám chữa bệnh</h1>
+
+    <div class="service-box">
+
+        <a href="/chuyen-khoa" class="item">
+            <div class="icon">🏥</div>
+            <p>Chuyên khoa</p>
+        </a>
+
+        <a href="/bac-si" class="item">
+            <div class="icon">👨‍⚕️</div>
+            <p>Bác sĩ</p>
+        </a>
+
+
+
+        <a href="#" class="item" onclick="openLoginModal()">
+            <div class="icon">🩺</div>
+            <p>Đặt lịch</p>
+        </a>
+
+        <a href="/dich-vu" class="item">
+            <div class="icon">💊</div>
+            <p>Dịch vụ</p>
+        </a>
+
+        <a href="/ho-tro" class="item">
+            <div class="icon">💬</div>
+            <p>Hỗ trợ</p>
+        </a>
+
+    </div>
+</section>
+
+<div class="ai">
+    🤖 Trợ lý MediCore xin chào!
+</div>
+<!-- CHĂM SÓC KHÁCH HÀNG -->
+<section class="service-section">
+    ...
+</section>
+
+<!-- THÊM ĐOẠN NÀY Ở ĐÂY -->
+
+<section class="why-choose">
+    <div class="container">
+
+        <h2>Vì sao chọn MediCore Health?</h2>
+
+        <div class="stats">
+
+            <div class="stat-box">
+                <h3>2.7 triệu +</h3>
+                <p>Lượt khám bệnh / năm</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>120.000 +</h3>
+                <p>Lượt điều trị nội trú / năm</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>44.000 +</h3>
+                <p>Ca phẫu thuật / năm</p>
+            </div>
+
+        </div>
+
+        <div class="feature-box">
+
+            <div class="feature-text">
+
+                <h3>Tiên phong</h3>
+
+                <p>
+                    Không ngừng phát triển và ứng dụng các kỹ thuật tiên tiến
+                    vào điều trị, đào tạo và nghiên cứu khoa học,
+                    giúp người bệnh tiếp cận các phương pháp điều trị mới,
+                    hiệu quả và an toàn hơn.
+                </p>
+
+                <a href="#">Tìm hiểu thêm</a>
+
+                <hr>
+
+                <h4>Thấu hiểu</h4>
+                <hr>
+
+                <h4>Chuẩn mực</h4>
+                <hr>
+
+                <h4>An toàn</h4>
+
+            </div>
+
+            <div class="feature-image">
+                <img src="/images/phau-thuat.jpg" alt="">
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- BẢNG GIÁ -->
+<section class="pricing">
+    ...
+</section>
+<div class="call">☎</div>
+<footer class="footer-med">
+    <div class="footer-wrap">
+
+        <div class="footer-top">
+            <div>
+                <div class="footer-logo">MediCore <span>Health</span></div>
+                <p>Chăm sóc tận tâm - Niềm tin của bạn</p>
+            </div>
+
+            <div>
+                <p>Theo dõi thông tin chính thức tại</p>
+                <div class="social">
+                    <span>f</span>
+                    <span>▶</span>
+                    <span>Zalo</span>
+                    <span>♪</span>
+                </div>
+            </div>
+
+            <div>
+                <p>Quản lý và chăm sóc sức khỏe với MediCore Care</p>
+                <div class="store">
+                    <button> App Store</button>
+                    <button>▶ Google Play</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="facility-main">
+            <div>
+                <h3>Cơ sở 1</h3>
+                <p>321 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3855 3469</p>
+                <p><b>Email:</b> bvhd@edu.vn</p>
+            </div>
+
+            <div class="building-box">🏥</div>
+        </div>
+
+        <div class="facility-grid">
+            <div>
+                <h3>Cơ sở 2</h3>
+                <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3953 2238</p>
+                <p><b>Email:</b> coso2@medicore.vn</p>
+                <div class="round-icons"><span>🌐</span><span>📍</span></div>
+            </div>
+
+            <div>
+                <h3>Cơ sở 3</h3>
+                <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3748 9090</p>
+                <p><b>Email:</b> coso3@medicore.vn</p>
+                <div class="round-icons"><span>🌐</span><span>📍</span></div>
+            </div>
+
+            <div>
+                <h3>Đơn vị hợp tác</h3>
+                <p><b>Phòng khám Bệnh Viện Medicore Health</b></p>
+                <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> 1900 3456</p>
+                <p><b>Email:</b> contact@medicore.vn</p>
+                <div class="round-icons"><span>🌐</span><span>📍</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>
+            <b>Chính sách bảo mật</b>
+            <span>|</span>
+            <b>Điều khoản dịch vụ</b>
+            <span>|</span>
+            <b>Quy định sử dụng</b>
+            <span>|</span>
+            <b>Chính sách Cookie</b>
+        </p>
+        <p>Copyright ©2026. MediCore Health. Đã đăng ký bản quyền.</p>
+    </div>
+</footer>
+</footer>
+
+<!-- MODAL ĐĂNG NHẬP -->
+<div id="loginModal" class="modal-overlay">
+    <div class="login-box">
+        <span class="close-btn" onclick="closeLoginModal()">×</span>
+
+        <h2 style="text-align:center;color:#0a6fb7">
+            Đăng nhập MediCore Care
+        </h2>
+
+        <br>
+
+        <label>Số điện thoại</label>
+        <input type="text" placeholder="Nhập số điện thoại">
+
+        <label>Mật khẩu</label>
+        <input type="password" placeholder="Nhập mật khẩu">
+
+        <button class="login-btn">Đăng nhập</button>
+    </div>
+</div>
+
+<script>
+    function openLoginModal(){
+        document.getElementById("loginModal").style.display="flex";
+    }
+
+    function closeLoginModal(){
+        document.getElementById("loginModal").style.display="none";
+    }
+</script>
+
+</body>
+</html>
