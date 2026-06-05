@@ -1062,9 +1062,12 @@
     <div style="flex:1">
         <h2>Tìm kiếm thông tin sức khỏe</h2>
         <div class="search">
-            <input placeholder="Nhập thông tin cần tìm...">
-            <button>🔍</button>
+            <input id="healthSearch" placeholder="Nhập thông tin cần tìm...">
+            <button onclick="searchHealth()">🔍</button>
         </div>
+
+        <div id="searchResult" class="search-result"></div>
+        <div id="healthDetail" class="health-detail"></div>
     </div>
 </section>
 
@@ -1096,8 +1099,11 @@
         </a>
 
         <a href="/ho-tro" class="item">
+
             <div class="icon">💬</div>
+
             <p>Hỗ trợ</p>
+
         </a>
 
     </div>
