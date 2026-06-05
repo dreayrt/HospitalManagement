@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -276,55 +276,18 @@
             font-weight:bold;
             font-size:16px;
         }
-
-        .facility-main{
-            margin-top:45px;
-            background:#c8f3ff;
-            display:grid;
-            grid-template-columns:1fr 1.2fr;
-            padding:45px 55px;
-            border-radius:20px 20px 0 0;
-        }
-
-        .facility-main h3,
-        .facility-grid h3{
-            font-size:24px;
-            margin-bottom:25px;
-        }
-
-        .facility-main p,
-        .facility-grid p{
-            font-size:19px;
-            line-height:1.6;
-            margin-bottom:12px;
-        }
-
-        .building-box{
-            background:#b9ecf8;
-            border-radius:16px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:120px;
-        }
-
-        .facility-grid{
-            background:#f7fdff;
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:45px;
-            padding:45px 55px;
-            border-radius:0 0 20px 20px;
-        }
-
-        .facility-grid>div{
-            border-right:1px solid #d9e9ef;
-            padding-right:35px;
-        }
-
-        .facility-grid>div:last-child{
-            border-right:none;
-        }
+                .facility-wrapper{position:relative;background:linear-gradient(135deg, #e6f6ff 0%, #cceeff 100%);border-radius:20px;overflow:hidden;margin-bottom:45px;box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+        .facility-wrapper::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:url('/images/hospital_building.png') no-repeat center center;background-size:cover;opacity:0.15;z-index:0;}
+        .facility-main{position:relative;z-index:1;padding:50px 55px 30px 55px;}
+        .facility-main-content{position:relative;z-index:2;max-width:60%;}
+        .facility-main h3,.facility-grid h3{font-size:24px;margin-bottom:25px}
+        .facility-main p,.facility-grid p{font-size:19px;line-height:1.6;margin-bottom:12px}
+        
+        .facility-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);background:transparent;padding:20px 55px 50px 55px;gap:45px;border-radius:0 0 20px 20px}
+        .facility-grid>div{border-right:1px solid rgba(11, 55, 96, 0.1);padding-right:35px}
+        .facility-grid>div:last-child{border-right:none}
+        .round-icons{display:flex;gap:15px;margin-top:35px}
+        .round-icons span{width:42px;height:42px;background:#0a6fb7;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center}
 
         .footer-bottom{
             background:#005fa8;
@@ -462,11 +425,9 @@
 
 </div>
 <footer class="footer-med">
-
     <div class="footer-wrap">
 
         <div class="footer-top">
-
             <div>
                 <div class="footer-logo">MediCore <span>Health</span></div>
                 <p>Chăm sóc tận tâm - Niềm tin của bạn</p>
@@ -474,66 +435,91 @@
 
             <div>
                 <p>Theo dõi thông tin chính thức tại</p>
-                <div class="social">
-                    <span>f</span>
-                    <span>▶</span>
-                    <span>Zalo</span>
-                    <span>♪</span>
+                <div class="social" style="gap:10px;">
+                    <a href="#" class="footer-social-btn fb" title="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn yt" title="Youtube">
+                        <svg viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107C4.495 20.455 12 20.455 12 20.455s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.953 24 12 24 12s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn zl" title="Zalo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5h-2v-4H9v-2h4v6zm-1-7.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn tt" title="Tiktok">
+                        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72-.08-.07-.17-.17-.24-.26v6.07c.05 1.93-.68 3.95-2.1 5.27-1.57 1.5-3.93 2.14-6.05 1.7-2.58-.45-4.75-2.5-5.18-5.07-.6-3.18 1.43-6.52 4.63-7.14.77-.16 1.56-.16 2.33-.04v4.07c-.88-.23-1.88-.13-2.65.37-.88.54-1.39 1.58-1.31 2.6.07 1.17.96 2.22 2.12 2.39 1.13.18 2.37-.41 2.81-1.49.25-.57.29-1.22.28-1.84V.02z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="facility-wrapper">
+            <div class="facility-main reveal fade-up">
+                <div class="facility-main-content">
+                    <h3>Cơ sở 1</h3>
+                    <p>321 Hồng Bàng, Phường 15, Quận 5, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3955 6031</p>
+                    <p><b>Email:</b> cskh@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <p>Quản lý và chăm sóc sức khỏe với MediCore Care</p>
-                <div class="store">
-                    <button> App Store</button>
-                    <button>▶ Google Play</button>
+            <div class="facility-grid stagger-container">
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 2</h3>
+                    <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3953 2238</p>
+                    <p><b>Email:</b> coso2@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 3</h3>
+                    <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3748 9090</p>
+                    <p><b>Email:</b> coso3@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal fade-up">
+                    <h3>Đơn vị hợp tác</h3>
+                    <p><b>Phòng khám Bệnh Viện MediCore Health</b></p>
+                    <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> 1900 3456</p>
+                    <p><b>Email:</b> contact@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-        </div>
-
-        <div class="facility-main">
-
-            <div>
-                <h3>Cơ sở 1</h3>
-                <p>321 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3855 3469</p>
-                <p><b>Email:</b> bvhd@edu.vn</p>
-            </div>
-
-            <div class="building-box">🏥</div>
-
-        </div>
-
-        <div class="facility-grid">
-
-            <div>
-                <h3>Cơ sở 2</h3>
-                <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3953 2238</p>
-                <p><b>Email:</b> coso2@medicore.vn</p>
-            </div>
-
-            <div>
-                <h3>Cơ sở 3</h3>
-                <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3748 9090</p>
-                <p><b>Email:</b> coso3@medicore.vn</p>
-            </div>
-
-            <div>
-                <h3>Đơn vị hợp tác</h3>
-                <p><b>Phòng khám Bệnh Viện MediCore Health</b></p>
-                <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> 1900 3456</p>
-                <p><b>Email:</b> contact@medicore.vn</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
+<div class="footer-bottom">
         <p>
             <b>Chính sách bảo mật</b>
             <span>|</span>
@@ -543,10 +529,8 @@
             <span>|</span>
             <b>Chính sách Cookie</b>
         </p>
-
         <p>Copyright ©2026. MediCore Health. Đã đăng ký bản quyền.</p>
     </div>
-
 </footer>
 </body>
 </html>

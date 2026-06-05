@@ -34,5 +34,9 @@ public class HomeController {
         return "redirect:/login";
 
     }
+    @GetMapping("/index")
+    public String index(){
+        return "pages/index";
+    }
 
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MediCore Health</title>
+    <link rel="stylesheet" href="/css/global-animations.css">
 
     <style>
         *{
@@ -203,14 +204,14 @@
         /* SERVICE */
         .service{
             background:linear-gradient(to bottom,#e8f8ff,#c9f2ff);
-            padding:60px 10%;
+            padding:45px 10%;
             text-align:center;
         }
 
         .service h1{
             color:#0a6fb7;
             margin-bottom:30px;
-            font-size:42px;
+            font-size:36px;
             animation:fadeUp 1s ease;
         }
 
@@ -218,8 +219,8 @@
             background:white;
             border-radius:20px;
             display:flex;
-            padding:30px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.12);
+            padding:20px 25px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.1);
             animation:zoomIn 1s ease;
         }
 
@@ -239,16 +240,27 @@
         }
 
         .icon{
-            width:80px;
-            height:80px;
+            width:60px;
+            height:60px;
             background:#eaf5ff;
             border-radius:50%;
             margin:auto;
             display:flex;
             align-items:center;
             justify-content:center;
-            font-size:35px;
+            font-size:28px;
             transition:0.4s;
+        }
+
+        .icon svg{
+            width:28px;
+            height:28px;
+            fill:#0a6fb7;
+            transition:0.4s;
+        }
+
+        .item:hover .icon svg{
+            fill:#00a6ff;
         }
 
         .item:hover .icon{
@@ -640,12 +652,15 @@
         .store{display:flex;gap:12px;margin-top:18px}
         .store button{background:black;color:white;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;font-size:16px}
         .footer-wrap hr{border:none;height:1px;background:#d1edf8}
-        .facility-main{background:#c8f3ff;display:grid;grid-template-columns:1fr 1fr;padding:45px 55px;border-radius:20px 20px 0 0}
+                .facility-wrapper{position:relative;background:linear-gradient(135deg, #e6f6ff 0%, #cceeff 100%);border-radius:20px;overflow:hidden;margin-bottom:45px;box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+        .facility-wrapper::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:url('/images/hospital_building.png') no-repeat center center;background-size:cover;opacity:0.15;z-index:0;}
+        .facility-main{position:relative;z-index:1;padding:50px 55px 30px 55px;}
+        .facility-main-content{position:relative;z-index:2;max-width:60%;}
         .facility-main h3,.facility-grid h3{font-size:24px;margin-bottom:25px}
         .facility-main p,.facility-grid p{font-size:19px;line-height:1.6;margin-bottom:12px}
-        .building-box{background:#b9ecf8;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:120px}
-        .facility-grid{display:grid;grid-template-columns:repeat(3,1fr);background:#f7fdff;padding:45px 55px;gap:45px;border-radius:0 0 20px 20px}
-        .facility-grid>div{border-right:1px solid #d9e9ef;padding-right:35px}
+        
+        .facility-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);background:transparent;padding:20px 55px 50px 55px;gap:45px;border-radius:0 0 20px 20px}
+        .facility-grid>div{border-right:1px solid rgba(11, 55, 96, 0.1);padding-right:35px}
         .facility-grid>div:last-child{border-right:none}
         .round-icons{display:flex;gap:15px;margin-top:35px}
         .round-icons span{width:42px;height:42px;background:#0a6fb7;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center}
@@ -976,16 +991,6 @@
 
 <body>
 
-<div class="topbar">
-    <div>
-        <span>Bệnh nhân</span>
-        <span>Chuyên gia</span>
-    </div>
-    <div>
-        <span>Đặt lịch</span>
-        <span>Liên hệ</span>
-    </div>
-</div>
 
 <div class="header">
     <div class="logo">
@@ -1002,7 +1007,7 @@
         <div id="navProfileArea" style="margin-left:18px;position:relative;">
             <!-- Nút đăng nhập (hiện khi chưa login) -->
             <a href="/login" class="nav-login-btn" id="navLoginBtn">
-                👤 Đăng nhập
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Đăng nhập
             </a>
 
             <!-- Profile trigger (hiện khi đã login) -->
@@ -1042,28 +1047,19 @@
 </div>
 
 <section class="hero">
-    <div class="hero-box">
+    <div class="hero-box reveal zoom-in">
         <h1>Chăm sóc sức khỏe<br>Chuẩn mực - An toàn</h1>
         <p>Giải pháp y tế hiện đại, tận tâm và chuyên nghiệp</p>
         <button>Đặt lịch khám</button>
     </div>
 </section>
 
-<section class="health">
-    <div>
-        <h2>Bạn đang quan tâm</h2>
-        <div class="tags">
-            <button>Bệnh lý</button>
-            <button>Triệu chứng</button>
-            <button>Cảnh báo sức khỏe</button>
-        </div>
-    </div>
-
+<section class="health reveal fade-up">
     <div style="flex:1">
         <h2>Tìm kiếm thông tin sức khỏe</h2>
         <div class="search">
             <input id="healthSearch" placeholder="Nhập thông tin cần tìm...">
-            <button onclick="searchHealth()">🔍</button>
+            <button onclick="searchHealth()"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
         </div>
 
         <div id="searchResult" class="search-result"></div>
@@ -1072,35 +1068,35 @@
 </section>
 
 <section class="service">
-    <h1>Bạn cần khám chữa bệnh</h1>
+    <h1 class="reveal fade-up">Bạn cần khám chữa bệnh</h1>
 
-    <div class="service-box">
+    <div class="service-box stagger-container">
 
-        <a href="/chuyen-khoa" class="item">
-            <div class="icon">🏥</div>
+        <a href="/chuyen-khoa" class="item reveal fade-up">
+            <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg></div>
             <p>Chuyên khoa</p>
         </a>
 
-        <a href="/bac-si" class="item">
-            <div class="icon">👨‍⚕️</div>
+        <a href="/bac-si" class="item reveal fade-up">
+            <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.5 15H8v-3h2.5V9.5h3V12H16v3h-2.5v2.5h-3V15zM19 8h-2V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6h6v2H9V6zm10 14H5V10h14v10z"/></svg></div>
             <p>Bác sĩ</p>
         </a>
 
 
 
-        <a href="#" class="item" onclick="openLoginModal()">
-            <div class="icon">🩺</div>
+        <a href="#" class="item reveal fade-up" onclick="openLoginModal()">
+            <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg></div>
             <p>Đặt lịch</p>
         </a>
 
-        <a href="/dich-vu" class="item">
-            <div class="icon">💊</div>
+        <a href="/dich-vu" class="item reveal fade-up">
+            <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm6 11h-3v3h-2v-3H8v-2h3v-3h2v3h3v2z"/></svg></div>
             <p>Dịch vụ</p>
         </a>
 
-        <a href="/ho-tro" class="item">
+        <a href="/ho-tro" class="item reveal fade-up">
 
-            <div class="icon">💬</div>
+            <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
 
             <p>Hỗ trợ</p>
 
@@ -1119,22 +1115,22 @@
 <section class="why-choose">
     <div class="container">
 
-        <h2>Vì sao chọn MediCore Health?</h2>
+        <h2 class="reveal fade-up">Vì sao chọn MediCore Health?</h2>
 
-        <div class="stats">
+        <div class="stats stagger-container">
 
-            <div class="stat-box">
-                <h3>2.7 triệu +</h3>
+            <div class="stat-box reveal zoom-in">
+                <h3 class="count-up" data-target="2.7" data-decimals="1" data-suffix=" triệu +">0</h3>
                 <p>Lượt khám bệnh / năm</p>
             </div>
 
-            <div class="stat-box">
-                <h3>120.000 +</h3>
+            <div class="stat-box reveal zoom-in">
+                <h3 class="count-up" data-target="120000" data-suffix=" +">0</h3>
                 <p>Lượt điều trị nội trú / năm</p>
             </div>
 
-            <div class="stat-box">
-                <h3>44.000 +</h3>
+            <div class="stat-box reveal zoom-in">
+                <h3 class="count-up" data-target="44000" data-suffix=" +">0</h3>
                 <p>Ca phẫu thuật / năm</p>
             </div>
 
@@ -1142,7 +1138,7 @@
 
         <div class="feature-box">
 
-            <div class="feature-text">
+            <div class="feature-text reveal fade-left">
 
                 <h3>Tiên phong</h3>
 
@@ -1167,9 +1163,9 @@
 
             </div>
 
-            <div class="feature-image">
-                <img src="/images/phau-thuat.jpg" alt="">
-            </div>
+             <div class="feature-image reveal fade-right">
+                 <img src="/images/phau-thuat.png" alt="Phẫu thuật hiện đại chuyên nghiệp tại MediCore Health">
+             </div>
 
         </div>
 
@@ -1198,7 +1194,7 @@
         </div>
     </div>
     <div class="call" onclick="toggleChat()">
-        <span id="chatIcon">💬</span>
+        <span id="chatIcon"><svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></span>
     </div>
 </div>
 <footer class="footer-med">
@@ -1212,65 +1208,91 @@
 
             <div>
                 <p>Theo dõi thông tin chính thức tại</p>
-                <div class="social">
-                    <span>f</span>
-                    <span>▶</span>
-                    <span>Zalo</span>
-                    <span>♪</span>
-                </div>
-            </div>
-
-            <div>
-                <p>Quản lý và chăm sóc sức khỏe với MediCore Care</p>
-                <div class="store">
-                    <button> App Store</button>
-                    <button>▶ Google Play</button>
+                <div class="social" style="gap:10px;">
+                    <a href="#" class="footer-social-btn fb" title="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn yt" title="Youtube">
+                        <svg viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107C4.495 20.455 12 20.455 12 20.455s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.953 24 12 24 12s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn zl" title="Zalo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5h-2v-4H9v-2h4v6zm-1-7.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn tt" title="Tiktok">
+                        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72-.08-.07-.17-.17-.24-.26v6.07c.05 1.93-.68 3.95-2.1 5.27-1.57 1.5-3.93 2.14-6.05 1.7-2.58-.45-4.75-2.5-5.18-5.07-.6-3.18 1.43-6.52 4.63-7.14.77-.16 1.56-.16 2.33-.04v4.07c-.88-.23-1.88-.13-2.65.37-.88.54-1.39 1.58-1.31 2.6.07 1.17.96 2.22 2.12 2.39 1.13.18 2.37-.41 2.81-1.49.25-.57.29-1.22.28-1.84V.02z"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
 
         <hr>
-
-        <div class="facility-main">
-            <div>
-                <h3>Cơ sở 1</h3>
-                <p>321 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3855 3469</p>
-                <p><b>Email:</b> bvhd@edu.vn</p>
+        <div class="facility-wrapper">
+            <div class="facility-main reveal fade-up">
+                <div class="facility-main-content">
+                    <h3>Cơ sở 1</h3>
+                    <p>321 Hồng Bàng, Phường 15, Quận 5, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3955 6031</p>
+                    <p><b>Email:</b> cskh@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <div class="building-box">🏥</div>
-        </div>
+            <div class="facility-grid stagger-container">
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 2</h3>
+                    <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3953 2238</p>
+                    <p><b>Email:</b> coso2@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
 
-        <div class="facility-grid">
-            <div>
-                <h3>Cơ sở 2</h3>
-                <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3953 2238</p>
-                <p><b>Email:</b> coso2@medicore.vn</p>
-                <div class="round-icons"><span>🌐</span><span>📍</span></div>
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 3</h3>
+                    <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3748 9090</p>
+                    <p><b>Email:</b> coso3@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal fade-up">
+                    <h3>Đơn vị hợp tác</h3>
+                    <p><b>Phòng khám Bệnh Viện MediCore Health</b></p>
+                    <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> 1900 3456</p>
+                    <p><b>Email:</b> contact@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <h3>Cơ sở 3</h3>
-                <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> (84.28) 3748 9090</p>
-                <p><b>Email:</b> coso3@medicore.vn</p>
-                <div class="round-icons"><span>🌐</span><span>📍</span></div>
-            </div>
-
-            <div>
-                <h3>Đơn vị hợp tác</h3>
-                <p><b>Phòng khám Bệnh Viện Medicore Health</b></p>
-                <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
-                <p><b>Hotline:</b> 1900 3456</p>
-                <p><b>Email:</b> contact@medicore.vn</p>
-                <div class="round-icons"><span>🌐</span><span>📍</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
+<div class="footer-bottom">
         <p>
             <b>Chính sách bảo mật</b>
             <span>|</span>
@@ -1408,10 +1430,10 @@
         const chatIcon = document.getElementById('chatIcon');
         if (chatBox.classList.contains('active')) {
             chatBox.classList.remove('active');
-            chatIcon.textContent = '💬';
+            chatIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>';
         } else {
             chatBox.classList.add('active');
-            chatIcon.textContent = '✖';
+            chatIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
             document.getElementById('chatInput').focus();
         }
     }
@@ -1476,4 +1498,5 @@
         }
     })
 </script>
+<script src="/js/global-animations.js" defer></script>
 </html>
