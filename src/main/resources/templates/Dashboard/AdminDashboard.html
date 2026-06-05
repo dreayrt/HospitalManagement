@@ -1918,6 +1918,268 @@
 
 </div>
 </body>
+<div class="modal fade doctor-modal-card" id="createDoctorModal" tabindex="-1" aria-labelledby="createDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <form id="createDoctorForm" onsubmit="submitCreateDoctor(event)">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createDoctorModalLabel"><i class="bi bi-person-plus-fill me-2"></i>Thêm bác sĩ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="doctor-form-section section-account">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-shield-lock"></i>Tài khoản đăng nhập
+                            <span class="section-subtitle">Thông tin bảo mật</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="createDoctorUserName" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="createDoctorUserName" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorPassword" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" id="createDoctorPassword" minlength="6" autocomplete="new-password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doctor-form-section section-profile">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-person-vcard"></i>Hồ sơ bác sĩ
+                            <span class="section-subtitle">Thông tin chuyên môn</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="createDoctorDepartmentId" class="form-label">Chọn Khoa</label>
+                                <select class="form-select" id="createDoctorDepartmentId" required></select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorFullName" class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" id="createDoctorFullName" maxlength="120" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="createDoctorEmail" maxlength="120">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorPhone" class="form-label">SĐT</label>
+                                <input type="number" class="form-control" id="createDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
+                                <input type="text" class="form-control" id="createDoctorLicenseNumber" minlength="6" maxlength="30" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorExperienceYears" class="form-label">Số năm kinh nghiệm</label>
+                                <input type="number" class="form-control" id="createDoctorExperienceYears" min="0" max="60" value="0" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="createDoctorStatus" class="form-label">Trạng thái</label>
+                                <select class="form-select" id="createDoctorStatus" required>
+                                    <option value="ACTIVE">Đang làm việc </option>
+                                    <option value="INACTIVE">Nghỉ việc</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn-gradient-primary">
+                        <i class="bi bi-check-circle"></i> Lưu bác sĩ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Added: Modal sửa bác sĩ -->
+<div class="modal fade doctor-modal-card" id="editDoctorModal" tabindex="-1" aria-labelledby="editDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editDoctorForm" onsubmit="submitUpdateDoctor(event)">
+                <input type="hidden" id="editDoctorId">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDoctorModalLabel"><i class="bi bi-pencil-square me-2"></i>Sửa bác sĩ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="doctor-form-section section-profile">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-pencil-square"></i>Chỉnh sửa hồ sơ
+                            <span class="section-subtitle">Cập nhật thông tin</span>
+                        </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="editDoctorUserId" class="form-label">Chọn tài khoản</label>
+                            <select class="form-select" id="editDoctorUserId" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorDepartmentId" class="form-label">Chọn Khoa</label>
+                            <select class="form-select" id="editDoctorDepartmentId" required></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorFullName" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="editDoctorFullName" maxlength="120" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editDoctorEmail" maxlength="120">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorPhone" class="form-label">SĐT</label>
+                            <input type="text" class="form-control" id="editDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
+                            <input type="text" class="form-control" id="editDoctorLicenseNumber" minlength="6" maxlength="30" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorExperienceYears" class="form-label">Số năm kinh nghiệm</label>
+                            <input type="number" class="form-control" id="editDoctorExperienceYears" min="0" max="60" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorSpecialization" class="form-label">Chuyên môn</label>
+                            <input type="text" class="form-control" id="editDoctorSpecialization" maxlength="120">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editDoctorStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="editDoctorStatus" required>
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn-gradient-primary">
+                        <i class="bi bi-check-circle"></i> Cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Added: Thông báo và xác nhận giữa màn hình cho thao tác bác sĩ -->
+<div class="doctor-center-notice" id="doctorCenterNotice" aria-live="polite">
+    <div class="doctor-center-box">
+        <div class="doctor-center-icon" id="doctorCenterIcon"><i class="bi bi-check-lg"></i></div>
+        <h5 id="doctorCenterTitle" style="font-weight:800;margin-bottom:.45rem;">Thành công</h5>
+        <p id="doctorCenterMessage" style="margin:0;color:var(--text-muted);"></p>
+        <div id="doctorCenterActions" style="display:none;margin-top:1rem;gap:.6rem;justify-content:center;">
+            <button type="button" class="btn btn-secondary" id="doctorCenterCancelBtn">Hủy</button>
+            <button type="button" class="btn btn-danger" id="doctorCenterConfirmBtn">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Lịch làm việc của Bác sĩ (Xem lịch khám theo tuần) ===== -->
+<div class="modal fade" id="doctorScheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-calendar2-week"></i> Lịch làm việc: <span id="scheduleModalDoctorName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thanh chọn khoảng ngày -->
+                <div class="d-flex gap-2 align-items-center mb-3">
+                    <label class="form-label mb-0">Từ ngày:</label>
+                    <input type="date" class="form-control" id="scheduleFromDate" style="width:auto;">
+                    <label class="form-label mb-0">Đến ngày:</label>
+                    <input type="date" class="form-control" id="scheduleToDate" style="width:auto;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="loadDoctorScheduleModal()">
+                        <i class="bi bi-search"></i> Xem
+                    </button>
+                </div>
+                <!-- Bảng lịch làm việc -->
+                <div style="overflow-x:auto;">
+                    <table class="activity-table" id="doctorScheduleTable">
+                        <thead>
+                            <tr>
+                                <th>Ngày khám</th>
+                                <th>Giờ khám</th>
+                                <th>Bệnh nhân</th>
+                                <th>Mã BN</th>
+                                <th>Lý do</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctor-schedule-modal-body">
+                            <tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Chọn khoảng ngày và nhấn Xem.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Hủy lịch khám (Admin nhập lý do) ===== -->
+<div class="modal fade" id="cancelAppointmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-x-circle-fill text-danger me-2"></i>Hủy lịch khám</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="cancelApptId">
+                <div class="alert" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:.75rem;padding:1rem;margin-bottom:1rem;">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                    Hành động này <strong>không thể hoàn tác</strong>. Lịch khám sẽ chuyển sang trạng thái <strong>CANCELLED</strong>.
+                </div>
+                <div id="cancelApptInfo" style="margin-bottom:1rem;padding:.75rem;background:var(--bg-secondary);border-radius:.6rem;font-size:.9rem;color:var(--text-muted);"></div>
+                <label for="cancelReason" class="form-label fw-semibold">Lý do hủy <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="cancelReason" rows="3" maxlength="300" placeholder="Nhập lý do hủy lịch khám..." required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" onclick="submitCancelAppointment()">
+                    <i class="bi bi-x-circle"></i> Xác nhận hủy lịch
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: Dời lịch khám ===== -->
+<div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content doctor-modal-card">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-calendar-arrow-right"></i> Dời lịch khám</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="rescheduleApptId">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="rescheduleDate" class="form-label">Ngày mới <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="rescheduleDate" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="rescheduleTime" class="form-label">Giờ mới <span class="text-danger">*</span></label>
+                        <input type="time" class="form-control" id="rescheduleTime" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-warning" onclick="submitReschedule()"><i class="bi bi-arrow-repeat"></i> Xác nhận dời lịch</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ==================== SCRIPTS ==================== -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
