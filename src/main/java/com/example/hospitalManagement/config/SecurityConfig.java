@@ -32,14 +32,11 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/api/auth/**",
-<<<<<<< Updated upstream
-                                "/error"
-=======
+                                "/error",
                                 "/index",
                                 "/",
                                 "/error",
                                 "/profile"
->>>>>>> Stashed changes
                         ).permitAll()
                         .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
                         .requestMatchers("/DashBoard/DoctorDashboard").hasAuthority("DOCTOR")

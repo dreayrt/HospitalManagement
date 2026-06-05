@@ -1884,15 +1884,17 @@
     logoutButton.addEventListener("click",async (e)=>{
         e.preventDefault();
         try{
-            const token= localStorage.getItem("token");
             await fetch('/api/auth/logout',{
                 method: "POST",
                 headers:{
                     "Content-Type":"application/json",
-                    "Authorization": "Bearer " + localStorage.getItem("token")
+                    "Authorization": "Bearer " + localStorage.getItem("accessToken")
                 }
             })
-            localStorage.removeItem("token");
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            
             window.location.href="/login";
         }catch (error)
         {
