@@ -1,4 +1,4 @@
-/* ==================== AUTH PAGES STYLES ==================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
@@ -29,7 +29,7 @@ body {
     color: var(--text-dark);
 }
 
-/* ==================== NAVBAR ==================== */
+
 .auth-navbar {
     background: #fff;
     padding: 0.75rem 2rem;
@@ -84,7 +84,7 @@ body {
     box-shadow: 0 4px 15px rgba(220,53,69,0.4);
 }
 
-/* ==================== MAIN CONTAINER ==================== */
+
 .auth-container {
     min-height: calc(100vh - 130px);
     display: flex;
@@ -104,7 +104,7 @@ body {
     animation: fadeInUp 0.8s ease-out;
 }
 
-/* ==================== LEFT PANEL (ILLUSTRATION) ==================== */
+
 .auth-left {
     flex: 1;
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -190,7 +190,7 @@ body {
     transform: scale(1.1);
 }
 
-/* ==================== RIGHT PANEL (FORM) ==================== */
+
 .auth-right {
     flex: 1;
     padding: 3rem 2.5rem;
@@ -211,7 +211,7 @@ body {
     margin-bottom: 1.8rem;
 }
 
-/* ==================== FORM ELEMENTS ==================== */
+
 .form-floating-custom {
     position: relative;
     margin-bottom: 1.2rem;
@@ -267,11 +267,11 @@ body {
 }
 .form-floating-custom .toggle-password:hover { color: var(--primary); }
 
-/* Row for 2 columns */
+
 .form-row-half { display: flex; gap: 1rem; }
 .form-row-half .form-floating-custom { flex: 1; }
 
-/* ==================== BUTTONS ==================== */
+
 .btn-auth-primary {
     width: 100%;
     padding: 0.75rem;
@@ -305,7 +305,7 @@ body {
 .btn-auth-primary:hover::before { left: 100%; }
 .btn-auth-primary:active { transform: translateY(0); }
 
-/* Social buttons */
+
 .social-divider {
     display: flex;
     align-items: center;
@@ -348,7 +348,7 @@ body {
 }
 .btn-social img { width: 18px; height: 18px; }
 
-/* ==================== CHECKBOX & LINKS ==================== */
+
 .form-check-custom { margin-bottom: 1.2rem; }
 .form-check-custom .form-check-input {
     border-radius: 4px;
@@ -396,7 +396,7 @@ body {
     margin-top: 1.2rem;
 }
 
-/* ==================== PAGE FOOTER ==================== */
+
 .auth-page-footer {
     background: #fff;
     padding: 1rem 2rem;
@@ -420,7 +420,7 @@ body {
 }
 .auth-page-footer .footer-links a:hover { color: var(--primary); }
 
-/* ==================== ANIMATIONS ==================== */
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
@@ -458,7 +458,7 @@ body {
     100% { background-position: 200% 0; }
 }
 
-/* Input focus animation */
+
 .form-floating-custom input {
     animation: fadeInUp 0.5s ease-out both;
 }
@@ -467,7 +467,7 @@ body {
 .form-floating-custom:nth-child(3) input { animation-delay: 0.3s; }
 .form-floating-custom:nth-child(4) input { animation-delay: 0.4s; }
 
-/* Stagger animation for form elements */
+
 .stagger-1 { animation: fadeInUp 0.6s ease-out 0.2s both; }
 .stagger-2 { animation: fadeInUp 0.6s ease-out 0.3s both; }
 .stagger-3 { animation: fadeInUp 0.6s ease-out 0.4s both; }
@@ -476,7 +476,7 @@ body {
 .stagger-6 { animation: fadeInUp 0.6s ease-out 0.7s both; }
 .stagger-7 { animation: fadeInUp 0.6s ease-out 0.8s both; }
 
-/* ==================== FLOATING PARTICLES ==================== */
+
 .particle {
     position: absolute;
     border-radius: 50%;
@@ -513,7 +513,7 @@ body {
     50% { transform: translate(25px, -10px); }
 }
 
-/* ==================== DNA HELIX SVG ==================== */
+
 .dna-helix-container {
     width: 100%;
     max-width: 280px;
@@ -522,7 +522,7 @@ body {
     filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
 }
 
-/* ==================== RESPONSIVE ==================== */
+
 @media (max-width: 768px) {
     .auth-card { flex-direction: column; min-height: auto; }
     .auth-left { padding: 2rem 1.5rem; min-height: 280px; }

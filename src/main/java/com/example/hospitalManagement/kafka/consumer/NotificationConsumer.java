@@ -11,13 +11,13 @@ public class NotificationConsumer {
     private KafkaTemplate<String, String> kafkaTemplate;
     @KafkaListener(topics = "appointment-notification",groupId = "notification-group")
     public void consumerAppointment(String message){
-        //todo
+        
         System.out.println("Appointment: "+message);
     }
 
     @KafkaListener(topics = "cancellation-notification",groupId = "notification-group")
     public void consumerCancellation(String message){
-        //todo
+        
         System.out.println("Cancellation: "+message);
     }
     @KafkaListener(topics = "reminder-notification",groupId = "notification-group")

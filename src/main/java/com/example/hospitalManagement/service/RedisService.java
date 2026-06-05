@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
-    //save cache
+    
     public void save(String key, String value, long timeout) {
         redisTemplate.opsForValue()
                 .set(key,value,timeout, TimeUnit.SECONDS);

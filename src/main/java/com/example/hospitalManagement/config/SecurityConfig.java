@@ -61,7 +61,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //tao ra bean AuthenticationManager dung de kiem tra username password account
+    
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config
@@ -75,13 +75,13 @@ public class SecurityConfig {
         return new PasswordEncoder() {
             @Override
             public String encode(CharSequence rawPassword) {
-                // Hash password bằng SHA-256 (giống MySQL SHA2(..., 256))
+                
                 return HashUtil.sha256(rawPassword.toString());
             }
 
             @Override
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                // So sánh: hash password người nhập vs password đã hash trong DB
+                
                 return HashUtil.sha256(rawPassword.toString()).equals(encodedPassword);
             }
         };

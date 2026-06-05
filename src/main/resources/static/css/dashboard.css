@@ -1,7 +1,7 @@
-/* ==================== ADMIN DASHBOARD STYLES ==================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ==================== CSS VARIABLES (LIGHT MODE) ==================== */
+
 :root {
     --primary: #1B2A4A;
     --primary-light: #2C3E6B;
@@ -43,7 +43,7 @@
     --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
-/* ==================== DARK MODE ==================== */
+
 [data-theme="dark"] {
     --primary: #a5b4fc;
     --primary-light: #818cf8;
@@ -69,7 +69,7 @@
     --gradient-primary: linear-gradient(135deg, #1e293b, #334155);
 }
 
-/* ==================== GLOBAL RESET ==================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -85,7 +85,7 @@ body {
     transition: background var(--transition-base), color var(--transition-base);
 }
 
-/* Custom Scrollbar */
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -104,13 +104,13 @@ body {
     background: var(--text-muted);
 }
 
-/* ==================== LAYOUT WRAPPER ==================== */
+
 .dashboard-wrapper {
     display: flex;
     min-height: 100vh;
 }
 
-/* ==================== SIDEBAR ==================== */
+
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
@@ -130,7 +130,7 @@ body {
     width: var(--sidebar-collapsed-width);
 }
 
-/* Sidebar Logo Area */
+
 .sidebar-logo {
     padding: 1.25rem 1.5rem;
     display: flex;
@@ -214,7 +214,7 @@ body {
     width: 0;
 }
 
-/* Sidebar Navigation */
+
 .sidebar-nav {
     flex: 1;
     padding: 1rem 0.75rem;
@@ -331,7 +331,7 @@ body {
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
 }
 
-/* Sidebar Badge */
+
 .nav-badge {
     margin-left: auto;
     padding: 0.15rem 0.5rem;
@@ -357,11 +357,21 @@ body {
     color: var(--danger);
 }
 
+.nav-badge.badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.nav-badge.badge-info {
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--info);
+}
+
 .sidebar.collapsed .nav-badge {
     display: none;
 }
 
-/* Sidebar Footer (Admin Profile) */
+
 .sidebar-footer {
     padding: 1rem 0.75rem;
     border-top: 1px solid var(--border-color);
@@ -434,7 +444,7 @@ body {
     font-weight: 500;
 }
 
-/* Sidebar Toggle Button */
+
 .sidebar-toggle {
     width: 28px;
     height: 28px;
@@ -467,7 +477,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* ==================== MAIN CONTENT AREA ==================== */
+
 .main-content {
     flex: 1;
     margin-left: var(--sidebar-width);
@@ -481,7 +491,7 @@ body {
     margin-left: var(--sidebar-collapsed-width);
 }
 
-/* ==================== HEADER ==================== */
+
 .dashboard-header {
     height: var(--header-height);
     background: var(--bg-header);
@@ -573,7 +583,7 @@ body {
     gap: 0.5rem;
 }
 
-/* Header Action Buttons */
+
 .header-action {
     width: 42px;
     height: 42px;
@@ -600,7 +610,7 @@ body {
     transform: translateY(0) scale(0.95);
 }
 
-/* Notification Bell Badge */
+
 .notification-badge {
     position: absolute;
     top: 6px;
@@ -624,7 +634,7 @@ body {
     50% { transform: scale(1.15); }
 }
 
-/* Bell Ring Animation */
+
 .header-action.bell-ring:hover i {
     animation: bellRing 0.5s ease-in-out;
 }
@@ -639,7 +649,7 @@ body {
     100% { transform: rotate(0); }
 }
 
-/* Theme Toggle */
+
 .theme-toggle {
     width: 56px;
     height: 30px;
@@ -693,7 +703,7 @@ body {
     background: #1e293b;
 }
 
-/* Header Profile */
+
 .header-profile {
     display: flex;
     align-items: center;
@@ -753,7 +763,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* ==================== NOTIFICATION DROPDOWN ==================== */
+
 .notification-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -901,7 +911,7 @@ body {
     opacity: 0.7;
 }
 
-/* ==================== PROFILE DROPDOWN ==================== */
+
 .profile-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -970,7 +980,7 @@ body {
     color: var(--danger);
 }
 
-/* ==================== PAGE CONTENT ==================== */
+
 .page-content {
     flex: 1;
     padding: 1.75rem 2rem;
@@ -989,7 +999,7 @@ body {
     }
 }
 
-/* Page Header */
+
 .page-header {
     margin-bottom: 1.75rem;
 }
@@ -1084,7 +1094,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==================== STAT CARDS ==================== */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1200,7 +1210,7 @@ body {
     font-weight: 500;
 }
 
-/* Stat card counter animation */
+
 .stat-card-value[data-count] {
     animation: countUp 1s ease-out both;
 }
@@ -1210,13 +1220,13 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Stagger animations for stat cards */
+
 .stat-card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.1s both; }
 .stat-card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.2s both; }
 .stat-card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.3s both; }
 .stat-card:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.4s both; }
 
-/* ==================== CONTENT GRID ==================== */
+
 .content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1228,7 +1238,7 @@ body {
     grid-column: 1 / -1;
 }
 
-/* ==================== CARD COMPONENT ==================== */
+
 .dashboard-card {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -1292,7 +1302,7 @@ body {
     padding: 1.25rem 1.5rem;
 }
 
-/* ==================== CHART PLACEHOLDER ==================== */
+
 .chart-container {
     width: 100%;
     height: 280px;
@@ -1300,7 +1310,7 @@ body {
     overflow: hidden;
 }
 
-/* SVG Chart Styles */
+
 .chart-line {
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
@@ -1329,7 +1339,7 @@ body {
 .chart-bar:nth-child(6) { animation-delay: 0.35s; }
 .chart-bar:nth-child(7) { animation-delay: 0.4s; }
 
-/* ==================== RECENT ACTIVITY TABLE ==================== */
+
 .activity-table {
     width: 100%;
     border-collapse: collapse;
@@ -1366,7 +1376,7 @@ body {
     border-bottom: none;
 }
 
-/* Patient avatar in table */
+
 .patient-cell {
     display: flex;
     align-items: center;
@@ -1402,7 +1412,7 @@ body {
     color: var(--text-muted);
 }
 
-/* Status Badge */
+
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -1462,7 +1472,7 @@ body {
     50% { opacity: 0.3; }
 }
 
-/* ==================== QUICK ACTIONS ==================== */
+
 .quick-actions-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1537,7 +1547,7 @@ body {
     margin-top: 0.1rem;
 }
 
-/* ==================== CHAT BUBBLE ==================== */
+
 .chat-bubble {
     position: fixed;
     bottom: 2rem;
@@ -1596,7 +1606,7 @@ body {
     animation: pulseBadge 2s ease-in-out infinite;
 }
 
-/* Chat Window */
+
 .chat-window {
     position: absolute;
     bottom: 70px;
@@ -1797,7 +1807,7 @@ body {
     transform: translateY(0);
 }
 
-/* ==================== DEPARTMENT / ROOM MANAGEMENT ==================== */
+
 .department-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1892,7 +1902,7 @@ body {
     margin-top: 0.1rem;
 }
 
-/* ==================== PATIENT MANAGEMENT ==================== */
+
 .patient-list-header {
     display: flex;
     align-items: center;
@@ -1961,7 +1971,7 @@ body {
     color: var(--accent);
 }
 
-/* ==================== BILLING MANAGEMENT ==================== */
+
 .billing-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -2007,7 +2017,7 @@ body {
     color: var(--text-muted);
 }
 
-/* ==================== STATISTICS PAGE ==================== */
+
 .stats-overview {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -2078,7 +2088,7 @@ body {
     border-radius: 50%;
 }
 
-/* ==================== ANIMATIONS ==================== */
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
@@ -2109,12 +2119,12 @@ body {
     to { transform: scale(4); opacity: 0; }
 }
 
-/* Sidebar slide-in */
+
 .sidebar {
     animation: slideInLeft 0.5s ease-out;
 }
 
-/* ==================== MOBILE SIDEBAR OVERLAY ==================== */
+
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -2133,7 +2143,7 @@ body {
     opacity: 1;
 }
 
-/* Mobile menu toggle */
+
 .mobile-menu-toggle {
     display: none;
     width: 40px;
@@ -2148,7 +2158,7 @@ body {
     justify-content: center;
 }
 
-/* ==================== RESPONSIVE ==================== */
+
 @media (max-width: 1200px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -2258,7 +2268,7 @@ body {
     }
 }
 
-/* ==================== TOOLTIP ==================== */
+
 .sidebar.collapsed .sidebar-nav-link {
     position: relative;
 }
@@ -2286,7 +2296,7 @@ body {
     to { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
-/* ==================== LOADING SKELETON ==================== */
+
 .skeleton {
     background: linear-gradient(90deg, var(--border-light) 25%, var(--bg-hover) 50%, var(--border-light) 75%);
     background-size: 200% 100%;
@@ -2299,7 +2309,7 @@ body {
     100% { background-position: -200% 0; }
 }
 
-/* ==================== MINI SPARKLINE ==================== */
+
 .sparkline-container {
     display: flex;
     align-items: flex-end;
@@ -2321,7 +2331,7 @@ body {
     opacity: 0.6;
 }
 
-/* ==================== PROGRESS BAR ==================== */
+
 .progress-custom {
     height: 6px;
     background: var(--border-color);
