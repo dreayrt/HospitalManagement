@@ -293,10 +293,18 @@
                     const data = await response.json();
                     const role = data.role;
 
+<<<<<<< Updated upstream
                     // Lưu token vào cookie để server đọc được khi redirect
                     document.cookie = "access_token=" + data.access_token + "; path=/;";
 
                     localStorage.setItem("token", data.access_token);
+=======
+                    document.cookie = "access_token=" + data.access_token + "; path=/;";//Hãy để cái Cookie access_token này khả dụng ở thư mục gốc (/) và mọi thư mục con của nó(; path=/;)
+                    localStorage.setItem("accessToken", data.access_token);
+                    if (data.refreshToken) {
+                        localStorage.setItem("refreshToken", data.refreshToken);
+                    }
+>>>>>>> Stashed changes
                     
                     window.location.href = "/";
                 } else {

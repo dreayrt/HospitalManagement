@@ -97,15 +97,7 @@
         </nav>
 
         <!-- Sidebar Footer -->
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="sidebar-user-avatar">AD</div>
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-name">Admin System</div>
-                    <div class="sidebar-user-role">Quản trị viên</div>
-                </div>
-            </div>
-        </div>
+
     </aside>
 
     <!-- ==================== MAIN CONTENT ==================== -->
@@ -215,7 +207,7 @@
 
                     <!-- Profile Dropdown -->
                     <div class="profile-dropdown" id="profileDropdown">
-                        <a href="#" class="profile-dropdown-item">
+                        <a href="/profile" class="profile-dropdown-item">
                             <i class="bi bi-person"></i>
                             Hồ sơ cá nhân
                         </a>
@@ -228,7 +220,8 @@
                             Trợ giúp
                         </a>
                         <div class="profile-dropdown-divider"></div>
-                        <a href="#" class="profile-dropdown-item danger">
+                        <a href="#"
+                           id="logoutBtn" class="profile-dropdown-item danger">
                             <i class="bi bi-box-arrow-right"></i>
                             Đăng xuất
                         </a>
@@ -1885,6 +1878,28 @@
     }
 
     animateCounters();
+</script>
+<script>
+    const logoutButton= document.getElementById("logoutBtn");
+    logoutButton.addEventListener("click",async (e)=>{
+        e.preventDefault();
+        try{
+            const token= localStorage.getItem("token");
+            await fetch('/api/auth/logout',{
+                method: "POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            })
+            localStorage.removeItem("token");
+            window.location.href="/login";
+        }catch (error)
+        {
+            console.log(error);
+        }
+
+    })
 </script>
 
 </html>

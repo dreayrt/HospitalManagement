@@ -1,6 +1,7 @@
 package com.example.hospitalManagement.api;
 
 import com.example.hospitalManagement.dto.LoginDTO;
+import com.example.hospitalManagement.dto.RefreshTokenDTO;
 import com.example.hospitalManagement.entity.User;
 import com.example.hospitalManagement.repository.userRepository;
 import com.example.hospitalManagement.util.JWTUtil;
@@ -14,9 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +31,31 @@ public class AuthenticationApi {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @PostMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken( @RequestBody RefreshTokenDTO refreshTokenDTO) {
+        String refreshToken = refreshTokenDTO.getRefreshToken();
+        if(!jwtUtil.validateToken(refreshToken)) {
+            Map<String, String>error=new HashMap<>();
+            error.put("error","Refresh token khong hop le hoac da het han");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
+        String tokenType=jwtUtil.extractType(refreshToken);
+        if(!"refresh_token".equals(tokenType)) {
+            Map<String, String>error=new HashMap<>();
+            error.put("error","Refresh token khong dung dinh dang");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
+        String username = jwtUtil.extractUsername(refreshToken);
+        Optional<User> user=userRepository.findByUserName(username);
+        if(user.isPresent()) {
+            String role=user.get().getRole().getName();
+            String newAccessToken= jwtUtil.generateToken(username,role);
+            Map<String,Object>ResponseData=new HashMap<>();
+            ResponseData.put("access_token",newAccessToken);
+            return ResponseEntity.ok(ResponseData);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
     @PostMapping("/login")
     public ResponseEntity<?> Login(@Valid @ModelAttribute LoginDTO loginDTO, org.springframework.validation.BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -70,5 +98,11 @@ public class AuthenticationApi {
         }
         return ResponseEntity.ok(responseData);
 
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> Logout() {
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("message", "Logout successful");
+        return ResponseEntity.status(HttpStatus.OK).body(responseData);
     }
 }

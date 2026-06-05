@@ -56,10 +56,9 @@ public class JWTUtil {
     public boolean validateToken(String token){
         try {
             Jwts.parser()
-                    .setSigningKey(getSigningKey())
-                    .build()
-                    .parseClaimsJws(token);//parse jwt xem co bi chinh sua khong
-
+                    .setSigningKey(getSigningKey()) //lay secret-key
+                    .build()//Tạo JwtParser hoàn chỉnh từ các cấu hình đã khai báo
+                    .parseClaimsJws(token);//parse jwt xem co bi chinh sua khong(doc, kiem tra, xac thuc)
             return true;
         } catch (Exception e) {
             return false;
