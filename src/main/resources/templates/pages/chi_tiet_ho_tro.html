@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Chi tiết hỗ trợ</title>
+
+    <style>
+        *{box-sizing:border-box;font-family:Arial,sans-serif}
+        body{margin:0;background:#f5f7fa;color:#10233f}
+
+        .topbar{background:#0a6fb7;color:white;display:flex;justify-content:space-between;padding:12px 10%;font-weight:bold}
+        .topbar span{margin-right:25px}
+
+        .header{background:white;display:flex;align-items:center;justify-content:space-between;padding:18px 10%;box-shadow:0 3px 10px rgba(0,0,0,.15);position:sticky;top:0;z-index:99}
+        .logo{font-size:26px;font-weight:bold;color:#0a6fb7}
+        .logo span{color:#00a6ff}
+        .menu a{text-decoration:none;color:#0a6fb7;margin-left:25px;font-weight:bold}
+
+        .hero{height:300px;background:linear-gradient(rgba(0,108,180,.55),rgba(0,108,180,.85)),url("https://images.unsplash.com/photo-1588776814546-ec7e1a94d4d2?auto=format&fit=crop&w=1600&q=80");background-size:cover;background-position:center;display:flex;align-items:center;padding-left:10%;color:white}
+        .hero-box{padding:40px;border-radius:20px;max-width:650px;background:rgba(0,70,130,.55)}
+        .hero-box h1{font-size:45px;margin:0 0 15px;color:white}
+        .hero-box p{font-size:20px;line-height:1.6}
+
+        .page{width:82%;margin:55px auto;display:grid;grid-template-columns:2fr 1fr;gap:45px}
+        .label{color:#0a6fb7;font-size:22px;font-weight:bold;margin-bottom:15px}
+        h1{color:#0a6fb7;font-size:48px;margin:0 0 18px}
+        .date{color:#999;font-size:22px;font-weight:bold;margin-bottom:30px}
+
+        .toc,.content-box{background:white;padding:30px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.06);margin-bottom:30px}
+        .toc h2,.content-box h2{color:#0a6fb7}
+        .toc p,.content-box p{font-size:20px;line-height:1.9;color:#333}
+
+        table{width:100%;border-collapse:collapse;margin-top:20px;background:white}
+        th,td{border:1px solid #ddd;padding:18px;font-size:18px}
+        th{background:#f4f8fb}
+
+        .sidebar h2{color:#0a6fb7;font-size:32px;margin-bottom:20px;border-bottom:1px solid #ddd;padding-bottom:15px}
+        .related-card{background:white;border-radius:10px;padding:14px;display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:center;margin-bottom:20px;box-shadow:0 8px 30px rgba(0,0,0,.08);text-decoration:none;color:#222}
+        .related-card img{width:130px;height:90px;object-fit:cover;border-radius:8px}
+        .related-card h3{font-size:18px;line-height:1.4}
+
+        .back{display:inline-block;margin-top:25px;color:#0a6fb7;font-weight:bold;text-decoration:none}
+
+        /* FOOTER ĐẸP GIỐNG TRANG CHỦ */
+        .footer-med{background:#eaf9ff;margin-top:80px;padding-top:45px}
+        .footer-wrap{width:86%;margin:auto}
+        .footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;align-items:start;padding:10px 40px 55px;border-bottom:1px solid #cfeaf5}
+        .footer-logo{color:#0a6fb7;font-size:36px;font-weight:900}
+        .footer-logo span{color:#00a6ff}
+        .footer-top p{font-size:17px;color:#0b3760;margin-top:8px}
+
+        .social{display:flex;gap:14px;margin-top:20px}
+        .social span{width:42px;height:42px;border-radius:50%;background:#0a6fb7;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold}
+        .social span:nth-child(2){background:red}
+        .social span:nth-child(3){background:white;color:#0a6fb7}
+        .social span:nth-child(4){background:black}
+
+        .store{display:flex;gap:12px;margin-top:18px}
+        .store button{background:black;color:white;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;font-size:16px}
+
+        .facility-main{margin-top:45px;background:#c8f3ff;display:grid;grid-template-columns:1fr 1.2fr;padding:45px 55px;border-radius:20px 20px 0 0}
+        .facility-main h3,.facility-grid h3{font-size:24px;margin-bottom:25px}
+        .facility-main p,.facility-grid p{font-size:19px;line-height:1.6;margin-bottom:12px}
+        .building-box{background:#b9ecf8;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:120px}
+
+        .facility-grid{background:#f7fdff;display:grid;grid-template-columns:repeat(3,1fr);gap:45px;padding:45px 55px;border-radius:0 0 20px 20px}
+        .facility-grid>div{border-right:1px solid #d9e9ef;padding-right:35px}
+        .facility-grid>div:last-child{border-right:none}
+
+        .footer-bottom{background:#005fa8;color:white;text-align:center;padding:25px 10px;margin-top:45px}
+        .footer-bottom span{margin:0 22px}
+        .footer-bottom p{margin:10px 0}
+
+        @media(max-width:900px){
+            .page,.footer-top,.facility-main,.facility-grid{grid-template-columns:1fr}
+            .page{width:92%}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div><span>Bệnh nhân</span><span>Chuyên gia</span></div>
+    <div><span>Đặt lịch</span><span>Liên hệ</span></div>
+</div>
+
+<div class="header">
+    <div class="logo">MediCore <span>Health</span></div>
+    <div class="menu">
+        <a href="/index">Trang chủ</a>
+        <a href="/chuyen-khoa">Chuyên khoa</a>
+        <a href="/bac-si">Bác sĩ</a>
+        <a href="/dich-vu">Dịch vụ</a>
+        <a href="/ho-tro">Hỗ trợ</a>
+    </div>
+</div>
+
+<section class="hero">
+    <div class="hero-box">
+        <h1 th:text="${title}">Hỗ trợ người bệnh</h1>
+        <p>Thông tin cần biết, hướng dẫn thủ tục và quy trình khám chữa bệnh.</p>
+    </div>
+</section>
+
+<div class="page">
+    <main>
+        <div class="label">Thông tin cần biết</div>
+        <h1 th:text="${title}">Tiêu đề</h1>
+        <div class="date" th:text="${date}">01/01/2025</div>
+
+        <div class="toc">
+            <h2>Mục lục</h2>
+            <p th:each="item : ${toc}" th:text="${item}">1. Nội dung</p>
+        </div>
+
+        <div class="content-box">
+            <p th:text="${description}">Nội dung mô tả.</p>
+
+            <h2>1. Thông tin hướng dẫn</h2>
+            <p>Người bệnh vui lòng đọc kỹ các thông tin hướng dẫn trước khi thực hiện. Việc chuẩn bị đầy đủ giấy tờ và thông tin cá nhân sẽ giúp quá trình khám chữa bệnh diễn ra nhanh chóng, thuận tiện và chính xác hơn.</p>
+
+            <h2>2. Các bước thực hiện</h2>
+            <p th:each="item : ${toc}" th:text="${item}">Bước thực hiện</p>
+
+            <h2>3. Bảng thông tin tham khảo</h2>
+            <table>
+                <tr><th>STT</th><th>Nội dung</th><th>Ghi chú</th></tr>
+                <tr><td>1</td><td>Chuẩn bị giấy tờ cần thiết</td><td>CCCD, thẻ BHYT, hồ sơ liên quan nếu có</td></tr>
+                <tr><td>2</td><td>Thực hiện theo hướng dẫn</td><td>Làm theo quy trình tại bệnh viện</td></tr>
+                <tr><td>3</td><td>Liên hệ hỗ trợ</td><td>Gặp nhân viên tư vấn khi cần</td></tr>
+            </table>
+
+            <h2>4. Một số lưu ý</h2>
+            <p>Người bệnh nên đến trước giờ hẹn, mang đầy đủ giấy tờ tùy thân và kiểm tra lại thông tin trước khi thực hiện các thủ tục tại bệnh viện.</p>
+
+            <a href="/ho-tro" class="back">⬅ Quay lại trang hỗ trợ</a>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <h2>Bài viết liên quan</h2>
+
+        <a href="/ho-tro/bao-hiem-y-te" class="related-card">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600">
+            <h3>Hướng dẫn thủ tục khám chữa bệnh bảo hiểm y tế</h3>
+        </a>
+
+        <a href="/ho-tro/noi-tru" class="related-card">
+            <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=600">
+            <h3>Quy trình điều trị nội trú</h3>
+        </a>
+
+        <a href="/ho-tro/huong-dan-dat-lich" class="related-card">
+            <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f4df?w=600">
+            <h3>Hướng dẫn đặt lịch khám bệnh trực tuyến</h3>
+        </a>
+    </aside>
+</div>
+
+<footer class="footer-med">
+    <div class="footer-wrap">
+
+        <div class="footer-top">
+            <div>
+                <div class="footer-logo">MediCore <span>Health</span></div>
+                <p>Chăm sóc tận tâm - Niềm tin của bạn</p>
+            </div>
+
+            <div>
+                <p>Theo dõi thông tin chính thức tại</p>
+                <div class="social">
+                    <span>f</span><span>▶</span><span>Zalo</span><span>♪</span>
+                </div>
+            </div>
+
+            <div>
+                <p>Quản lý và chăm sóc sức khỏe với MediCore Care</p>
+                <div class="store">
+                    <button> App Store</button>
+                    <button>▶ Google Play</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-main">
+            <div>
+                <h3>Cơ sở 1</h3>
+                <p>321 Hồng Bàng, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3855 3469</p>
+                <p><b>Email:</b> bvhd@edu.vn</p>
+            </div>
+            <div class="building-box">🏥</div>
+        </div>
+
+        <div class="facility-grid">
+            <div>
+                <h3>Cơ sở 2</h3>
+                <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3953 2238</p>
+                <p><b>Email:</b> coso2@medicore.vn</p>
+            </div>
+
+            <div>
+                <h3>Cơ sở 3</h3>
+                <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> (84.28) 3748 9090</p>
+                <p><b>Email:</b> coso3@medicore.vn</p>
+            </div>
+
+            <div>
+                <h3>Đơn vị hợp tác</h3>
+                <p><b>Phòng khám Bệnh Viện MediCore Health</b></p>
+                <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
+                <p><b>Hotline:</b> 1900 3456</p>
+                <p><b>Email:</b> contact@medicore.vn</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>
+            <b>Chính sách bảo mật</b>
+            <span>|</span>
+            <b>Điều khoản dịch vụ</b>
+            <span>|</span>
+            <b>Quy định sử dụng</b>
+            <span>|</span>
+            <b>Chính sách Cookie</b>
+        </p>
+        <p>Copyright ©2026. MediCore Health. Đã đăng ký bản quyền.</p>
+    </div>
+</footer>
+
+</body>
+</html>

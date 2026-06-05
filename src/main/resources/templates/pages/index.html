@@ -626,6 +626,43 @@
             width:100%;
             border-radius:15px;
         }
+        .search-result{
+            margin-top:15px;
+            background:white;
+            border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            overflow:hidden;
+        }
+
+        .search-item{
+            padding:15px;
+            border-bottom:1px solid #eee;
+            cursor:pointer;
+        }
+
+        .search-item:hover{
+            background:#eaf5ff;
+            color:#0a6fb7;
+        }
+        .health-detail{
+            margin-top:25px;
+            background:#ffffff;
+            border-radius:15px;
+            padding:25px;
+            box-shadow:0 6px 18px rgba(0,0,0,0.12);
+            display:none;
+        }
+
+        .health-detail h3{
+            color:#0a6fb7;
+            font-size:28px;
+            margin-bottom:15px;
+        }
+
+        .health-detail p{
+            font-size:18px;
+            line-height:1.7;
+        }
     </style>
 </head>
 
@@ -652,7 +689,7 @@
         <a href="http://localhost:8081/chuyen-khoa">Chuyên khoa</a>
         <a href="http://localhost:8081/bac-si">Bác sĩ</a>
         <a href="http://localhost:8081/dich-vu">Dịch vụ</a>
-
+        <a href="http://localhost:8081/ho-tro">Hỗ Trợ</a>
     </div>
 </div>
 
@@ -677,9 +714,12 @@
     <div style="flex:1">
         <h2>Tìm kiếm thông tin sức khỏe</h2>
         <div class="search">
-            <input placeholder="Nhập thông tin cần tìm...">
-            <button>🔍</button>
+            <input id="healthSearch" placeholder="Nhập thông tin cần tìm...">
+            <button onclick="searchHealth()">🔍</button>
         </div>
+
+        <div id="searchResult" class="search-result"></div>
+        <div id="healthDetail" class="health-detail"></div>
     </div>
 </section>
 
@@ -711,8 +751,11 @@
         </a>
 
         <a href="/ho-tro" class="item">
+
             <div class="icon">💬</div>
+
             <p>Hỗ trợ</p>
+
         </a>
 
     </div>
@@ -907,6 +950,107 @@
         document.getElementById("loginModal").style.display="none";
     }
 </script>
+<script>
+    const healthData = [
+        {
+            title: "Bệnh lý tim mạch",
+            slug: "benh-ly-tim-mach",
+            content: "Bệnh lý tim mạch..."
+        },
+        {
+            title: "Bệnh lý hô hấp",
+            slug: "benh-ly-ho-hap",
+            content: "Bệnh lý hô hấp..."
+        },
+        {
+            title: "Bệnh lý thần kinh",
+            slug: "benh-ly-than-kinh",
+            content: "..."
+        },
+        {
+            title: "Bệnh lý xương khớp",
+            slug: "benh-ly-xuong-khop",
+            content: "..."
+        },
+        {
+            title: "Triệu chứng đau đầu",
+            slug: "trieu-chung-dau-dau",
+            content: "..."
+        },
+        {
+            title: "Triệu chứng đau ngực",
+            slug: "trieu-chung-dau-nguc",
+            content: "..."
+        },
+        {
+            title: "Triệu chứng khó thở",
+            slug: "trieu-chung-kho-tho",
+            content: "..."
+        },
+        {
+            title: "Cảnh báo đột quỵ",
+            slug: "canh-bao-dot-quy",
+            content: "..."
+        }
+    ];
 
+    function searchHealth(){
+        const keyword = document.getElementById("healthSearch").value.toLowerCase();
+        const resultBox = document.getElementById("searchResult");
+        const detailBox = document.getElementById("healthDetail");
+
+        resultBox.innerHTML = "";
+
+        if(keyword.trim() === ""){
+            resultBox.style.display = "none";
+
+            document.getElementById("healthDetail").style.display = "none";
+            document.getElementById("healthDetail").innerHTML = "";
+
+            return;
+        }
+        function removeVietnamese(str){
+            return str
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/đ/g, "d");
+        }
+        const key = removeVietnamese(keyword.trim());
+
+        const results = healthData.filter(item =>
+            removeVietnamese(item.title).includes(key) ||
+            removeVietnamese(item.content).includes(key)
+        );
+        console.log(results);
+
+        resultBox.style.display = "block";
+
+        if(results.length === 0){
+            resultBox.innerHTML = "<div class='search-item'>Không tìm thấy kết quả phù hợp</div>";
+            return;
+        }
+
+        results.forEach((item, index) => {
+            resultBox.innerHTML += `
+            <div class="search-item"
+     onclick="showHealthDetail('${item.slug}')">
+${item.title}
+            </div>
+        `;
+        });
+    }x``
+
+    function showHealthDetail(slug){
+        window.location.href = "/suc-khoe/" + slug;
+    }
+
+    function quickSearch(text){
+        document.getElementById("healthSearch").value = text;
+        searchHealth();
+    }
+
+    document.getElementById("healthSearch").addEventListener("keyup", searchHealth);
+</script>
 </body>
 </html>
