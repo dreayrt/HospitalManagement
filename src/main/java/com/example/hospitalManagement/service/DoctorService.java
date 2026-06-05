@@ -118,7 +118,7 @@ public class DoctorService {
     public DoctorDTO create(DoctorDTO request) {
         validateDoctorRequest(request, null);
 
-        // Kiểm tra xem là chọn tài khoản có sẵn hay tạo tài khoản đăng nhập mới hoàn toàn
+        
         User user = (request.getUserId() != null && request.getUserId() > 0)
                 ? findUserById(request.getUserId())
                 : createDoctorUser(request);
@@ -159,11 +159,11 @@ public class DoctorService {
 
     @Transactional
     public void delete(Long id) {
-        // 1. Tìm chính xác ông bác sĩ dưới DB
+        
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Khong tim thay bac si"));
 
-        // 2. Kiểm tra các ràng buộc dữ liệu (Lịch hẹn, bệnh án...)
+        
         if (doctor.getAppointments() != null && !doctor.getAppointments().isEmpty()) {
             throw new IllegalStateException("Khong the xoa bac si da co lich hen");
         }
@@ -174,24 +174,24 @@ public class DoctorService {
             throw new IllegalStateException("Khong the xoa bac si khi van con lich lam viec");
         }
 
-        // 3. Lấy ra tài khoản User liên kết với bác sĩ này để chuẩn bị xóa ké
+        
         User user = doctor.getUser();
 
-        // 4. Ngắt liên kết 2 bên để Hibernate không bị gạch lỗi ràng buộc tạm thời (Transient)
+        
         if (user != null) {
             user.setDoctor(null);
         }
         doctor.setUser(null);
 
-        // 5. Tiến hành xóa hồ sơ bác sĩ trước (Xóa con trước)
+        
         doctorRepository.delete(doctor);
 
-        // 6. BỔ SUNG QUAN TRỌNG: Tiến hành xóa luôn tài khoản User gốc (Xóa cha sau)
+        
         if (user != null) {
             userRepository.delete(user);
         }
 
-        // 7. Xóa sạch bộ nhớ đệm Cache phiên bản mới
+        
         invalidateDoctorCache();
     }
 
@@ -485,7 +485,7 @@ public class DoctorService {
     }
 
     private User createDoctorUser(DoctorDTO request) {
-        // Kiểm tra dữ liệu đăng nhập đầu vào trước khi gán
+        
         if (!StringUtils.hasText(request.getUserName())) {
             throw new IllegalArgumentException("Ten dang nhap tai khoan bac si khong duoc de trong");
         }
@@ -505,10 +505,10 @@ public class DoctorService {
         Role doctorRole = roleRepository.findByNameIgnoreCase("DOCTOR")
                 .orElseThrow(() -> new NoSuchElementException("Khong tim thay role DOCTOR"));
 
-        // BỔ SUNG ĐẦY ĐỦ: Gán userName và mã hóa password bằng SHA-256 khớp chuẩn Database
+        
         User user = new User();
         user.setUserName(request.getUserName().trim());
-        user.setPassword(HashUtil.sha256(request.getPassword().trim())); // Mã hóa bảo mật trực tiếp
+        user.setPassword(HashUtil.sha256(request.getPassword().trim())); 
         user.setFullName(request.getFullName().trim());
         user.setEmail(StringUtils.hasText(request.getEmail()) ? request.getEmail().trim() : null);
         user.setPhone(StringUtils.hasText(request.getPhone()) ? request.getPhone().trim() : null);

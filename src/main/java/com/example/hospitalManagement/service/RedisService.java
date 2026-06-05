@@ -10,20 +10,20 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
-    //save cache
+    
     public void save(String key, String value, long timeout) {
         redisTemplate.opsForValue()
                 .set(key,value,timeout, TimeUnit.SECONDS);
     }
-    //get cache
+    
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
-    //Delete cache
+    
     public void remove(String key) {
         redisTemplate.delete(key);
     }
-    //check exists
+    
     public boolean exists(String key) {
         Boolean exists = redisTemplate.hasKey(key);
         if(exists != null && exists == true){

@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedules, Long> {
 
-    // Tìm danh sách lịch trực của 1 bác sĩ và sắp xếp theo ngày/giờ tăng dần
+    
     List<DoctorSchedules> findByDoctorIdOrderByWorkDateAscStartTimeAsc(Long doctorId);
 
-    // Thuật toán kiểm tra lịch làm việc bị chồng chéo (Overlapping) thời gian
+    
     @Query("""
             select case when count(ds) > 0 then true else false end
             from DoctorSchedules ds

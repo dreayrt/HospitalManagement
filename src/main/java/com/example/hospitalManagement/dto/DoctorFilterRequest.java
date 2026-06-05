@@ -5,7 +5,7 @@ import com.example.hospitalManagement.entity.Enum.UserStatus;
 public class DoctorFilterRequest {
     private String keyword;
     private Long departmentId;
-    private UserStatus userStatus; // <-- Đổi từ status thành userStatus cho đồng bộ hệ thống
+    private UserStatus userStatus; 
     private Boolean availableToday;
 
     public String getKeyword() {

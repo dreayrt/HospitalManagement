@@ -5,37 +5,37 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-/**
- * Bộ lọc tìm kiếm lịch khám
- * Dùng trong API GET /api/appointments với query params
- * Ví dụ: GET /api/appointments?doctorId=1&status=PENDING&fromDate=2024-05-01&page=0&size=10
- */
+
+
+
+
+
 public class AppointmentFilterRequestDTO {
 
-    // Lọc theo bác sĩ
+    
     private Long doctorId;
 
-    // Lọc theo bệnh nhân
+    
     private Long patientId;
 
-    // Lọc theo trạng thái (PENDING, CONFIRMED, CANCELLED, COMPLETED, RESCHEDULED)
+    
     private AppointmentStatus status;
 
-    // Lọc theo khoảng ngày
+    
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fromDate;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate toDate;
 
-    // Tìm kiếm theo tên bệnh nhân hoặc mã bệnh nhân
+    
     private String search;
 
-    // Phân trang
+    
     private int page = 0;
     private int size = 10;
 
-    // ===================== GETTERS & SETTERS =====================
+    
 
     public Long getDoctorId() { return doctorId; }
     public void setDoctorId(Long doctorId) { this.doctorId = doctorId; }

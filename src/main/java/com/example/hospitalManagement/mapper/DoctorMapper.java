@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DoctorMapper {
 
-    // Đã bóc tách cắt bỏ Specialty, chỉ giữ lại đúng 4 tham số khớp 100% với DoctorService
+    
     public DoctorDTO toDoctorDTO(Doctor doctor, String workingStatus, long todayScheduleCount, long totalScheduleCount) {
         DoctorDTO dto = new DoctorDTO();
         dto.setId(doctor.getId());
@@ -21,7 +21,7 @@ public class DoctorMapper {
         }
         dto.setLicenseNumber(doctor.getLicenseNumber());
         dto.setExperienceYears(doctor.getExperienceYears());
-        dto.setStatus(doctor.getUserStatus()); // Khớp với trường userStatus mới trong DoctorDTO
+        dto.setStatus(doctor.getUserStatus()); 
         dto.setSpecialization(doctor.getSpecialization());
 
         if (doctor.getDepartment() != null) {

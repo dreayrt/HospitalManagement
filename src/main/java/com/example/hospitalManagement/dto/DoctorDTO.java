@@ -41,7 +41,7 @@ public class DoctorDTO {
     private Integer experienceYears;
 
     @NotNull(message = "Trạng thái bác sĩ không được để trống")
-    private UserStatus status; // Giữ nguyên tên status trùng khớp với Service
+    private UserStatus status; 
 
     @NotNull(message = "Khoa/phòng làm việc không được để trống")
     private Long departmentId;
@@ -53,7 +53,7 @@ public class DoctorDTO {
     private long totalScheduleCount;
     private List<DoctorScheduleDTO> schedules = new ArrayList<>();
 
-    // --- GETTER AND SETTER ---
+    
 
     public Long getId() {
         return id;

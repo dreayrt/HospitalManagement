@@ -6,16 +6,16 @@
     <title>Trang Đăng nhập - MediCore Health</title>
     <meta name="description" content="Đăng nhập vào hệ thống quản lý bệnh viện MediCore Health">
 
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Custom Auth CSS -->
+    
     <link th:href="@{/css/auth.css}" rel="stylesheet">
 </head>
 <body>
 
-<!-- ==================== NAVBAR ==================== -->
+
 <nav class="auth-navbar d-flex justify-content-between align-items-center">
     <a href="#" class="navbar-brand">
         <i class="bi bi-hospital"></i>
@@ -31,27 +31,27 @@
     </div>
 </nav>
 
-<!-- ==================== MAIN CONTENT ==================== -->
+
 <div class="auth-container">
     <div class="auth-card">
 
-        <!-- ===== LEFT PANEL ===== -->
+        
         <div class="auth-left">
-            <!-- Floating Particles -->
+            
             <div class="particle particle-1"></div>
             <div class="particle particle-2"></div>
             <div class="particle particle-3"></div>
 
             <div class="auth-left-content text-center">
-                <!-- SVG Illustration: Doctor with Phone -->
+                
                 <svg class="auth-illustration" viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Phone Frame -->
+                    
                     <rect x="85" y="30" width="130" height="250" rx="18" fill="rgba(255,255,255,0.12)"
                           stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
                     <rect x="95" y="50" width="110" height="200" rx="8" fill="rgba(255,255,255,0.08)"/>
-                    <!-- Phone Top Notch -->
+                    
                     <rect x="125" y="38" width="50" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
-                    <!-- Phone Screen Content -->
+                    
                     <circle cx="150" cy="100" r="22" fill="rgba(13,110,253,0.3)" stroke="rgba(255,255,255,0.4)"
                             stroke-width="1.5">
                         <animate attributeName="r" values="22;25;22" dur="2s" repeatCount="indefinite"/>
@@ -59,14 +59,14 @@
                     <path d="M142 100 l5 5 l11-11" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none">
                         <animate attributeName="opacity" values="0;1;1" dur="2s" repeatCount="indefinite"/>
                     </path>
-                    <!-- Heartbeat Line -->
+                    
                     <polyline points="100,145 120,145 130,125 140,160 150,140 160,145 200,145"
                               stroke="rgba(255,255,255,0.6)" stroke-width="2" fill="none" stroke-linecap="round">
                         <animate attributeName="stroke-dashoffset" from="200" to="0" dur="3s" repeatCount="indefinite"/>
                         <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="3s"
                                  repeatCount="indefinite"/>
                     </polyline>
-                    <!-- Stats Bars -->
+                    
                     <rect x="108" y="175" width="18" height="30" rx="4" fill="rgba(255,255,255,0.15)">
                         <animate attributeName="height" values="15;30;15" dur="2.5s" repeatCount="indefinite"/>
                         <animate attributeName="y" values="190;175;190" dur="2.5s" repeatCount="indefinite"/>
@@ -83,7 +83,7 @@
                         <animate attributeName="height" values="12;25;12" dur="2.2s" repeatCount="indefinite"/>
                         <animate attributeName="y" values="193;180;193" dur="2.2s" repeatCount="indefinite"/>
                     </rect>
-                    <!-- Floating notification badges -->
+                    
                     <circle cx="215" cy="60" r="16" fill="rgba(13,110,253,0.5)">
                         <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
                     </circle>
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <!-- ===== RIGHT PANEL (LOGIN FORM) ===== -->
+        
         <div class="auth-right">
             <div class="stagger-1">
                 <h3>Chào mừng trở lại</h3>
@@ -110,7 +110,7 @@
             <form th:action="@{/api/AuthenticationApi/login}" th:object="${LoginDTO}" method="post" id="loginForm">
                 <small id="generalError" class="text-danger d-block mb-3 text-center fw-bold"></small>
 
-                <!-- Username / Email -->
+                
                 <div class="form-floating-custom stagger-2">
                     <label for="loginUsername">Tên đăng nhập </label>
                     <div class="input-wrapper">
@@ -124,7 +124,7 @@
                     </small>
                 </div>
 
-                <!-- Password -->
+                
                 <div class="form-floating-custom stagger-3">
                     <label for="loginPassword">Mật khẩu</label>
                     <div class="input-wrapper">
@@ -142,7 +142,7 @@
                     </small>
                 </div>
 
-                <!-- Remember me & Forgot password -->
+                
                 <div class="form-extras stagger-4">
                     <div class="form-check form-check-custom">
                         <input class="form-check-input" type="checkbox" id="rememberMe" th:field="*{rememberMe}">
@@ -155,7 +155,7 @@
                     <a href="#" class="auth-link">Quên mật khẩu?</a>
                 </div>
 
-                <!-- Submit Button -->
+                
                 <div class="stagger-5">
                     <button type="submit" class="btn-auth-primary">
                         Đăng nhập
@@ -163,12 +163,12 @@
                 </div>
             </form>
 
-            <!-- Social Login Divider -->
+            
             <div class="social-divider stagger-6">
                 <span>Hoặc đăng nhập với</span>
             </div>
 
-            <!-- Social Buttons -->
+            
             <div class="social-buttons stagger-7">
                 <a href="#" class="btn-social">
                     <svg width="18" height="18" viewBox="0 0 48 48">
@@ -189,7 +189,7 @@
                 </a>
             </div>
 
-            <!-- Register Link -->
+            
             <div class="auth-footer-text stagger-7">
                 Chưa có tài khoản?
                 <a th:href="@{/register}" class="auth-link">Đăng ký ngay</a>
@@ -199,7 +199,7 @@
     </div>
 </div>
 
-<!-- ==================== FOOTER ==================== -->
+
 <footer class="auth-page-footer">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
         <div>
@@ -217,7 +217,7 @@
     </div>
 </footer>
 
-<!-- Bootstrap 5 JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>

@@ -28,7 +28,7 @@ public class DoctorScheduleDTO {
 
     private String doctorName;
 
-    // --- GETTER AND SETTER ---
+    
 
     public Long getId() {
         return id;

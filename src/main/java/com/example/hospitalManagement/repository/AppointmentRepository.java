@@ -13,20 +13,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-/**
- * Repository quản lý Lịch khám
- */
+
+
+
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointments, Long> {
 
-    /**
-     * Lấy toàn bộ lịch khám của một bác sĩ theo ngày (dùng cho xem lịch làm việc bác sĩ)
-     */
+    
+
+
     List<Appointments> findByDoctorIdAndAppointmentDate(Long doctorId, LocalDate date);
 
-    /**
-     * Kiểm tra trùng lịch: bác sĩ đã có lịch vào ngày + giờ đó chưa?
-     */
+    
+
+
     boolean existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(
             Long doctorId,
             LocalDate appointmentDate,
@@ -34,10 +34,10 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
             AppointmentStatus status
     );
 
-    /**
-     * Tìm kiếm lịch khám với filter đa điều kiện + phân trang
-     * Hỗ trợ: lọc bác sĩ, bệnh nhân, trạng thái, khoảng ngày, tìm tên/mã bệnh nhân
-     */
+    
+
+
+
     @Query("""
             SELECT a FROM Appointments a
             LEFT JOIN a.doctor d
@@ -64,9 +64,9 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
             Pageable pageable
     );
 
-    /**
-     * Lấy lịch khám theo bác sĩ (tất cả trạng thái) - dùng cho popup lịch làm việc
-     */
+    
+
+
     @Query("""
             SELECT a FROM Appointments a
             WHERE a.doctor.id = :doctorId

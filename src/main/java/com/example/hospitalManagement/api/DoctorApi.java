@@ -3,6 +3,7 @@ package com.example.hospitalManagement.api;
 import com.example.hospitalManagement.dto.DoctorDTO;
 import com.example.hospitalManagement.dto.DoctorFilterRequest;
 import com.example.hospitalManagement.dto.DoctorScheduleDTO;
+import com.example.hospitalManagement.entity.Enum.UserStatus;
 import com.example.hospitalManagement.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class DoctorApi {
     @GetMapping("/findAll")
     public List<DoctorDTO> findAll(@ModelAttribute DoctorFilterRequest filterRequest) {
         return doctorService.findAll(filterRequest);
+    }
+
+    @GetMapping("/statuses")
+    public List<Map<String, String>> findDoctorStatuses() {
+        return List.of(
+                Map.of("value", UserStatus.ACTIVE.name(), "label", "Đang hoạt động"),
+                Map.of("value", UserStatus.INACTIVE.name(), "label", "Tạm ngưng"),
+                Map.of("value", UserStatus.LOCKED.name(), "label", "Đã khóa")
+        );
     }
 
     @GetMapping("/{id}")

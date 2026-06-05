@@ -30,7 +30,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path=request.getRequestURI();
         if(path.equals("/login")||path.equals("/auth")||path.startsWith("/api/auth")){
-            filterChain.doFilter(request,response);//cho request chạy tiếp xuống controller
+            filterChain.doFilter(request,response);
             return;
         }
         String token=extractToken(request);
@@ -44,7 +44,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                         UsernamePasswordAuthenticationToken auth =
                                 new UsernamePasswordAuthenticationToken(
                                         userDetails,null,userDetails.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(auth);//Gắn vào SecurityContext Nó nói với Spring: request này đã authenticated
+                        SecurityContextHolder.getContext().setAuthentication(auth);
                     }
                 }
             } catch (Exception e) {
@@ -52,8 +52,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-
-
 
     }
     private String extractToken(HttpServletRequest request) {
