@@ -175,6 +175,22 @@
                             <span class="nav-badge badge-warning" id="appointment-nav-badge">0</span>
                         </a>
                     </li>
+                    <!-- Added: Menu quản lý Check-in -->
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="checkin" data-tooltip="Quản lý Check-in">
+                            <span class="nav-icon"><i class="bi bi-person-check-fill"></i></span>
+                            <span class="nav-label">Quản lý Check-in</span>
+                            <span class="nav-badge badge-info" id="checkin-nav-badge">0</span>
+                        </a>
+                    </li>
+                    <!-- Added: Menu Hồ sơ Bệnh án -->
+                    <li class="sidebar-nav-item">
+                        <a href="#" class="sidebar-nav-link" data-section="medical-records" data-tooltip="Hồ sơ Bệnh án">
+                            <span class="nav-icon"><i class="bi bi-journal-medical"></i></span>
+                            <span class="nav-label">Hồ sơ Bệnh án</span>
+                            <span class="nav-badge badge-success" id="medical-records-nav-badge">0</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -1157,81 +1173,104 @@
 
             <!-- ===== SECTION: APPOINTMENTS (Quản lý Lịch khám) ===== -->
             <div class="content-section" id="section-appointments">
-                <div class="page-header">
-                    <div class="page-header-top">
-                        <div>
-                            <h1 class="page-title">Quản lý Lịch khám 📅</h1>
-                            <p class="page-subtitle">Xác nhận, hủy, dời lịch và theo dõi trạng thái lịch hẹn của bệnh nhân.</p>
+                <!-- Header mới -->
+                <div class="admin-section-header">
+                    <div class="admin-section-icon">
+                        <i class="bi bi-calendar2-week-fill"></i>
+                    </div>
+                    <div class="admin-section-info">
+                        <h1 class="admin-section-title">Quản lý Lịch khám</h1>
+                        <p class="admin-section-desc">Xác nhận, hủy, dời lịch và theo dõi trạng thái lịch hẹn của bệnh nhân.</p>
+                    </div>
+                </div>
+
+                <!-- Filter Card mới -->
+                <div class="admin-filter-card">
+                    <div class="filter-group">
+                        <label for="apptFilterSearch">Tìm kiếm</label>
+                        <input type="text" id="apptFilterSearch" placeholder="Tên hoặc mã bệnh nhân" oninput="loadAppointmentData(0)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="apptFilterFrom">Từ ngày</label>
+                        <input type="date" id="apptFilterFrom" onchange="loadAppointmentData(0)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="apptFilterTo">Đến ngày</label>
+                        <input type="date" id="apptFilterTo" onchange="loadAppointmentData(0)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="apptFilterStatus">Trạng thái</label>
+                        <select id="apptFilterStatus" onchange="loadAppointmentData(0)">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="PENDING">⏳ Chờ xác nhận</option>
+                            <option value="CONFIRMED">✅ Đã xác nhận</option>
+                            <option value="IN_PROGRESS">🔵 Đang khám</option>
+                            <option value="COMPLETED">🟢 Hoàn thành</option>
+                            <option value="CANCELLED">🔴 Đã hủy</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button type="button" class="btn-gradient-outline w-100" onclick="loadAppointmentData(0)">
+                            <i class="bi bi-arrow-clockwise"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Row mới -->
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card stat-warning" onclick="filterApptByStatus('PENDING')">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+                            <div class="admin-stat-number" id="apptCountPending">-</div>
                         </div>
-                        <div class="page-header-actions">
-                            <!-- Tìm kiếm nhanh -->
-                            <input type="text" class="form-control" id="apptFilterSearch" placeholder="Tìm bệnh nhân..." style="width:180px;display:inline-block;" oninput="loadAppointmentData(0)">
-                            <!-- Bộ lọc ngày -->
-                            <input type="date" class="form-control" id="apptFilterFrom" style="width:auto;display:inline-block;" title="Từ ngày" onchange="loadAppointmentData(0)">
-                            <input type="date" class="form-control" id="apptFilterTo" style="width:auto;display:inline-block;" title="Đến ngày" onchange="loadAppointmentData(0)">
-                            <!-- Lọc trạng thái -->
-                            <select class="form-select" id="apptFilterStatus" style="width:auto;display:inline-block;" onchange="loadAppointmentData(0)">
-                                <option value="">Tất cả trạng thái</option>
-                                <option value="PENDING">⏳ Chờ xác nhận</option>
-                                <option value="CONFIRMED">✅ Đã xác nhận</option>
-                                <option value="IN_PROGRESS">🔵 Đang khám</option>
-                                <option value="COMPLETED">🟢 Hoàn thành</option>
-                                <option value="CANCELLED">🔴 Đã hủy</option>
-                            </select>
-                            <button type="button" class="btn-outline-dashboard" onclick="loadAppointmentData(0)">
-                                <i class="bi bi-arrow-clockwise"></i> Làm mới
+                        <div class="admin-stat-label">Chờ xác nhận</div>
+                    </div>
+                    <div class="admin-stat-card stat-success" onclick="filterApptByStatus('CONFIRMED')">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-calendar-check"></i></div>
+                            <div class="admin-stat-number" id="apptCountConfirmed">-</div>
+                        </div>
+                        <div class="admin-stat-label">Đã xác nhận</div>
+                    </div>
+                    <div class="admin-stat-card stat-primary" onclick="filterApptByStatus('IN_PROGRESS')">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-activity"></i></div>
+                            <div class="admin-stat-number" id="apptCountInProgress">-</div>
+                        </div>
+                        <div class="admin-stat-label">Đang khám</div>
+                    </div>
+                    <div class="admin-stat-card stat-emerald" onclick="filterApptByStatus('COMPLETED')">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-check2-all"></i></div>
+                            <div class="admin-stat-number" id="apptCountCompleted">-</div>
+                        </div>
+                        <div class="admin-stat-label">Hoàn thành</div>
+                    </div>
+                    <div class="admin-stat-card stat-danger" onclick="filterApptByStatus('CANCELLED')">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-x-circle"></i></div>
+                            <div class="admin-stat-number" id="apptCountCancelled">-</div>
+                        </div>
+                        <div class="admin-stat-label">Đã hủy</div>
+                    </div>
+                </div>
+
+                <!-- Data Card mới -->
+                <div class="admin-data-card">
+                    <div class="admin-data-header">
+                        <div class="admin-data-title">
+                            <i class="bi bi-list-ul"></i> Danh sách lịch khám
+                        </div>
+                        <div class="admin-data-actions">
+                            <!-- Nút export excel (demo) -->
+                            <button class="btn-gradient-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                                <i class="bi bi-download"></i> Xuất Excel
                             </button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Thẻ thống kê nhanh -->
-                <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.5rem;">
-                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('PENDING')">
-                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><i class="bi bi-hourglass-split"></i></div>
-                        <div class="stat-card-content">
-                            <div class="stat-card-value" id="apptCountPending">-</div>
-                            <div class="stat-card-label">Chờ xác nhận</div>
-                        </div>
-                    </div>
-                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('CONFIRMED')">
-                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="bi bi-calendar-check"></i></div>
-                        <div class="stat-card-content">
-                            <div class="stat-card-value" id="apptCountConfirmed">-</div>
-                            <div class="stat-card-label">Đã xác nhận</div>
-                        </div>
-                    </div>
-                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('COMPLETED')">
-                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);"><i class="bi bi-check2-all"></i></div>
-                        <div class="stat-card-content">
-                            <div class="stat-card-value" id="apptCountCompleted">-</div>
-                            <div class="stat-card-label">Hoàn thành</div>
-                        </div>
-                    </div>
-                    <div class="stat-card" style="cursor:pointer;" onclick="filterApptByStatus('CANCELLED')">
-                        <div class="stat-card-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);"><i class="bi bi-x-circle"></i></div>
-                        <div class="stat-card-content">
-                            <div class="stat-card-value" id="apptCountCancelled">-</div>
-                            <div class="stat-card-label">Đã hủy</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">
-                            <i class="bi bi-calendar2-week-fill"></i>
-                            Danh sách lịch khám
-                        </div>
-                        <!-- Phân trang -->
-                        <div class="dashboard-card-actions" id="apptPaginationControls" style="display:flex;gap:.4rem;align-items:center;">
-                            <button type="button" class="card-action-btn" id="apptPrevBtn" onclick="changeApptPage(-1)" title="Trang trước"><i class="bi bi-chevron-left"></i></button>
-                            <span id="apptPageInfo" style="font-size:.85rem;color:var(--text-muted);">Trang 1</span>
-                            <button type="button" class="card-action-btn" id="apptNextBtn" onclick="changeApptPage(1)" title="Trang sau"><i class="bi bi-chevron-right"></i></button>
-                        </div>
-                    </div>
-                    <div class="dashboard-card-body" style="padding:0;overflow-x:auto;">
-                        <table class="activity-table">
+                    
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
                             <thead>
                                 <tr>
                                     <th>Bệnh nhân</th>
@@ -1246,10 +1285,193 @@
                             </thead>
                             <tbody id="appointment-table-body">
                                 <tr>
-                                    <td colspan="8" style="text-align:center;padding:1.5rem;color:var(--text-muted);">Chọn menu Quản lý Lịch khám để tải dữ liệu.</td>
+                                    <td colspan="8">
+                                        <div class="admin-empty-state">
+                                            <div class="admin-empty-icon"><i class="bi bi-inbox"></i></div>
+                                            <div class="admin-empty-title">Chưa có dữ liệu</div>
+                                            <div class="admin-empty-desc">Chọn menu Quản lý Lịch khám để tải dữ liệu.</div>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <!-- Pagination mới -->
+                    <div class="admin-pagination">
+                        <div class="admin-pagination-info" id="apptPageInfo">Trang 1</div>
+                        <div class="admin-pagination-btns" id="apptPaginationControls">
+                            <button type="button" class="admin-page-btn" id="apptPrevBtn" onclick="changeApptPage(-1)" title="Trang trước"><i class="bi bi-chevron-left"></i></button>
+                            <button type="button" class="admin-page-btn" id="apptNextBtn" onclick="changeApptPage(1)" title="Trang sau"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>            <!-- ===== SECTION: CHECK-IN (Quản lý Check-in) ===== -->
+            <div class="content-section" id="section-checkin">
+                <div class="admin-section-header">
+                    <div class="admin-section-icon" style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(14,165,233,0.1)); color: #06b6d4;">
+                        <i class="bi bi-person-check-fill"></i>
+                    </div>
+                    <div class="admin-section-info">
+                        <h1 class="admin-section-title">Quản lý Check-in</h1>
+                        <p class="admin-section-desc">Xác nhận bệnh nhân đến viện, cập nhật ưu tiên và điều phối vào phòng khám.</p>
+                    </div>
+                </div>
+
+                <div class="admin-filter-card">
+                    <div class="filter-group">
+                        <label for="checkinFilterSearch">Tìm kiếm</label>
+                        <input type="text" id="checkinFilterSearch" placeholder="Mã BN hoặc Tên..." oninput="loadCheckInData(0)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="checkinFilterDate">Ngày check-in</label>
+                        <input type="date" id="checkinFilterDate" onchange="loadCheckInData(0)">
+                    </div>
+                    <div class="filter-group">
+                        <label for="checkinFilterStatus">Trạng thái</label>
+                        <select id="checkinFilterStatus" onchange="loadCheckInData(0)">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="WAITING">Đang chờ</option>
+                            <option value="CHECKED_IN">Đã vào khám</option>
+                            <option value="DONE">Hoàn thành</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button type="button" class="btn-gradient-outline w-100" onclick="loadCheckInData(0)">
+                            <i class="bi bi-arrow-clockwise"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card stat-info" onclick="document.getElementById('checkinFilterStatus').value=''; loadCheckInData(0);">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-people-fill"></i></div>
+                            <div class="admin-stat-number" id="checkinStatsTotal">0</div>
+                        </div>
+                        <div class="admin-stat-label">Tổng Check-in</div>
+                    </div>
+                    <div class="admin-stat-card stat-warning" onclick="document.getElementById('checkinFilterStatus').value='WAITING'; loadCheckInData(0);">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-hourglass"></i></div>
+                            <div class="admin-stat-number" id="checkinStatsWaiting">0</div>
+                        </div>
+                        <div class="admin-stat-label">Bệnh nhân đang chờ</div>
+                    </div>
+                    <div class="admin-stat-card stat-primary" onclick="document.getElementById('checkinFilterStatus').value='CHECKED_IN'; loadCheckInData(0);">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-door-open"></i></div>
+                            <div class="admin-stat-number" id="checkinStatsCheckedIn">0</div>
+                        </div>
+                        <div class="admin-stat-label">Đang trong phòng khám</div>
+                    </div>
+                    <div class="admin-stat-card stat-success" onclick="document.getElementById('checkinFilterStatus').value='DONE'; loadCheckInData(0);">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-check-circle"></i></div>
+                            <div class="admin-stat-number" id="checkinStatsDone">0</div>
+                        </div>
+                        <div class="admin-stat-label">Hoàn thành trong ngày</div>
+                    </div>
+                </div>
+
+                <div class="admin-data-card">
+                    <div class="admin-data-header">
+                        <div class="admin-data-title">
+                            <i class="bi bi-list-task"></i> Danh sách Check-in
+                        </div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Bác sĩ / Khoa</th>
+                                    <th>Ghi chú</th>
+                                    <th>Mức độ ưu tiên</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkin-table-body">
+                                <tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-title">Đang tải dữ liệu...</div></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-pagination">
+                        <div class="admin-pagination-info" id="checkinPageInfo">Trang 1</div>
+                        <div class="admin-pagination-btns" id="checkinPaginationControls">
+                            <button type="button" class="admin-page-btn" id="checkinPrevBtn" onclick="changeCheckInPage(-1)"><i class="bi bi-chevron-left"></i></button>
+                            <button type="button" class="admin-page-btn" id="checkinNextBtn" onclick="changeCheckInPage(1)"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: MEDICAL RECORDS (Hồ sơ Bệnh án) ===== -->
+            <div class="content-section" id="section-medical-records">
+                <div class="admin-section-header">
+                    <div class="admin-section-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(5,150,105,0.1)); color: #10b981;">
+                        <i class="bi bi-journal-medical"></i>
+                    </div>
+                    <div class="admin-section-info">
+                        <h1 class="admin-section-title">Hồ sơ Bệnh án</h1>
+                        <p class="admin-section-desc">Tra cứu lịch sử khám bệnh, chẩn đoán, điều trị và thông tin sức khỏe của bệnh nhân.</p>
+                    </div>
+                </div>
+
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card stat-success" onclick="document.getElementById('medicalRecordFilterSearch').value=''; loadMedicalRecordsData(0);">
+                        <div class="admin-stat-top">
+                            <div class="admin-stat-icon"><i class="bi bi-journal-check"></i></div>
+                            <div class="admin-stat-number" id="medicalRecordsTotalCount">0</div>
+                        </div>
+                        <div class="admin-stat-label">Tổng số Hồ sơ Bệnh án</div>
+                    </div>
+                </div>
+
+                <div class="admin-filter-card">
+                    <div class="filter-group">
+                        <label for="medicalRecordFilterSearch">Tìm kiếm bệnh nhân</label>
+                        <input type="text" id="medicalRecordFilterSearch" placeholder="Nhập ID hoặc tên bệnh nhân..." oninput="loadMedicalRecordsData(0)">
+                    </div>
+                    <div class="filter-actions">
+                        <button type="button" class="btn-gradient-outline w-100" onclick="loadMedicalRecordsData(0)">
+                            <i class="bi bi-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-data-card">
+                    <div class="admin-data-header">
+                        <div class="admin-data-title">
+                            <i class="bi bi-file-earmark-medical"></i> Danh sách Hồ sơ Bệnh án
+                        </div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã BA</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Bác sĩ chẩn đoán</th>
+                                    <th>Ngày lập</th>
+                                    <th>Chẩn đoán</th>
+                                    <th>Đơn thuốc</th>
+                                    <th>Trạng thái khám</th>
+                                </tr>
+                            </thead>
+                            <tbody id="medical-records-table-body">
+                                <tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-title">Đang tải dữ liệu...</div></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-pagination">
+                        <div class="admin-pagination-info" id="medicalRecordPageInfo">Trang 1</div>
+                        <div class="admin-pagination-btns" id="medicalRecordPaginationControls">
+                            <button type="button" class="admin-page-btn" id="medicalRecordPrevBtn" onclick="changeMedicalRecordPage(-1)"><i class="bi bi-chevron-left"></i></button>
+                            <button type="button" class="admin-page-btn" id="medicalRecordNextBtn" onclick="changeMedicalRecordPage(1)"><i class="bi bi-chevron-right"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1560,8 +1782,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="doctor-form-section">
-                        <div class="doctor-form-section-title"><i class="bi bi-shield-lock"></i>Tài khoản đăng nhập mới</div>
+                    <div class="doctor-form-section section-account">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-shield-lock"></i>Tài khoản đăng nhập
+                            <span class="section-subtitle">Thông tin bảo mật</span>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="createDoctorUserName" class="form-label">Tên đăng nhập</label>
@@ -1573,8 +1798,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="doctor-form-section">
-                        <div class="doctor-form-section-title"><i class="bi bi-person-vcard"></i>Hồ sơ bác sĩ</div>
+                    <div class="doctor-form-section section-profile">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-person-vcard"></i>Hồ sơ bác sĩ
+                            <span class="section-subtitle">Thông tin chuyên môn</span>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="createDoctorDepartmentId" class="form-label">Chọn Khoa</label>
@@ -1590,7 +1818,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="createDoctorPhone" class="form-label">SĐT</label>
-                                <input type="text" class="form-control" id="createDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                                <input type="number" class="form-control" id="createDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
                             </div>
                             <div class="col-md-6">
                                 <label for="createDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
@@ -1600,15 +1828,12 @@
                                 <label for="createDoctorExperienceYears" class="form-label">Số năm kinh nghiệm</label>
                                 <input type="number" class="form-control" id="createDoctorExperienceYears" min="0" max="60" value="0" required>
                             </div>
-                            <div class="col-md-6">
-                                <label for="createDoctorSpecialization" class="form-label">Chuyên môn</label>
-                                <input type="text" class="form-control" id="createDoctorSpecialization" maxlength="120">
-                            </div>
+
                             <div class="col-md-6">
                                 <label for="createDoctorStatus" class="form-label">Trạng thái</label>
                                 <select class="form-select" id="createDoctorStatus" required>
-                                    <option value="ACTIVE">ACTIVE</option>
-                                    <option value="INACTIVE">INACTIVE</option>
+                                    <option value="ACTIVE">Đang làm việc </option>
+                                    <option value="INACTIVE">Nghỉ việc</option>
                                 </select>
                             </div>
                         </div>
@@ -1616,7 +1841,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lưu bác sĩ</button>
+                    <button type="submit" class="btn-gradient-primary">
+                        <i class="bi bi-check-circle"></i> Lưu bác sĩ
+                    </button>
                 </div>
             </form>
         </div>
@@ -1634,6 +1861,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="doctor-form-section section-profile">
+                        <div class="doctor-form-section-title">
+                            <i class="bi bi-pencil-square"></i>Chỉnh sửa hồ sơ
+                            <span class="section-subtitle">Cập nhật thông tin</span>
+                        </div>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="editDoctorUserId" class="form-label">Chọn tài khoản</label>
@@ -1675,10 +1907,13 @@
                             </select>
                         </div>
                     </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    <button type="submit" class="btn-gradient-primary">
+                        <i class="bi bi-check-circle"></i> Cập nhật
+                    </button>
                 </div>
             </form>
         </div>
@@ -1865,6 +2100,10 @@
             loadDoctorData();
         } else if (section === 'appointments') {
             loadAppointmentData();
+        } else if (section === 'checkin') {
+            loadCheckInData(0);
+        } else if (section === 'medical-records') {
+            loadMedicalRecordsData(0);
         }
     }
 
@@ -2024,7 +2263,7 @@
                     <div>${escapeHtml(doctor.phone)}</div>
                     <div class="patient-id">${escapeHtml(doctor.email)}</div>
                 </td>
-                <td>${escapeHtml(doctor.departmentName)}</td>
+                <td>${escapeHtml(departmentMap[doctor.departmentName] || doctor.departmentName || '-')}</td>
                 <td>${escapeHtml(doctor.specialization || '-')}</td>
                 <td>${escapeHtml(doctor.experienceYears ?? 0)} năm</td>
                 <td>${doctorSystemBadge(doctor.status)}</td>
@@ -2045,6 +2284,28 @@
             </tr>
         `).join('');
     }
+
+    const departmentMap = {
+        'Cardiology': 'Tim mạch',
+        'Neurology': 'Thần kinh',
+        'Orthopedics': 'Chấn thương chỉnh hình',
+        'Pediatrics': 'Nhi khoa',
+        'Oncology': 'Ung bướu',
+        'Dermatology': 'Da liễu',
+        'Emergency': 'Cấp cứu',
+        'General Surgery': 'Ngoại khoa',
+        'Internal Medicine': 'Nội khoa',
+        'Gastroenterology': 'Tiêu hóa',
+        'Ophthalmology': 'Mắt',
+        'ENT': 'Tai Mũi Họng',
+        'Obstetrics and Gynecology': 'Sản phụ khoa',
+        'Psychiatry': 'Tâm thần',
+        'Urology': 'Tiết niệu',
+        'Endocrinology': 'Nội tiết',
+        'Pulmonology': 'Hô hấp',
+        'Dental': 'Răng Hàm Mặt',
+        'Infectious Diseases': 'Truyền nhiễm'
+    };
 
     async function loadDoctorData() {
         const tableBody = document.getElementById('doctor-table-body');
@@ -2111,7 +2372,7 @@
             `${prefix}DoctorDepartmentId`,
             doctorState.departments,
             'Chọn khoa/phòng',
-            department => department.name || 'Không tên',
+            department => departmentMap[department.name] || department.name || 'Không tên',
             doctor.departmentId
         );
     }
@@ -2311,19 +2572,6 @@
         loadAppointmentData(0);
     }
 
-    // Load thống kê nhanh (4 thẻ)
-    async function loadApptStats() {
-        const statuses = ['PENDING','CONFIRMED','COMPLETED','CANCELLED'];
-        const ids      = ['apptCountPending','apptCountConfirmed','apptCountCompleted','apptCountCancelled'];
-        for (let i = 0; i < statuses.length; i++) {
-            try {
-                const res = await doctorFetchJson(`/api/appointments?page=0&size=1&status=${statuses[i]}`);
-                const el = document.getElementById(ids[i]);
-                if (el) el.textContent = res.totalElements ?? 0;
-            } catch { /* bỏ qua nếu lỗi */ }
-        }
-    }
-
     // Mở modal xem lịch làm việc của bác sĩ
     async function openDoctorScheduleModal(doctorId, doctorName) {
         document.getElementById('scheduleModalDoctorName').textContent = doctorName;
@@ -2417,6 +2665,28 @@
             document.getElementById('apptNextBtn').disabled = pageData.last;
 
             const appts = pageData.content || [];
+            
+            // Thống kê dựa vào dữ liệu hiện tại (state)
+            const stats = { PENDING: 0, CONFIRMED: 0, IN_PROGRESS: 0, COMPLETED: 0, CANCELLED: 0 };
+            appts.forEach(a => {
+                if (stats[a.status] !== undefined) stats[a.status]++;
+            });
+            
+            const countElPending = document.getElementById('apptCountPending');
+            if (countElPending) countElPending.textContent = stats.PENDING;
+            
+            const countElConfirmed = document.getElementById('apptCountConfirmed');
+            if (countElConfirmed) countElConfirmed.textContent = stats.CONFIRMED;
+            
+            const countElInProgress = document.getElementById('apptCountInProgress');
+            if (countElInProgress) countElInProgress.textContent = stats.IN_PROGRESS;
+            
+            const countElCompleted = document.getElementById('apptCountCompleted');
+            if (countElCompleted) countElCompleted.textContent = stats.COMPLETED;
+            
+            const countElCancelled = document.getElementById('apptCountCancelled');
+            if (countElCancelled) countElCancelled.textContent = stats.CANCELLED;
+
             if (!appts.length) {
                 tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="bi bi-calendar2-x" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>Không tìm thấy lịch khám nào phù hợp.</td></tr>`;
                 return;
@@ -2687,6 +2957,167 @@
         });
     }
     animateCounters();
+    // ==================== CHECK-IN MANAGEMENT ====================
+    let checkinState = { page: 0, size: 10, totalPages: 1 };
+
+    async function loadCheckInData(page = 0) {
+        checkinState.page = page;
+        const search = document.getElementById('checkinFilterSearch').value.trim();
+        const date = document.getElementById('checkinFilterDate').value;
+        const status = document.getElementById('checkinFilterStatus').value;
+        
+        const params = new URLSearchParams({ page: checkinState.page, size: checkinState.size });
+        if (search) params.append('search', search);
+        if (date) { params.append('fromDate', date); params.append('toDate', date); }
+        if (status) params.append('status', status);
+
+        const tbody = document.getElementById('checkin-table-body');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;"><div class="spinner-border text-primary spinner-border-sm"></div><span style="margin-left:.5rem;color:var(--text-muted);">Đang tải dữ liệu...</span></td></tr>';
+
+        try {
+            const data = await doctorFetchJson('/api/checkins?' + params.toString());
+            
+            // Render Stats
+            const checkinNavBadge = document.getElementById('checkin-nav-badge');
+            if (checkinNavBadge) checkinNavBadge.textContent = data.totalElements || 0;
+            const checkinStatsTotal = document.getElementById('checkinStatsTotal');
+            if (checkinStatsTotal) checkinStatsTotal.textContent = data.totalElements || 0;
+
+            const appts = data.content || [];
+            const stateStats = { WAITING: 0, CHECKED_IN: 0, DONE: 0 };
+            appts.forEach(c => {
+                if (stateStats[c.status] !== undefined) stateStats[c.status]++;
+            });
+
+            const countWaiting = document.getElementById('checkinStatsWaiting');
+            if (countWaiting) countWaiting.textContent = stateStats.WAITING;
+            const countCheckedIn = document.getElementById('checkinStatsCheckedIn');
+            if (countCheckedIn) countCheckedIn.textContent = stateStats.CHECKED_IN;
+            const countDone = document.getElementById('checkinStatsDone');
+            if (countDone) countDone.textContent = stateStats.DONE;
+
+            // Render Table
+            checkinState.totalPages = data.totalPages;
+            document.getElementById('checkinPageInfo').textContent = `Trang ${data.number + 1} / ${Math.max(1, data.totalPages)}`;
+            document.getElementById('checkinPrevBtn').disabled = data.first;
+            document.getElementById('checkinNextBtn').disabled = data.last;
+
+            if (data.content.length === 0) {
+                if (tbody) tbody.innerHTML = `<tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-icon"><i class="bi bi-inbox"></i></div><div class="admin-empty-title">Không tìm thấy dữ liệu</div></div></td></tr>`;
+                return;
+            }
+
+            if (tbody) tbody.innerHTML = data.content.map(c => `
+                <tr>
+                    <td style="font-weight:600;color:var(--accent);">${fmtTime(c.appointmentTime || '')}</td>
+                    <td>
+                        <div style="font-weight:700;color:var(--text-dark);">${escapeHtml(c.patientName || 'Không rõ')}</div>
+                        <div style="font-size:0.75rem;color:var(--text-muted);">SĐT: ${escapeHtml(c.patientPhone || '-')}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight:600;">${escapeHtml(c.doctorName || '-')}</div>
+                        <div style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(departmentMap[c.departmentName] || c.departmentName || '-')}</div>
+                    </td>
+                    <td><div style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(c.notes || '')}">${escapeHtml(c.notes || '-')}</div></td>
+                    <td>${c.priority > 1 ? `<span class="admin-badge badge-urgent"><i class="bi bi-exclamation-triangle-fill"></i> Ưu tiên cao</span>` : `<span class="admin-badge badge-normal">Bình thường</span>`}</td>
+                    <td>${checkinBadge(c.status)}</td>
+                    <td>
+                        <div class="admin-row-actions">
+                            ${c.status === 'WAITING' ? `<button class="admin-action-btn btn-confirm" onclick="confirmCheckin(${c.id})" title="Xác nhận vào khám"><i class="bi bi-check-lg"></i></button>` : ''}
+                            ${c.status === 'CHECKED_IN' ? `<button class="admin-action-btn btn-confirm" onclick="completeCheckin(${c.id})" title="Hoàn tất khám"><i class="bi bi-check2-all"></i></button>` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--danger);">${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    function checkinBadge(status) {
+        if (status === 'WAITING') return '<span class="admin-badge badge-waiting"><i class="bi bi-hourglass-split"></i> Đang chờ</span>';
+        if (status === 'CHECKED_IN') return '<span class="admin-badge badge-checked-in"><i class="bi bi-door-open"></i> Đã vào khám</span>';
+        if (status === 'DONE') return '<span class="admin-badge badge-done"><i class="bi bi-check-circle"></i> Hoàn thành</span>';
+        return `<span class="admin-badge badge-normal">${status}</span>`;
+    }
+
+    function changeCheckInPage(delta) {
+        let newPage = checkinState.page + delta;
+        if (newPage >= 0 && newPage < checkinState.totalPages) loadCheckInData(newPage);
+    }
+
+    async function confirmCheckin(id) {
+        try {
+            await doctorFetchJson(`/api/checkins/${id}/confirm-arrival`, { method: 'PUT' });
+            showDoctorCenterNotice('success', 'Thành công', 'Đã xác nhận bệnh nhân vào khám.');
+            loadCheckInData(checkinState.page);
+        } catch (err) {
+            showDoctorCenterNotice('error', 'Lỗi xác nhận', err.message);
+        }
+    }
+
+    async function completeCheckin(id) {
+        try {
+            await doctorFetchJson(`/api/checkins/${id}/complete`, { method: 'PUT' });
+            showDoctorCenterNotice('success', 'Hoàn tất', 'Bệnh nhân đã khám xong.');
+            loadCheckInData(checkinState.page);
+        } catch (err) {
+            showDoctorCenterNotice('error', 'Lỗi hoàn tất', err.message);
+        }
+    }
+
+    // ==================== MEDICAL RECORDS MANAGEMENT ====================
+    let medicalRecordState = { page: 0, size: 10, totalPages: 1 };
+
+    async function loadMedicalRecordsData(page = 0) {
+        medicalRecordState.page = page;
+        const search = document.getElementById('medicalRecordFilterSearch').value.trim();
+        const params = new URLSearchParams({ page: medicalRecordState.page, size: medicalRecordState.size });
+        if (search) params.append('search', search);
+
+        const tbody = document.getElementById('medical-records-table-body');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;"><div class="spinner-border text-primary spinner-border-sm"></div><span style="margin-left:.5rem;color:var(--text-muted);">Đang tải dữ liệu...</span></td></tr>';
+
+        try {
+            const data = await doctorFetchJson('/api/medical-records?' + params.toString());
+            medicalRecordState.totalPages = data.totalPages;
+            
+            const mrBadge = document.getElementById('medical-records-nav-badge');
+            if (mrBadge) mrBadge.textContent = data.totalElements || 0;
+            const mrTotalCount = document.getElementById('medicalRecordsTotalCount');
+            if (mrTotalCount) mrTotalCount.textContent = data.totalElements || 0;
+
+            document.getElementById('medicalRecordPageInfo').textContent = `Trang ${data.number + 1} / ${Math.max(1, data.totalPages)}`;
+            document.getElementById('medicalRecordPrevBtn').disabled = data.first;
+            document.getElementById('medicalRecordNextBtn').disabled = data.last;
+
+            if (data.content.length === 0) {
+                if (tbody) tbody.innerHTML = `<tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-icon"><i class="bi bi-inbox"></i></div><div class="admin-empty-title">Không tìm thấy dữ liệu</div></div></td></tr>`;
+                return;
+            }
+
+            if (tbody) tbody.innerHTML = data.content.map(m => `
+                <tr>
+                    <td style="font-weight:700;color:var(--accent);">BA-${m.id}</td>
+                    <td>
+                        <div style="font-weight:700;">${escapeHtml(m.patientName || '-')}</div>
+                    </td>
+                    <td>${escapeHtml(m.doctorName || '-')}</td>
+                    <td>${fmtDate(m.createdAt || m.appointmentDate || '')}</td>
+                    <td><div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(m.diagnosis || '')}">${escapeHtml(m.diagnosis || '-')}</div></td>
+                    <td><div style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(m.prescription || '')}">${escapeHtml(m.prescription || '-')}</div></td>
+                    <td>${m.status === 'COMPLETED' ? '<span class="admin-badge badge-done"><i class="bi bi-check-circle"></i> Đã khám</span>' : `<span class="admin-badge badge-normal">${m.status}</span>`}</td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--danger);">${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    function changeMedicalRecordPage(delta) {
+        let newPage = medicalRecordState.page + delta;
+        if (newPage >= 0 && newPage < medicalRecordState.totalPages) loadMedicalRecordsData(newPage);
+    }
 </script>
 
 </body>
