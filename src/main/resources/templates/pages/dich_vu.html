@@ -334,8 +334,14 @@
             transition: .3s;
         }
 
+        a.service-item {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         .service-item:hover {
-            transform: translateY(-8px)
+            transform: translateY(-8px);
+            box-shadow: 0 8px 28px rgba(10, 111, 183, 0.18);
         }
 
         .service-item span {
@@ -344,7 +350,7 @@
             color: #0a6fb7;
         }
 
-        .service-item button {
+        .service-item .arrow-btn {
             width: 45px;
             height: 45px;
             border-radius: 50%;
@@ -353,6 +359,15 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background .3s;
+        }
+
+        .service-item:hover .arrow-btn {
+            background: #005fa8;
         }
 
         /* CONTENT BOX */
@@ -860,12 +875,12 @@
         </div>
 
         <div class="service-grid stagger-container" id="serviceGrid">
-            <div class="service-item reveal fade-up" data-name="Phòng khám Bệnh lý cột sống"><span>Phòng khám Bệnh lý cột sống</span><button>›</button></div>
-            <div class="service-item reveal fade-up" data-name="Phòng khám Chăm sóc giảm nhẹ"><span>Phòng khám Chăm sóc giảm nhẹ</span><button>›</button></div>
-            <div class="service-item reveal fade-up" data-name="Phòng khám Da liễu"><span>Phòng khám Da liễu</span><button>›</button></div>
-            <div class="service-item reveal fade-up" data-name="Phòng khám Dị ứng"><span>Phòng khám Dị ứng</span><button>›</button></div>
-            <div class="service-item reveal fade-up" data-name="Phòng khám Đau mạn tính"><span>Phòng khám Đau mạn tính</span><button>›</button></div>
-            <div class="service-item reveal fade-up" data-name="Phòng khám Ghép gan nhi"><span>Phòng khám Ghép gan nhi</span><button>›</button></div>
+            <a class="service-item reveal fade-up" href="/chi-tiet-tong-quat" data-name="Gói khám tổng quát cơ bản"><span>Gói khám tổng quát cơ bản</span><span class="arrow-btn">›</span></a>
+            <a class="service-item reveal fade-up" href="/chi-tiet-ung-thu" data-name="Gói tầm soát ung thư toàn diện"><span>Gói tầm soát ung thư toàn diện</span><span class="arrow-btn">›</span></a>
+            <a class="service-item reveal fade-up" href="/chi-tiet-lay-mau" data-name="Dịch vụ lấy mẫu xét nghiệm tại nhà"><span>Dịch vụ lấy mẫu xét nghiệm tại nhà</span><span class="arrow-btn">›</span></a>
+            <a class="service-item reveal fade-up" href="/chi-tiet-tim-mach" data-name="Gói tầm soát bệnh lý tim mạch"><span>Gói tầm soát bệnh lý tim mạch</span><span class="arrow-btn">›</span></a>
+            <a class="service-item reveal fade-up" href="/chi-tiet-tien-thai-san" data-name="Gói khám sức khỏe tiền thai sản"><span>Gói khám sức khỏe tiền thai sản</span><span class="arrow-btn">›</span></a>
+            <a class="service-item reveal fade-up" href="/chi-tiet-tiem-chung" data-name="Dịch vụ tiêm chủng vắc xin trọn gói"><span>Dịch vụ tiêm chủng vắc xin trọn gói</span><span class="arrow-btn">›</span></a>
         </div>
     </section>
 
