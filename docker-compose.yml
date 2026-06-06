@@ -30,14 +30,6 @@ services:
 volumes:
   redis-data:
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-volumes:
-  redis-data:
+
 
 
