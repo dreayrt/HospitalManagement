@@ -1,18 +1,51 @@
 package com.example.hospitalManagement.controller;
 
+import com.example.hospitalManagement.entity.Departments;
+import com.example.hospitalManagement.entity.Enum.DepartmentStatus;
+import com.example.hospitalManagement.repository.DepartmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.text.Normalizer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ChuyenKhoaController {
 
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    /**
+     * Chuyển tên khoa thành slug URL-friendly.
+     * VD: "KHOA TIM MẠCH" → "khoa-tim-mach"
+     */
+    private String toSlug(String name) {
+        if (name == null) return "";
+        String normalized = Normalizer.normalize(name, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replace("đ", "d").replace("Đ", "d");
+        return normalized.toLowerCase()
+                .replaceAll("[^a-z0-9\\s-]", "")
+                .trim()
+                .replaceAll("\\s+", "-");
+    }
+
     @GetMapping("/chuyen-khoa")
-    public String chuyenKhoa() {
+    public String chuyenKhoa(Model model) {
+        // Chỉ lấy các khoa ACTIVE từ database
+        List<Departments> departments = departmentRepository.findAll()
+                .stream()
+                .filter(d -> d.getStatus() == DepartmentStatus.ACTIVE)
+                .collect(Collectors.toList());
+
+        // Gán thêm slug cho mỗi khoa để dùng trong link href
+        model.addAttribute("departments", departments);
         return "pages/chuyen_khoa";
     }
 
@@ -61,18 +94,30 @@ public class ChuyenKhoaController {
                 "Điều trị mụn, viêm da, dị ứng da, nám, tàn nhang, rụng tóc và chăm sóc da."
         });
 
+        // Thử tìm bằng slug cố định trước, nếu không có thì tìm từ DB theo id
         String[] specialty = data.get(slug);
-
-        if (specialty == null) {
-            return "redirect:/chuyen-khoa";
+        if (specialty != null) {
+            model.addAttribute("title", specialty[0]);
+            model.addAttribute("slug", specialty[1]);
+            model.addAttribute("intro", specialty[2]);
+            model.addAttribute("description", specialty[3]);
+            model.addAttribute("strength", specialty[4]);
+            return "pages/chi_tiet_chuyen_khoa";
         }
 
-        model.addAttribute("title", specialty[0]);
-        model.addAttribute("slug", specialty[1]);
-        model.addAttribute("intro", specialty[2]);
-        model.addAttribute("description", specialty[3]);
-        model.addAttribute("strength", specialty[4]);
-
-        return "pages/chi_tiet_chuyen_khoa";
+        // Thử tìm theo id nếu slug là số
+        try {
+            long id = Long.parseLong(slug);
+            return departmentRepository.findById(id).map(dept -> {
+                model.addAttribute("title", dept.getName());
+                model.addAttribute("slug", toSlug(dept.getName()));
+                model.addAttribute("intro", dept.getDescription());
+                model.addAttribute("description", dept.getDescription());
+                model.addAttribute("strength", "Chuyên điều trị và chăm sóc sức khỏe toàn diện cho người bệnh.");
+                return "pages/chi_tiet_chuyen_khoa";
+            }).orElse("redirect:/chuyen-khoa");
+        } catch (NumberFormatException e) {
+            return "redirect:/chuyen-khoa";
+        }
     }
 }
