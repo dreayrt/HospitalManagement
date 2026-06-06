@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -146,20 +146,6 @@
                             <span class="nav-badge badge-primary">12</span>
                         </a>
                     </li>
-                    <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="patients" data-tooltip="Quản lý Bệnh nhân">
-                            <span class="nav-icon"><i class="bi bi-people-fill"></i></span>
-                            <span class="nav-label">Quản lý Bệnh nhân</span>
-                            <span class="nav-badge badge-success">248</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="billing" data-tooltip="Hóa đơn Thanh toán">
-                            <span class="nav-icon"><i class="bi bi-receipt-cutoff"></i></span>
-                            <span class="nav-label">Hóa đơn Thanh toán</span>
-                            <span class="nav-badge badge-danger">5</span>
-                        </a>
-                    </li>
                     <!-- Added: Menu quản lý bác sĩ chạy SPA bằng Fetch API -->
                     <li class="sidebar-nav-item">
                         <a href="#" class="sidebar-nav-link" data-section="doctors" data-tooltip="Quản lý Bác sĩ">
@@ -176,22 +162,7 @@
                             <span class="nav-badge badge-warning" id="appointment-nav-badge">0</span>
                         </a>
                     </li>
-                    <!-- Added: Menu quản lý Check-in -->
-                    <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="checkin" data-tooltip="Quản lý Check-in">
-                            <span class="nav-icon"><i class="bi bi-person-check-fill"></i></span>
-                            <span class="nav-label">Quản lý Check-in</span>
-                            <span class="nav-badge badge-info" id="checkin-nav-badge">0</span>
-                        </a>
-                    </li>
-                    <!-- Added: Menu Hồ sơ Bệnh án -->
-                    <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="medical-records" data-tooltip="Hồ sơ Bệnh án">
-                            <span class="nav-icon"><i class="bi bi-journal-medical"></i></span>
-                            <span class="nav-label">Hồ sơ Bệnh án</span>
-                            <span class="nav-badge badge-success" id="medical-records-nav-badge">0</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </div>
 
@@ -804,150 +775,6 @@
                 </div>
             </div>
 
-            <!-- ===== SECTION: PATIENTS (Quản lý Bệnh nhân) ===== -->
-            <div class="content-section" id="section-patients">
-                <div class="page-header">
-                    <div class="page-header-top">
-                        <div>
-                            <h1 class="page-title">Quản lý Bệnh nhân 👥</h1>
-                            <p class="page-subtitle">Theo dõi và quản lý toàn bộ hồ sơ bệnh nhân.</p>
-                        </div>
-                        <div class="page-header-actions">
-                            <button class="btn-outline-dashboard">
-                                <i class="bi bi-upload"></i>
-                                Nhập Excel
-                            </button>
-                            <button class="btn-primary-dashboard">
-                                <i class="bi bi-person-plus"></i>
-                                Thêm bệnh nhân
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-body">
-                        <div class="patient-list-header">
-                            <div class="patient-search">
-                                <i class="bi bi-search"></i>
-                                <input type="text" placeholder="Tìm kiếm bệnh nhân theo tên, mã BN...">
-                            </div>
-                            <div class="filter-chips">
-                                <button class="filter-chip active">Tất cả</button>
-                                <button class="filter-chip">Nội trú</button>
-                                <button class="filter-chip">Ngoại trú</button>
-                                <button class="filter-chip">Cấp cứu</button>
-                                <button class="filter-chip">Xuất viện</button>
-                            </div>
-                        </div>
-
-                        <table class="activity-table">
-                            <thead>
-                            <tr>
-                                <th>Bệnh nhân</th>
-                                <th>Mã BN</th>
-                                <th>SĐT</th>
-                                <th>Khoa</th>
-                                <th>Phòng</th>
-                                <th>Trạng thái</th>
-                                <th>Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-1">NV</div>
-                                        <div>
-                                            <div class="patient-name">Nguyễn Văn An</div>
-                                            <div class="patient-id">Nam, 45 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0892</td>
-                                <td>0912 345 678</td>
-                                <td>Tim mạch</td>
-                                <td>P.301</td>
-                                <td><span class="status-badge status-danger">Cấp cứu</span></td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-2">TT</div>
-                                        <div>
-                                            <div class="patient-name">Trần Thị Bích</div>
-                                            <div class="patient-id">Nữ, 32 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0891</td>
-                                <td>0987 654 321</td>
-                                <td>Sản khoa</td>
-                                <td>P.205</td>
-                                <td><span class="status-badge status-warning">Điều trị</span></td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-3">PH</div>
-                                        <div>
-                                            <div class="patient-name">Phạm Hoàng Cường</div>
-                                            <div class="patient-id">Nam, 58 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0890</td>
-                                <td>0909 123 456</td>
-                                <td>Nội tiết</td>
-                                <td>—</td>
-                                <td><span class="status-badge status-info">Ngoại trú</span></td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-4">LM</div>
-                                        <div>
-                                            <div class="patient-name">Lê Minh Đạt</div>
-                                            <div class="patient-id">Nam, 27 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0889</td>
-                                <td>0938 765 432</td>
-                                <td>Chấn thương</td>
-                                <td>P.108</td>
-                                <td><span class="status-badge status-success">Xuất viện</span></td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-pencil"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
             <!-- ===== SECTION: BILLING (Hóa đơn Thanh toán) ===== -->
             <div class="content-section" id="section-billing">
                 <div class="page-header">
@@ -993,79 +820,6 @@
                             <div class="billing-summary-value">₫180M</div>
                             <div class="billing-summary-label">Quá hạn</div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Billing Table -->
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">
-                            <i class="bi bi-receipt-cutoff"></i>
-                            Danh sách hóa đơn
-                        </div>
-                        <div class="dashboard-card-actions">
-                            <button class="card-action-btn"><i class="bi bi-funnel"></i></button>
-                            <button class="card-action-btn"><i class="bi bi-download"></i></button>
-                        </div>
-                    </div>
-                    <div class="dashboard-card-body" style="padding:0;">
-                        <table class="activity-table">
-                            <thead>
-                            <tr>
-                                <th>Mã HĐ</th>
-                                <th>Bệnh nhân</th>
-                                <th>Dịch vụ</th>
-                                <th>Tổng tiền</th>
-                                <th>Trạng thái</th>
-                                <th>Ngày tạo</th>
-                                <th>Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td style="font-weight:600;color:var(--accent);">HD-2024-0892</td>
-                                <td>Nguyễn Văn An</td>
-                                <td>Khám + Xét nghiệm</td>
-                                <td style="font-weight:700;">₫3,500,000</td>
-                                <td><span class="status-badge status-success">Đã thanh toán</span></td>
-                                <td>22/05/2024</td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-printer"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:600;color:var(--accent);">HD-2024-0891</td>
-                                <td>Trần Thị Bích</td>
-                                <td>Phẫu thuật + Nằm viện</td>
-                                <td style="font-weight:700;">₫45,000,000</td>
-                                <td><span class="status-badge status-warning">Chờ thanh toán</span></td>
-                                <td>21/05/2024</td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-printer"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:600;color:var(--accent);">HD-2024-0890</td>
-                                <td>Phạm Hoàng Cường</td>
-                                <td>Khám ngoại trú</td>
-                                <td style="font-weight:700;">₫850,000</td>
-                                <td><span class="status-badge status-danger">Quá hạn</span></td>
-                                <td>18/05/2024</td>
-                                <td>
-                                    <div class="dashboard-card-actions">
-                                        <button class="card-action-btn"><i class="bi bi-eye"></i></button>
-                                        <button class="card-action-btn"><i class="bi bi-printer"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -1264,175 +1018,9 @@
                         </div>
                     </div>
                 </div>
-            </div>            <!-- ===== SECTION: CHECK-IN (Quản lý Check-in) ===== -->
-            <div class="content-section" id="section-checkin">
-                <div class="admin-section-header">
-                    <div class="admin-section-icon" style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(14,165,233,0.1)); color: #06b6d4;">
-                        <i class="bi bi-person-check-fill"></i>
-                    </div>
-                    <div class="admin-section-info">
-                        <h1 class="admin-section-title">Quản lý Check-in</h1>
-                        <p class="admin-section-desc">Xác nhận bệnh nhân đến viện, cập nhật ưu tiên và điều phối vào phòng khám.</p>
-                    </div>
-                </div>
+            </div>            
 
-                <div class="admin-filter-card">
-                    <div class="filter-group">
-                        <label for="checkinFilterSearch">Tìm kiếm</label>
-                        <input type="text" id="checkinFilterSearch" placeholder="Mã BN hoặc Tên..." oninput="loadCheckInData(0)">
-                    </div>
-                    <div class="filter-group">
-                        <label for="checkinFilterDate">Ngày check-in</label>
-                        <input type="date" id="checkinFilterDate" onchange="loadCheckInData(0)">
-                    </div>
-                    <div class="filter-group">
-                        <label for="checkinFilterStatus">Trạng thái</label>
-                        <select id="checkinFilterStatus" onchange="loadCheckInData(0)">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="WAITING">Đang chờ</option>
-                            <option value="CHECKED_IN">Đã vào khám</option>
-                            <option value="DONE">Hoàn thành</option>
-                        </select>
-                    </div>
-                    <div class="filter-actions">
-                        <button type="button" class="btn-gradient-outline w-100" onclick="loadCheckInData(0)">
-                            <i class="bi bi-arrow-clockwise"></i> Làm mới
-                        </button>
-                    </div>
-                </div>
-
-                <div class="admin-stats-row">
-                    <div class="admin-stat-card stat-info" onclick="document.getElementById('checkinFilterStatus').value=''; loadCheckInData(0);">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-people-fill"></i></div>
-                            <div class="admin-stat-number" id="checkinStatsTotal">0</div>
-                        </div>
-                        <div class="admin-stat-label">Tổng Check-in</div>
-                    </div>
-                    <div class="admin-stat-card stat-warning" onclick="document.getElementById('checkinFilterStatus').value='WAITING'; loadCheckInData(0);">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-hourglass"></i></div>
-                            <div class="admin-stat-number" id="checkinStatsWaiting">0</div>
-                        </div>
-                        <div class="admin-stat-label">Bệnh nhân đang chờ</div>
-                    </div>
-                    <div class="admin-stat-card stat-primary" onclick="document.getElementById('checkinFilterStatus').value='CHECKED_IN'; loadCheckInData(0);">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-door-open"></i></div>
-                            <div class="admin-stat-number" id="checkinStatsCheckedIn">0</div>
-                        </div>
-                        <div class="admin-stat-label">Đang trong phòng khám</div>
-                    </div>
-                    <div class="admin-stat-card stat-success" onclick="document.getElementById('checkinFilterStatus').value='DONE'; loadCheckInData(0);">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-check-circle"></i></div>
-                            <div class="admin-stat-number" id="checkinStatsDone">0</div>
-                        </div>
-                        <div class="admin-stat-label">Hoàn thành trong ngày</div>
-                    </div>
-                </div>
-
-                <div class="admin-data-card">
-                    <div class="admin-data-header">
-                        <div class="admin-data-title">
-                            <i class="bi bi-list-task"></i> Danh sách Check-in
-                        </div>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Thời gian</th>
-                                    <th>Bệnh nhân</th>
-                                    <th>Bác sĩ / Khoa</th>
-                                    <th>Ghi chú</th>
-                                    <th>Mức độ ưu tiên</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody id="checkin-table-body">
-                                <tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-title">Đang tải dữ liệu...</div></div></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="admin-pagination">
-                        <div class="admin-pagination-info" id="checkinPageInfo">Trang 1</div>
-                        <div class="admin-pagination-btns" id="checkinPaginationControls">
-                            <button type="button" class="admin-page-btn" id="checkinPrevBtn" onclick="changeCheckInPage(-1)"><i class="bi bi-chevron-left"></i></button>
-                            <button type="button" class="admin-page-btn" id="checkinNextBtn" onclick="changeCheckInPage(1)"><i class="bi bi-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== SECTION: MEDICAL RECORDS (Hồ sơ Bệnh án) ===== -->
-            <div class="content-section" id="section-medical-records">
-                <div class="admin-section-header">
-                    <div class="admin-section-icon" style="background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(5,150,105,0.1)); color: #10b981;">
-                        <i class="bi bi-journal-medical"></i>
-                    </div>
-                    <div class="admin-section-info">
-                        <h1 class="admin-section-title">Hồ sơ Bệnh án</h1>
-                        <p class="admin-section-desc">Tra cứu lịch sử khám bệnh, chẩn đoán, điều trị và thông tin sức khỏe của bệnh nhân.</p>
-                    </div>
-                </div>
-
-                <div class="admin-stats-row">
-                    <div class="admin-stat-card stat-success" onclick="document.getElementById('medicalRecordFilterSearch').value=''; loadMedicalRecordsData(0);">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-journal-check"></i></div>
-                            <div class="admin-stat-number" id="medicalRecordsTotalCount">0</div>
-                        </div>
-                        <div class="admin-stat-label">Tổng số Hồ sơ Bệnh án</div>
-                    </div>
-                </div>
-
-                <div class="admin-filter-card">
-                    <div class="filter-group">
-                        <label for="medicalRecordFilterSearch">Tìm kiếm bệnh nhân</label>
-                        <input type="text" id="medicalRecordFilterSearch" placeholder="Nhập ID hoặc tên bệnh nhân..." oninput="loadMedicalRecordsData(0)">
-                    </div>
-                    <div class="filter-actions">
-                        <button type="button" class="btn-gradient-outline w-100" onclick="loadMedicalRecordsData(0)">
-                            <i class="bi bi-search"></i> Tìm kiếm
-                        </button>
-                    </div>
-                </div>
-
-                <div class="admin-data-card">
-                    <div class="admin-data-header">
-                        <div class="admin-data-title">
-                            <i class="bi bi-file-earmark-medical"></i> Danh sách Hồ sơ Bệnh án
-                        </div>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Mã BA</th>
-                                    <th>Bệnh nhân</th>
-                                    <th>Bác sĩ chẩn đoán</th>
-                                    <th>Ngày lập</th>
-                                    <th>Chẩn đoán</th>
-                                    <th>Đơn thuốc</th>
-                                    <th>Trạng thái khám</th>
-                                </tr>
-                            </thead>
-                            <tbody id="medical-records-table-body">
-                                <tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-title">Đang tải dữ liệu...</div></div></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="admin-pagination">
-                        <div class="admin-pagination-info" id="medicalRecordPageInfo">Trang 1</div>
-                        <div class="admin-pagination-btns" id="medicalRecordPaginationControls">
-                            <button type="button" class="admin-page-btn" id="medicalRecordPrevBtn" onclick="changeMedicalRecordPage(-1)"><i class="bi bi-chevron-left"></i></button>
-                            <button type="button" class="admin-page-btn" id="medicalRecordNextBtn" onclick="changeMedicalRecordPage(1)"><i class="bi bi-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
 
             <!-- ===== SECTION: STATISTICS (Thống kê) ===== -->
             <div class="content-section" id="section-statistics">
@@ -1963,7 +1551,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="createDoctorPhone" class="form-label">SĐT</label>
-                                <input type="number" class="form-control" id="createDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                                <input type="tel" class="form-control" id="createDoctorPhone" placeholder="Ví dụ: 0912345678" pattern="[0-9]{10}" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                             </div>
                             <div class="col-md-6">
                                 <label for="createDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
@@ -1980,6 +1568,10 @@
                                     <option value="ACTIVE">Đang làm việc </option>
                                     <option value="INACTIVE">Nghỉ việc</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="createDoctorSpecialization" class="form-label">Chuyên môn</label>
+                                <input type="text" class="form-control" id="createDoctorSpecialization" maxlength="120">
                             </div>
                         </div>
                     </div>
@@ -2013,8 +1605,9 @@
                         </div>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="editDoctorUserId" class="form-label">Chọn tài khoản</label>
-                            <select class="form-select" id="editDoctorUserId" required></select>
+                            <label for="editDoctorUserDisplay" class="form-label">Tài khoản</label>
+                            <input type="text" class="form-control" id="editDoctorUserDisplay" disabled>
+                            <input type="hidden" id="editDoctorUserId">
                         </div>
                         <div class="col-md-6">
                             <label for="editDoctorDepartmentId" class="form-label">Chọn Khoa</label>
@@ -2022,7 +1615,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="editDoctorFullName" class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" id="editDoctorFullName" maxlength="120" required>
+                            <input type="text" class="form-control" id="editDoctorFullName" maxlength="120" required disabled>
                         </div>
                         <div class="col-md-6">
                             <label for="editDoctorEmail" class="form-label">Email</label>
@@ -2030,7 +1623,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="editDoctorPhone" class="form-label">SĐT</label>
-                            <input type="text" class="form-control" id="editDoctorPhone" placeholder="0xxxxxxxxx hoặc +84xxxxxxxxx">
+                            <input type="tel" class="form-control" id="editDoctorPhone" placeholder="Ví dụ: 0912345678" pattern="[0-9]{10}" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         </div>
                         <div class="col-md-6">
                             <label for="editDoctorLicenseNumber" class="form-label">Số chứng chỉ</label>
@@ -2303,12 +1896,13 @@
     const closeBtn =
         document.getElementById("closeDepartmentModal");
 
-    const cancelBtn =
+    const cancelDepartmentBtn =
         document.getElementById("cancelDepartmentModal");
 
     // OPEN MODAL
     openDepartmentBtn.addEventListener("click", (e) => {
 
+        console.log("DA NHAN SU KIEN");
         e.preventDefault();
 
         e.stopPropagation();
@@ -2328,7 +1922,7 @@
 
     closeBtn.addEventListener("click", closeModal);
 
-    cancelBtn.addEventListener("click", closeModal);
+    cancelDepartmentBtn.addEventListener("click", closeModal);
 
     // CLICK OUTSIDE
     modal.addEventListener("click", (e) => {
@@ -2404,8 +1998,6 @@
         // SUCCESS
         closeModal();
 
-        alert("Tạo khoa thành công");
-
         location.reload();
     });
 
@@ -2472,10 +2064,6 @@
             loadDoctorData();
         } else if (section === 'appointments') {
             loadAppointmentData();
-        } else if (section === 'checkin') {
-            loadCheckInData(0);
-        } else if (section === 'medical-records') {
-            loadMedicalRecordsData(0);
         }
     }
 
@@ -2732,13 +2320,12 @@
 
     function renderDoctorDropdowns(prefix, doctor = {}) {
         if (prefix !== 'create') {
-            fillDoctorSelect(
-                `${prefix}DoctorUserId`,
-                doctorState.users,
-                'Chọn tài khoản',
-                user => `${user.fullName || 'Không tên'}${user.email ? ' - ' + user.email : ''}`,
-                doctor.userId
-            );
+            const user = doctorState.users.find(u => u.id === doctor.userId);
+            const userDisplay = user ? `${user.fullName || 'Không tên'}${user.email ? ' - ' + user.email : ''}` : 'Không có tài khoản';
+            const displayEl = document.getElementById(`${prefix}DoctorUserDisplay`);
+            if (displayEl) displayEl.value = userDisplay;
+            const idEl = document.getElementById(`${prefix}DoctorUserId`);
+            if (idEl) idEl.value = doctor.userId || '';
         }
         fillDoctorSelect(
             `${prefix}DoctorDepartmentId`,
@@ -3330,167 +2917,6 @@
     }
 
     animateCounters();
-    // ==================== CHECK-IN MANAGEMENT ====================
-    let checkinState = { page: 0, size: 10, totalPages: 1 };
-
-    async function loadCheckInData(page = 0) {
-        checkinState.page = page;
-        const search = document.getElementById('checkinFilterSearch').value.trim();
-        const date = document.getElementById('checkinFilterDate').value;
-        const status = document.getElementById('checkinFilterStatus').value;
-        
-        const params = new URLSearchParams({ page: checkinState.page, size: checkinState.size });
-        if (search) params.append('search', search);
-        if (date) { params.append('fromDate', date); params.append('toDate', date); }
-        if (status) params.append('status', status);
-
-        const tbody = document.getElementById('checkin-table-body');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;"><div class="spinner-border text-primary spinner-border-sm"></div><span style="margin-left:.5rem;color:var(--text-muted);">Đang tải dữ liệu...</span></td></tr>';
-
-        try {
-            const data = await doctorFetchJson('/api/checkins?' + params.toString());
-            
-            // Render Stats
-            const checkinNavBadge = document.getElementById('checkin-nav-badge');
-            if (checkinNavBadge) checkinNavBadge.textContent = data.totalElements || 0;
-            const checkinStatsTotal = document.getElementById('checkinStatsTotal');
-            if (checkinStatsTotal) checkinStatsTotal.textContent = data.totalElements || 0;
-
-            const appts = data.content || [];
-            const stateStats = { WAITING: 0, CHECKED_IN: 0, DONE: 0 };
-            appts.forEach(c => {
-                if (stateStats[c.status] !== undefined) stateStats[c.status]++;
-            });
-
-            const countWaiting = document.getElementById('checkinStatsWaiting');
-            if (countWaiting) countWaiting.textContent = stateStats.WAITING;
-            const countCheckedIn = document.getElementById('checkinStatsCheckedIn');
-            if (countCheckedIn) countCheckedIn.textContent = stateStats.CHECKED_IN;
-            const countDone = document.getElementById('checkinStatsDone');
-            if (countDone) countDone.textContent = stateStats.DONE;
-
-            // Render Table
-            checkinState.totalPages = data.totalPages;
-            document.getElementById('checkinPageInfo').textContent = `Trang ${data.number + 1} / ${Math.max(1, data.totalPages)}`;
-            document.getElementById('checkinPrevBtn').disabled = data.first;
-            document.getElementById('checkinNextBtn').disabled = data.last;
-
-            if (data.content.length === 0) {
-                if (tbody) tbody.innerHTML = `<tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-icon"><i class="bi bi-inbox"></i></div><div class="admin-empty-title">Không tìm thấy dữ liệu</div></div></td></tr>`;
-                return;
-            }
-
-            if (tbody) tbody.innerHTML = data.content.map(c => `
-                <tr>
-                    <td style="font-weight:600;color:var(--accent);">${fmtTime(c.appointmentTime || '')}</td>
-                    <td>
-                        <div style="font-weight:700;color:var(--text-dark);">${escapeHtml(c.patientName || 'Không rõ')}</div>
-                        <div style="font-size:0.75rem;color:var(--text-muted);">SĐT: ${escapeHtml(c.patientPhone || '-')}</div>
-                    </td>
-                    <td>
-                        <div style="font-weight:600;">${escapeHtml(c.doctorName || '-')}</div>
-                        <div style="font-size:0.75rem;color:var(--text-muted);">${escapeHtml(departmentMap[c.departmentName] || c.departmentName || '-')}</div>
-                    </td>
-                    <td><div style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(c.notes || '')}">${escapeHtml(c.notes || '-')}</div></td>
-                    <td>${c.priority > 1 ? `<span class="admin-badge badge-urgent"><i class="bi bi-exclamation-triangle-fill"></i> Ưu tiên cao</span>` : `<span class="admin-badge badge-normal">Bình thường</span>`}</td>
-                    <td>${checkinBadge(c.status)}</td>
-                    <td>
-                        <div class="admin-row-actions">
-                            ${c.status === 'WAITING' ? `<button class="admin-action-btn btn-confirm" onclick="confirmCheckin(${c.id})" title="Xác nhận vào khám"><i class="bi bi-check-lg"></i></button>` : ''}
-                            ${c.status === 'CHECKED_IN' ? `<button class="admin-action-btn btn-confirm" onclick="completeCheckin(${c.id})" title="Hoàn tất khám"><i class="bi bi-check2-all"></i></button>` : ''}
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        } catch (err) {
-            if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--danger);">${escapeHtml(err.message)}</td></tr>`;
-        }
-    }
-
-    function checkinBadge(status) {
-        if (status === 'WAITING') return '<span class="admin-badge badge-waiting"><i class="bi bi-hourglass-split"></i> Đang chờ</span>';
-        if (status === 'CHECKED_IN') return '<span class="admin-badge badge-checked-in"><i class="bi bi-door-open"></i> Đã vào khám</span>';
-        if (status === 'DONE') return '<span class="admin-badge badge-done"><i class="bi bi-check-circle"></i> Hoàn thành</span>';
-        return `<span class="admin-badge badge-normal">${status}</span>`;
-    }
-
-    function changeCheckInPage(delta) {
-        let newPage = checkinState.page + delta;
-        if (newPage >= 0 && newPage < checkinState.totalPages) loadCheckInData(newPage);
-    }
-
-    async function confirmCheckin(id) {
-        try {
-            await doctorFetchJson(`/api/checkins/${id}/confirm-arrival`, { method: 'PUT' });
-            showDoctorCenterNotice('success', 'Thành công', 'Đã xác nhận bệnh nhân vào khám.');
-            loadCheckInData(checkinState.page);
-        } catch (err) {
-            showDoctorCenterNotice('error', 'Lỗi xác nhận', err.message);
-        }
-    }
-
-    async function completeCheckin(id) {
-        try {
-            await doctorFetchJson(`/api/checkins/${id}/complete`, { method: 'PUT' });
-            showDoctorCenterNotice('success', 'Hoàn tất', 'Bệnh nhân đã khám xong.');
-            loadCheckInData(checkinState.page);
-        } catch (err) {
-            showDoctorCenterNotice('error', 'Lỗi hoàn tất', err.message);
-        }
-    }
-
-    // ==================== MEDICAL RECORDS MANAGEMENT ====================
-    let medicalRecordState = { page: 0, size: 10, totalPages: 1 };
-
-    async function loadMedicalRecordsData(page = 0) {
-        medicalRecordState.page = page;
-        const search = document.getElementById('medicalRecordFilterSearch').value.trim();
-        const params = new URLSearchParams({ page: medicalRecordState.page, size: medicalRecordState.size });
-        if (search) params.append('search', search);
-
-        const tbody = document.getElementById('medical-records-table-body');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;"><div class="spinner-border text-primary spinner-border-sm"></div><span style="margin-left:.5rem;color:var(--text-muted);">Đang tải dữ liệu...</span></td></tr>';
-
-        try {
-            const data = await doctorFetchJson('/api/medical-records?' + params.toString());
-            medicalRecordState.totalPages = data.totalPages;
-            
-            const mrBadge = document.getElementById('medical-records-nav-badge');
-            if (mrBadge) mrBadge.textContent = data.totalElements || 0;
-            const mrTotalCount = document.getElementById('medicalRecordsTotalCount');
-            if (mrTotalCount) mrTotalCount.textContent = data.totalElements || 0;
-
-            document.getElementById('medicalRecordPageInfo').textContent = `Trang ${data.number + 1} / ${Math.max(1, data.totalPages)}`;
-            document.getElementById('medicalRecordPrevBtn').disabled = data.first;
-            document.getElementById('medicalRecordNextBtn').disabled = data.last;
-
-            if (data.content.length === 0) {
-                if (tbody) tbody.innerHTML = `<tr><td colspan="7"><div class="admin-empty-state"><div class="admin-empty-icon"><i class="bi bi-inbox"></i></div><div class="admin-empty-title">Không tìm thấy dữ liệu</div></div></td></tr>`;
-                return;
-            }
-
-            if (tbody) tbody.innerHTML = data.content.map(m => `
-                <tr>
-                    <td style="font-weight:700;color:var(--accent);">BA-${m.id}</td>
-                    <td>
-                        <div style="font-weight:700;">${escapeHtml(m.patientName || '-')}</div>
-                    </td>
-                    <td>${escapeHtml(m.doctorName || '-')}</td>
-                    <td>${fmtDate(m.createdAt || m.appointmentDate || '')}</td>
-                    <td><div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(m.diagnosis || '')}">${escapeHtml(m.diagnosis || '-')}</div></td>
-                    <td><div style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(m.prescription || '')}">${escapeHtml(m.prescription || '-')}</div></td>
-                    <td>${m.status === 'COMPLETED' ? '<span class="admin-badge badge-done"><i class="bi bi-check-circle"></i> Đã khám</span>' : `<span class="admin-badge badge-normal">${m.status}</span>`}</td>
-                </tr>
-            `).join('');
-        } catch (err) {
-            if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:var(--danger);">${escapeHtml(err.message)}</td></tr>`;
-        }
-    }
-
-    function changeMedicalRecordPage(delta) {
-        let newPage = medicalRecordState.page + delta;
-        if (newPage >= 0 && newPage < medicalRecordState.totalPages) loadMedicalRecordsData(newPage);
-    }
 </script>
 <script>
     const logoutButton= document.getElementById("logoutBtn");
