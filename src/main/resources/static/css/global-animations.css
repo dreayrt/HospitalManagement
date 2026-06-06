@@ -1,0 +1,678 @@
+/* ==========================================================================
+   MEDICORE HEALTH - GLOBAL ANIMATIONS SYSTEM
+   ========================================================================== */
+
+/* 1. Custom Smooth Scroll & Scrollbar */
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4fbff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00a6ff, #0a6fb7);
+    border-radius: 5px;
+    border: 2px solid #f4fbff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0a6fb7;
+}
+
+/* 2. Scroll Progress Bar Indicator */
+.scroll-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    z-index: 99999;
+}
+
+.scroll-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00a6ff, #0a6fb7, #00ffd5);
+    background-size: 200% auto;
+    animation: shine-progress 2s linear infinite;
+    transition: width 0.1s ease-out;
+}
+
+@keyframes shine-progress {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* 3. Preloader (Màn hình chào mừng sang trọng) */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f4fbff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.6s ease;
+}
+
+.preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-100%);
+}
+
+.preloader-spinner {
+    width: 70px;
+    height: 70px;
+    border: 5px solid rgba(10, 111, 183, 0.1);
+    border-top: 5px solid #0a6fb7;
+    border-right: 5px solid #00a6ff;
+    border-radius: 50%;
+    animation: spin-preloader 1s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+}
+
+.preloader-text {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #0a6fb7;
+    letter-spacing: 2px;
+    animation: pulse-text 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spin-preloader {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse-text {
+    0% { opacity: 0.4; transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1.03); }
+}
+
+/* 4. Scroll Reveal (Xuất hiện khi cuộn trang) */
+.reveal {
+    opacity: 0;
+    will-change: transform, opacity;
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* cubic-out */
+    transition-property: transform, opacity;
+}
+
+.reveal.fade-up {
+    transform: translateY(50px);
+}
+
+.reveal.fade-down {
+    transform: translateY(-50px);
+}
+
+.reveal.fade-left {
+    transform: translateX(-50px);
+}
+
+.reveal.fade-right {
+    transform: translateX(50px);
+}
+
+.reveal.zoom-in {
+    transform: scale(0.9);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translate(0) scale(1);
+}
+
+/* 5. Enhanced Button Hover (Shimmer Effect) */
+.shimmer-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.shimmer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: none;
+}
+
+.shimmer-btn:hover {
+    transform: translateY(-3px) scale(1.03) !important;
+    box-shadow: 0 10px 25px rgba(10, 111, 183, 0.4) !important;
+}
+
+.shimmer-btn:hover::before {
+    left: 150%;
+    transition: left 0.8s ease-in-out;
+}
+
+/* 6. Card Hover & Micro-interactions */
+.service-box .item, .doctor-card {
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.service-box .item:hover {
+    transform: translateY(-12px) scale(1.03) !important;
+    box-shadow: 0 15px 35px rgba(0, 166, 255, 0.2) !important;
+    background: linear-gradient(to bottom, #ffffff, #f0faff) !important;
+}
+
+.doctor-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12) !important;
+    border-color: #00a6ff !important;
+}
+
+/* Xoay nhẹ ảnh bác sĩ khi hover vào card */
+.doctor-card:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(18, 169, 232, 0.3);
+}
+
+.doctor-card img {
+    transition: all 0.4s ease;
+}
+
+/* 7. Chatbot Sonar & Elastic Pop Effect */
+.call {
+    position: relative;
+    animation: bounce-floating 3s ease-in-out infinite alternate !important;
+}
+
+.call::after, .call::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(10, 111, 183, 0.4);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.call::after {
+    animation: sonar-wave 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.call::before {
+    animation: sonar-wave 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.8s;
+}
+
+@keyframes sonar-wave {
+    0% {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+    }
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+@keyframes bounce-floating {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+.chat-box {
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important; /* Spring effect */
+}
+
+/* Stagger animation cho tin nhắn chat */
+.chat-msg {
+    animation: message-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+@keyframes message-slide-up {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stat Box Glowing */
+.stat-box {
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+}
+.stat-box:hover {
+    background: #ffffff !important;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(10, 111, 183, 0.15);
+    border-color: rgba(10, 111, 183, 0.2);
+}
+
+/* Tự động áp dụng hiệu ứng reveal động cho thẻ bác sĩ */
+.doctor-card {
+    opacity: 0;
+    transform: translateY(45px);
+    will-change: opacity, transform;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease, border-color 0.3s, box-shadow 0.3s !important;
+}
+
+.doctor-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   REFINE FOOTER SYSTEM - ELEGANT & MINIMALIST
+   ========================================================================== */
+
+/* Nút mạng xã hội thiết kế lại */
+.footer-social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 111, 183, 0.08);
+    color: #0a6fb7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    border: 1px solid rgba(10, 111, 183, 0.12);
+}
+
+.footer-social-btn:hover {
+    color: white !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(10, 111, 183, 0.25);
+}
+
+.footer-social-btn.fb:hover { background: #1877f2; border-color: #1877f2; }
+.footer-social-btn.yt:hover { background: #ff0000; border-color: #ff0000; }
+.footer-social-btn.zl:hover { background: #0068ff; border-color: #0068ff; }
+.footer-social-btn.tt:hover { background: #000000; border-color: #000000; }
+
+.footer-social-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Thiết kế lại Cơ sở 1 */
+.facility-main {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr !important;
+    gap: 30px;
+    padding: 40px 50px !important;
+    background: linear-gradient(135deg, #e4f7fe, #c9f3ff) !important;
+    align-items: center !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.facility-main h3 {
+    color: #0a6fb7;
+    font-size: 26px !important;
+    margin-bottom: 15px !important;
+}
+
+.facility-main p {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #334155 !important;
+}
+
+.facility-image-container {
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(10, 111, 183, 0.18);
+    position: relative;
+    background: #e2e8f0;
+    border: 3px solid white;
+}
+
+.facility-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.facility-image-container:hover img {
+    transform: scale(1.08);
+}
+
+/* Thiết kế lại cơ sở phụ */
+.facility-grid {
+    padding: 40px 50px !important;
+    gap: 40px !important;
+}
+
+.facility-grid h3 {
+    color: #0d5ea8;
+    font-size: 20px !important;
+    margin-bottom: 15px !important;
+}
+
+.facility-grid p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    color: #475569 !important;
+}
+
+.facility-icon-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.facility-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(10, 111, 183, 0.05);
+    color: #0a6fb7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(10, 111, 183, 0.1);
+    transition: all 0.3s ease;
+}
+
+.facility-icon-btn:hover {
+    background: #0a6fb7;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(10, 111, 183, 0.15);
+}
+
+.facility-icon-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+@media(max-width: 900px) {
+    .facility-main {
+        grid-template-columns: 1fr !important;
+        padding: 30px !important;
+    }
+    .facility-image-container {
+        height: 180px;
+    }
+    .facility-grid {
+        padding: 30px !important;
+    }
+}
+/* ===== FIX FOOTER / CƠ SỞ CHO TẤT CẢ TRANG HỖ TRỢ - HƯỚNG DẪN ===== */
+
+.footer-med{
+    background:#eaf9ff !important;
+    margin-top:60px !important;
+    padding:55px 0 0 !important;
+}
+
+.footer-wrap{
+    width:86% !important;
+    margin:auto !important;
+    background:#eaf9ff !important;
+}
+
+.footer-top{
+    display:grid !important;
+    grid-template-columns:1.2fr 1fr !important;
+    gap:80px !important;
+    align-items:start !important;
+    padding:0 40px 55px !important;
+}
+
+.footer-logo{
+    color:#0a6fb7 !important;
+    font-size:38px !important;
+    font-weight:900 !important;
+}
+
+.footer-logo span{
+    color:#00a6ff !important;
+}
+
+.footer-top p{
+    font-size:17px !important;
+    color:#00345c !important;
+    margin-top:10px !important;
+}
+
+.social{
+    display:flex !important;
+    gap:14px !important;
+    margin-top:20px !important;
+}
+
+.footer-social-btn{
+    width:40px !important;
+    height:40px !important;
+    min-width:40px !important;
+    min-height:40px !important;
+    max-width:40px !important;
+    max-height:40px !important;
+    border-radius:50% !important;
+    background:#d9f2ff !important;
+    border:1px solid #abdff7 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-decoration:none !important;
+    overflow:hidden !important;
+}
+
+.footer-social-btn svg{
+    width:20px !important;
+    height:20px !important;
+    min-width:20px !important;
+    min-height:20px !important;
+    max-width:20px !important;
+    max-height:20px !important;
+    fill:#0a6fb7 !important;
+    display:block !important;
+}
+
+.footer-wrap hr{
+    border:none !important;
+    height:1px !important;
+    background:#cfeefa !important;
+}
+
+/* Khung cơ sở */
+.facility-wrapper{
+    position:relative !important;
+    background:linear-gradient(135deg,#e9f9ff 0%,#c9f4ff 100%) !important;
+    border-radius:18px !important;
+    overflow:hidden !important;
+    box-shadow:0 18px 40px rgba(0,90,140,0.08) !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+}
+
+/* Ảnh nền bệnh viện */
+.facility-wrapper::before{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    height:48% !important;
+    background:url('/images/hospital_building.png') no-repeat center center !important;
+    background-size:cover !important;
+    opacity:0.23 !important;
+    z-index:0 !important;
+}
+
+/* Nội dung nằm trên nền */
+.facility-main,
+.facility-grid{
+    position:relative !important;
+    z-index:1 !important;
+}
+
+.facility-main{
+    padding:45px 50px 35px !important;
+}
+
+.facility-main-content{
+    max-width:55% !important;
+    position:relative !important;
+    z-index:2 !important;
+}
+
+.facility-main h3,
+.facility-grid h3{
+    font-size:28px !important;
+    color:#0a6fb7 !important;
+    font-weight:800 !important;
+    margin-bottom:18px !important;
+}
+
+.facility-main p,
+.facility-grid p{
+    font-size:16px !important;
+    line-height:1.7 !important;
+    color:#334155 !important;
+    margin-bottom:12px !important;
+}
+
+.facility-main b,
+.facility-grid b{
+    color:#26384d !important;
+}
+
+.facility-grid{
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:45px !important;
+    padding:35px 50px 50px !important;
+}
+
+.facility-grid > div{
+    border-right:1px solid rgba(0,80,130,0.12) !important;
+    padding-right:35px !important;
+}
+
+.facility-grid > div:last-child{
+    border-right:none !important;
+}
+
+/* FIX ICON BỊ TO ĐEN */
+.facility-icon-wrapper{
+    display:flex !important;
+    gap:14px !important;
+    margin-top:25px !important;
+}
+
+.facility-icon-btn{
+    width:38px !important;
+    height:38px !important;
+    min-width:38px !important;
+    min-height:38px !important;
+    max-width:38px !important;
+    max-height:38px !important;
+    border-radius:50% !important;
+    background:#d7f2ff !important;
+    border:1px solid #a9e2fb !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-decoration:none !important;
+    overflow:hidden !important;
+    transition:0.3s !important;
+}
+
+.facility-icon-btn:hover{
+    background:#0a6fb7 !important;
+    transform:translateY(-4px) !important;
+}
+
+.facility-icon-btn svg{
+    width:18px !important;
+    height:18px !important;
+    min-width:18px !important;
+    min-height:18px !important;
+    max-width:18px !important;
+    max-height:18px !important;
+    fill:#0a6fb7 !important;
+    display:block !important;
+}
+
+.facility-icon-btn:hover svg{
+    fill:white !important;
+}
+
+/* Footer cuối */
+.footer-bottom{
+    background:#005fa8 !important;
+    color:white !important;
+    text-align:center !important;
+    padding:25px 10px !important;
+    margin-top:0 !important;
+}
+
+.footer-bottom span{
+    margin:0 22px !important;
+}
+
+.footer-bottom p{
+    margin:10px 0 !important;
+}
+
+/* Mobile */
+@media(max-width:900px){
+    .footer-top{
+        grid-template-columns:1fr !important;
+        gap:30px !important;
+        padding:0 20px 40px !important;
+    }
+
+    .facility-main-content{
+        max-width:100% !important;
+    }
+
+    .facility-grid{
+        grid-template-columns:1fr !important;
+    }
+
+    .facility-grid > div{
+        border-right:none !important;
+        border-bottom:1px solid rgba(0,80,130,0.12) !important;
+        padding-bottom:25px !important;
+    }
+
+    .facility-grid > div:last-child{
+        border-bottom:none !important;
+    }
+}
+

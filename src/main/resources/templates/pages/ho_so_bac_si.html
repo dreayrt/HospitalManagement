@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ sơ bác sĩ</title>
+
+    <style>
+        *{box-sizing:border-box;font-family:Arial}
+        body{margin:0;background:#f5f7fa}
+
+        /* layout */
+        .container{
+            width:88%;
+            margin:40px auto;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:30px;
+        }
+
+        /* card */
+        .card{
+            background:white;
+            border-radius:12px;
+            box-shadow:0 6px 18px rgba(0,0,0,.1);
+            overflow:hidden;
+        }
+
+        /* profile */
+        .profile{
+            display:flex;
+            gap:20px;
+            padding:25px;
+        }
+
+        .profile img{
+            width:180px;
+            height:200px;
+            object-fit:cover;
+            border:2px solid #039be5;
+            border-radius:8px;
+        }
+
+        .degree{color:#0872b8;font-weight:bold}
+        .name{font-size:26px;font-weight:bold;margin:6px 0}
+
+        .btn{
+            display:block;
+            background:#0a6fb7;
+            color:white;
+            padding:12px;
+            text-align:center;
+            border-radius:8px;
+            margin-top:10px;
+            text-decoration:none;
+        }
+
+        /* section */
+        .title{
+            background:#0a6fb7;
+            color:white;
+            padding:14px;
+            font-weight:bold;
+        }
+
+        .body{
+            padding:20px;
+        }
+
+        /* rating */
+        .rating{color:#ffc107;font-size:18px}
+
+        /* textarea */
+        textarea{
+            width:100%;
+            height:90px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            padding:10px;
+        }
+
+        /* responsive */
+        @media(max-width:900px){
+            .container{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT -->
+    <div>
+
+        <!-- PROFILE -->
+        <div class="card profile">
+            <img th:src="${image}">
+            <div>
+                <div class="degree" th:text="${degree}"></div>
+                <div class="name" th:text="${name}"></div>
+                <p th:text="${department}"></p>
+
+                <p>
+                    Đánh giá:
+                    <span class="rating">★★★★★</span>
+                    <b style="color:#0a6fb7">4.5/5</b>
+                </p>
+
+                <a href="#" class="btn">Đặt lịch khám 📅</a>
+            </div>
+        </div>
+
+        <!-- LỊCH KHÁM -->
+        <div class="card">
+            <div class="title">Lịch khám</div>
+            <div class="body">
+                <p><b th:text="${specialty}"></b></p>
+                <p th:text="${schedule}"></p>
+            </div>
+        </div>
+
+        <!-- ĐÁNH GIÁ -->
+        <div class="card">
+            <div class="title">Cảm nhận của người bệnh</div>
+            <div class="body">
+
+                <p><b>Viết đánh giá của bạn</b></p>
+
+                <textarea placeholder="Chia sẻ trải nghiệm khám bệnh..."></textarea>
+
+                <button style="margin-top:10px;padding:10px 20px;border:none;background:#999;color:white;border-radius:8px">
+                    Gửi đánh giá
+                </button>
+
+                <hr style="margin:20px 0">
+
+                <p><b>Đánh giá từ người bệnh</b></p>
+                <p>Nguyễn Hoàn Phúc ⭐⭐⭐⭐☆ 4.5/5</p>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+
+        <!-- CHUYÊN MÔN -->
+        <div class="card">
+            <div class="body">
+                <h3>Lĩnh vực chuyên môn</h3>
+                <p th:text="${expertise}"></p>
+
+                <hr>
+
+                <h3>Ngôn ngữ</h3>
+                <p>Tiếng Việt, Tiếng Anh</p>
+            </div>
+        </div>
+
+        <!-- ĐÀO TẠO -->
+        <div class="card">
+            <div class="title">Quá trình đào tạo</div>
+            <div class="body">
+                <p>• 2020: Sau đại học chuyên ngành <span th:text="${specialty}"></span></p>
+                <p>• 2010: Bác sĩ chuyên khoa</p>
+                <p>• 2005: Bác sĩ đa khoa</p>
+            </div>
+        </div>
+
+        <!-- CÔNG TÁC -->
+        <div class="card">
+            <div class="title">Quá trình công tác</div>
+            <div class="body">
+                <p>• 2010 - nay: Bác sĩ tại <span th:text="${department}"></span></p>
+                <p>• 2007 - 2010: Bác sĩ điều trị</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<a href="/bac-si" style="display:block;text-align:center;margin:30px;color:#0a6fb7;font-weight:bold">
+    ⬅ Quay về danh sách bác sĩ
+</a>
+
+</body>
+</html>

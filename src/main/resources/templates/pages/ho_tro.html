@@ -1,0 +1,747 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hỗ trợ người bệnh</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4fbff;
+            overflow-x:hidden;
+        }
+
+        /* TOP BAR GIỐNG INDEX */
+        .topbar{
+            background:#0a6fb7;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            padding:12px 10%;
+            font-weight:bold;
+        }
+
+        .topbar span{
+            margin-right:25px;
+        }
+
+        /* HEADER GIỐNG INDEX */
+        .header{
+            background:white;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:18px 10%;
+            box-shadow:0 3px 10px rgba(0,0,0,0.15);
+            position:sticky;
+            top:0;
+            z-index:99;
+        }
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+            color:#0a6fb7;
+        }
+
+        .logo span{
+            color:#00a6ff;
+        }
+
+        .menu a{
+            text-decoration:none;
+            color:#0a6fb7;
+            margin-left:25px;
+            font-weight:bold;
+        }
+
+        .menu a:hover{
+            color:#00a6ff;
+        }
+
+        /* HERO GIỐNG INDEX */
+        .hero{
+            height:360px;
+            background:
+                    linear-gradient(rgba(0,108,180,0.5),rgba(0,108,180,0.8)),
+                    url("https://images.unsplash.com/photo-1588776814546-ec7e1a94d4d2?auto=format&fit=crop&w=1600&q=80");
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            align-items:center;
+            padding-left:10%;
+            color:white;
+        }
+
+        .hero-box{
+            padding:45px;
+            border-radius:20px;
+            color:white;
+            max-width:650px;
+            background:
+                    linear-gradient(rgba(0,45,80,0.6),rgba(0,90,150,0.8)),
+                    url("https://images.unsplash.com/photo-1584515933487-779824d29309?w=1200");
+            background-size:cover;
+            background-position:center;
+        }
+
+        .hero-box h1{
+            font-size:45px;
+            margin-bottom:15px;
+        }
+
+        .hero-box p{
+            font-size:20px;
+            line-height:1.6;
+        }
+
+        /* CONTENT */
+        .container{
+            width:90%;
+            margin:auto;
+        }
+
+        .title{
+            text-align:center;
+            color:#0a6fb7;
+            margin:55px 0 40px;
+            font-size:45px;
+        }
+
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:30px;
+        }
+
+        .card{
+            display:block;
+            background:white;
+            border-radius:15px;
+            overflow:hidden;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            transition:0.3s;
+            text-decoration:none;
+            color:#222;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .card img{
+            width:100%;
+            height:250px;
+            object-fit:cover;
+            display:block;
+        }
+
+        .card h3{
+            padding:20px;
+            font-size:24px;
+            line-height:1.4;
+            color:#222;
+            margin:0;
+        }
+
+        /* AI + CALL GIỐNG INDEX */
+        .ai{
+            position:fixed;
+            right:20px;
+            bottom:100px;
+            background:white;
+            padding:15px;
+            border-radius:12px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.2);
+            z-index:999;
+        }
+
+        .call{
+            position:fixed;
+            right:20px;
+            bottom:30px;
+            background:#0a6fb7;
+            color:white;
+            width:55px;
+            height:55px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:24px;
+            z-index:999;
+        }
+
+        /* FOOTER GIỐNG INDEX */
+        .footer-med{
+            background:#eaf9ff;
+            margin-top:80px;
+            padding-top:40px;
+        }
+
+        .footer-wrap{
+            width:86%;
+            margin:auto;
+            background:#eaf9ff;
+        }
+
+        .footer-top{
+            display:grid;
+            grid-template-columns:1.3fr 1fr 1fr;
+            gap:40px;
+            align-items:start;
+            padding:10px 40px 55px;
+        }
+
+        .footer-logo{
+            color:#0a6fb7;
+            font-size:36px;
+            font-weight:900;
+        }
+
+        .footer-logo span{
+            color:#00a6ff;
+        }
+
+        .footer-top p{
+            font-size:17px;
+            color:#0b3760;
+            margin-top:8px;
+        }
+
+        .social{
+            display:flex;
+            gap:14px;
+            margin-top:20px;
+        }
+
+        .social span{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#0a6fb7;
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:bold;
+        }
+
+        .social span:nth-child(2){background:red}
+        .social span:nth-child(3){background:white;color:#0a6fb7}
+        .social span:nth-child(4){background:black}
+
+        .store{
+            display:flex;
+            gap:12px;
+            margin-top:18px;
+        }
+
+        .store button{
+            background:black;
+            color:white;
+            border:none;
+            border-radius:6px;
+            padding:12px 22px;
+            font-weight:bold;
+            font-size:16px;
+        }
+
+        .footer-wrap hr{
+            border:none;
+            height:1px;
+            background:#d1edf8;
+        }
+                .facility-wrapper{position:relative;background:linear-gradient(135deg, #e6f6ff 0%, #cceeff 100%);border-radius:20px;overflow:hidden;margin-bottom:45px;box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+        .facility-wrapper::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:url('/images/hospital_building.png') no-repeat center center;background-size:cover;opacity:0.15;z-index:0;}
+        .facility-main{position:relative;z-index:1;padding:50px 55px 30px 55px;}
+        .facility-main-content{position:relative;z-index:2;max-width:60%;}
+        .facility-main h3,.facility-grid h3{font-size:24px;margin-bottom:25px}
+        .facility-main p,.facility-grid p{font-size:19px;line-height:1.6;margin-bottom:12px}
+        
+        .facility-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);background:transparent;padding:20px 55px 50px 55px;gap:45px;border-radius:0 0 20px 20px}
+        .facility-grid>div{border-right:1px solid rgba(11, 55, 96, 0.1);padding-right:35px}
+        .facility-grid>div:last-child{border-right:none}
+        .round-icons{display:flex;gap:15px;margin-top:35px}
+        .round-icons span{width:42px;height:42px;background:#0a6fb7;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+        .footer-bottom{
+            background:#005fa8;
+            color:white;
+            text-align:center;
+            padding:25px 10px;
+            margin-top:45px;
+        }
+
+        .footer-bottom span{
+            margin:0 22px;
+        }
+
+        .footer-bottom p{
+            margin:10px 0;
+        }
+
+        @media(max-width:900px){
+            .topbar,
+            .header{
+                flex-direction:column;
+                gap:15px;
+            }
+
+            .grid,
+            .footer-top,
+            .facility-main,
+            .facility-grid{
+                grid-template-columns:1fr;
+            }
+
+            .menu a{
+                display:inline-block;
+                margin:8px;
+            }
+        }
+        /* ===== BACKGROUND TRANG HỖ TRỢ GIỐNG INDEX ===== */
+
+        body{
+            background:#eaf9ff !important;
+            overflow-x:hidden;
+        }
+
+        /* Khung ngoài */
+        .footer-med{
+            background:#eaf9ff;
+            padding:55px 0 0;
+        }
+
+        .footer-wrap{
+            width:86%;
+            margin:auto;
+            background:#eaf9ff;
+        }
+
+        /* Logo + social */
+        .footer-top{
+            display:grid;
+            grid-template-columns:1.2fr 1fr;
+            gap:80px;
+            align-items:start;
+            padding:0 40px 55px;
+        }
+
+        .footer-logo{
+            color:#0a6fb7;
+            font-size:38px;
+            font-weight:900;
+        }
+
+        .footer-logo span{
+            color:#00a6ff;
+        }
+
+        .footer-top p{
+            font-size:17px;
+            color:#00345c;
+            margin-top:10px;
+        }
+
+        .social{
+            display:flex;
+            gap:14px;
+            margin-top:20px;
+        }
+
+        .footer-social-btn{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#d9f2ff;
+            border:1px solid #abdff7;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-decoration:none;
+        }
+
+        .footer-social-btn svg{
+            width:20px !important;
+            height:20px !important;
+            fill:#0a6fb7 !important;
+        }
+
+        .footer-wrap hr{
+            border:none;
+            height:1px;
+            background:#cfeefa;
+        }
+
+        /* Khung cơ sở */
+        .facility-wrapper{
+            position:relative;
+            background:linear-gradient(135deg,#e9f9ff 0%,#c9f4ff 100%);
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 18px 40px rgba(0,90,140,0.08);
+        }
+
+        /* Nền bệnh viện nằm phía dưới giống index */
+        .facility-wrapper::before{
+            content:"";
+            position:absolute;
+            left:0;
+            right:0;
+            bottom:0;
+            height:48%;
+            background:url('/images/hospital_building.png') no-repeat center center;
+            background-size:cover;
+            opacity:0.23;
+            z-index:0;
+        }
+
+        /* Cơ sở 1 */
+        .facility-main{
+            position:relative;
+            z-index:1;
+            padding:45px 50px 35px;
+        }
+
+        .facility-main-content{
+            max-width:55%;
+            position:relative;
+            z-index:2;
+        }
+
+        /* Text */
+        .facility-main h3,
+        .facility-grid h3{
+            font-size:28px;
+            color:#0a6fb7;
+            font-weight:800;
+            margin-bottom:18px;
+        }
+
+        .facility-main p,
+        .facility-grid p{
+            font-size:16px;
+            line-height:1.7;
+            color:#334155;
+            margin-bottom:12px;
+        }
+
+        .facility-main b,
+        .facility-grid b{
+            color:#26384d;
+        }
+
+        /* Cơ sở 2, 3, hợp tác */
+        .facility-grid{
+            position:relative;
+            z-index:1;
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:45px;
+            padding:35px 50px 50px;
+        }
+
+        .facility-grid > div{
+            border-right:1px solid rgba(0,80,130,0.12);
+            padding-right:35px;
+        }
+
+        .facility-grid > div:last-child{
+            border-right:none;
+        }
+
+        /* FIX ICON BỊ ĐEN TO */
+        .facility-icon-wrapper{
+            display:flex;
+            gap:14px;
+            margin-top:25px;
+        }
+
+        .facility-icon-btn{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            background:#d7f2ff;
+            border:1px solid #a9e2fb;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-decoration:none;
+            transition:0.3s;
+        }
+
+        .facility-icon-btn:hover{
+            background:#0a6fb7;
+            transform:translateY(-4px);
+        }
+
+        .facility-icon-btn svg{
+            width:18px !important;
+            height:18px !important;
+            fill:#0a6fb7 !important;
+            display:block;
+        }
+
+        .facility-icon-btn:hover svg{
+            fill:white !important;
+        }
+
+        /* Footer dưới */
+        .footer-bottom{
+            background:#005fa8;
+            color:white;
+            text-align:center;
+            padding:25px 10px;
+            margin-top:0;
+        }
+
+        .footer-bottom span{
+            margin:0 22px;
+        }
+
+        .footer-bottom p{
+            margin:10px 0;
+        }
+
+        /* Mobile */
+        @media(max-width:900px){
+            .footer-top{
+                grid-template-columns:1fr;
+                gap:30px;
+                padding:0 20px 40px;
+            }
+
+            .facility-main-content{
+                max-width:100%;
+            }
+
+            .facility-grid{
+                grid-template-columns:1fr;
+            }
+
+            .facility-grid > div{
+                border-right:none;
+                border-bottom:1px solid rgba(0,80,130,0.12);
+                padding-bottom:25px;
+            }
+
+            .facility-grid > div:last-child{
+                border-bottom:none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div>
+        <span>Bệnh nhân</span>
+        <span>Chuyên gia</span>
+    </div>
+    <div>
+        <span>Đặt lịch</span>
+        <span>Liên hệ</span>
+    </div>
+</div>
+
+<div class="header">
+    <div class="logo">
+        MediCore <span>Health</span>
+    </div>
+
+    <div class="menu">
+        <a href="/index">Trang chủ</a>
+        <a href="/chuyen-khoa">Chuyên khoa</a>
+        <a href="/bac-si">Bác sĩ</a>
+        <a href="/dich-vu">Dịch vụ</a>
+        <a href="/ho-tro">Hỗ trợ</a>
+    </div>
+</div>
+
+<section class="hero">
+    <div class="hero-box">
+        <h1>Hỗ trợ người bệnh</h1>
+        <p>Thông tin cần biết, hướng dẫn thủ tục, bảo hiểm, thanh toán và quy trình khám chữa bệnh.</p>
+    </div>
+</section>
+
+<div class="container">
+
+    <h1 class="title">Thông tin cần biết</h1>
+
+    <div class="grid">
+
+        <a href="/ho-tro/huong-dan-dat-lich" class="card">
+            <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=800">
+            <h3>Hướng dẫn đặt lịch khám bệnh trực tuyến</h3>
+        </a>
+
+        <a href="/ho-tro/bao-hiem-y-te" class="card">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800">
+            <h3>Hướng dẫn thủ tục khám chữa bệnh bảo hiểm y tế</h3>
+        </a>
+
+        <a href="/ho-tro/bao-lanh-vien-phi" class="card">
+            <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f4df?w=800">
+            <h3>Hướng dẫn thực hiện thủ tục bảo lãnh viện phí</h3>
+        </a>
+
+        <a href="/ho-tro/noi-tru" class="card">
+            <img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=800">
+            <h3>Thông tin cần biết cho người bệnh nội trú</h3>
+        </a>
+
+        <a href="/ho-tro/thanh-toan-vien-phi" class="card">
+            <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800">
+            <h3>Hướng dẫn thanh toán viện phí không dùng tiền mặt</h3>
+        </a>
+
+        <a href="/ho-tro/hoa-don-vat" class="card">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800">
+            <h3>Hướng dẫn phát hành hóa đơn VAT</h3>
+        </a>
+
+        <a href="/ho-tro/hoan-tien" class="card">
+            <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800">
+            <h3>Quy trình hoàn tiền phí dịch vụ</h3>
+        </a>
+
+        <a href="/ho-tro/xac-nhan-bhyt" class="card">
+            <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800">
+            <h3>Xác nhận bảo hiểm y tế khi đặt khám</h3>
+        </a>
+
+        <a href="/ho-tro/mua-thuoc" class="card">
+            <img src="https://images.unsplash.com/photo-1585435557343-3b092031d4f7?w=800">
+            <h3>Hướng dẫn mua thuốc tại nhà thuốc bệnh viện</h3>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="ai">
+    🤖 Trợ lý MediCore xin chào!
+</div>
+
+<div class="call">☎</div>
+
+<footer class="footer-med">
+    <div class="footer-wrap">
+
+        <div class="footer-top">
+            <div>
+                <div class="footer-logo">MediCore <span>Health</span></div>
+                <p>Chăm sóc tận tâm - Niềm tin của bạn</p>
+            </div>
+
+            <div>
+                <p>Theo dõi thông tin chính thức tại</p>
+                <div class="social" style="gap:10px;">
+                    <a href="#" class="footer-social-btn fb" title="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn yt" title="Youtube">
+                        <svg viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.047 0 12 0 12s0 3.953.502 5.837a3.002 3.002 0 0 0 2.11 2.107C4.495 20.455 12 20.455 12 20.455s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.953 24 12 24 12s0-3.953-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn zl" title="Zalo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5h-2v-4H9v-2h4v6zm-1-7.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>
+                    </a>
+                    <a href="#" class="footer-social-btn tt" title="Tiktok">
+                        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72-.08-.07-.17-.17-.24-.26v6.07c.05 1.93-.68 3.95-2.1 5.27-1.57 1.5-3.93 2.14-6.05 1.7-2.58-.45-4.75-2.5-5.18-5.07-.6-3.18 1.43-6.52 4.63-7.14.77-.16 1.56-.16 2.33-.04v4.07c-.88-.23-1.88-.13-2.65.37-.88.54-1.39 1.58-1.31 2.6.07 1.17.96 2.22 2.12 2.39 1.13.18 2.37-.41 2.81-1.49.25-.57.29-1.22.28-1.84V.02z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div class="facility-wrapper">
+            <div class="facility-main reveal fade-up">
+                <div class="facility-main-content">
+                    <h3>Cơ sở 1</h3>
+                    <p>321 Hồng Bàng, Phường 15, Quận 5, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3955 6031</p>
+                    <p><b>Email:</b> cskh@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="facility-grid stagger-container">
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 2</h3>
+                    <p>147 Nguyễn Chí Thanh, Phường Chợ Lớn, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3953 2238</p>
+                    <p><b>Email:</b> coso2@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal fade-up">
+                    <h3>Cơ sở 3</h3>
+                    <p>334 Hoàng Văn Thụ, Phường Phú Nhuận, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> (84.28) 3748 9090</p>
+                    <p><b>Email:</b> coso3@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal fade-up">
+                    <h3>Đơn vị hợp tác</h3>
+                    <p><b>Phòng khám Bệnh Viện MediCore Health</b></p>
+                    <p>10-11 Dương Quang Trung, Phường Hòa Hưng, TP. Hồ Chí Minh</p>
+                    <p><b>Hotline:</b> 1900 3456</p>
+                    <p><b>Email:</b> contact@medicore.vn</p>
+                    <div class="facility-icon-wrapper">
+                        <a href="#" class="facility-icon-btn" title="Trang chủ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                        </a>
+                        <a href="#" class="facility-icon-btn" title="Bản đồ">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+<div class="footer-bottom">
+        <p>
+            <b>Chính sách bảo mật</b>
+            <span>|</span>
+            <b>Điều khoản dịch vụ</b>
+            <span>|</span>
+            <b>Quy định sử dụng</b>
+            <span>|</span>
+            <b>Chính sách Cookie</b>
+        </p>
+        <p>Copyright ©2026. MediCore Health. Đã đăng ký bản quyền.</p>
+    </div>
+</footer>
+
+</body>
+</html>

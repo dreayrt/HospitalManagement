@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Chi tiết sức khỏe</title>
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial, sans-serif;
+            background:#f4fbff;
+            color:#10233f;
+        }
+
+        .topbar{
+            background:#0a6fb7;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            padding:12px 10%;
+            font-weight:bold;
+        }
+
+        .header{
+            background:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px 10%;
+            box-shadow:0 3px 10px rgba(0,0,0,.15);
+        }
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+            color:#0a6fb7;
+        }
+
+        .logo span{
+            color:#00a6ff;
+        }
+
+        .menu a{
+            text-decoration:none;
+            color:#0a6fb7;
+            margin-left:25px;
+            font-weight:bold;
+        }
+
+        .hero{
+            height:280px;
+            background:
+                    linear-gradient(rgba(0,108,180,.65),rgba(0,108,180,.85)),
+                    url("https://images.unsplash.com/photo-1588776814546-ec7e1a94d4d2?w=1600");
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            align-items:center;
+            padding-left:10%;
+            color:white;
+        }
+
+        .hero h1{
+            font-size:48px;
+        }
+
+        .container{
+            width:80%;
+            margin:50px auto;
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 8px 25px rgba(0,0,0,.1);
+        }
+
+        .container h2{
+            color:#0a6fb7;
+            font-size:34px;
+            margin-bottom:20px;
+        }
+
+        .container p{
+            font-size:21px;
+            line-height:1.8;
+            margin-bottom:20px;
+        }
+
+        .note{
+            background:#eaf7ff;
+            border-left:5px solid #0a6fb7;
+            padding:20px;
+            border-radius:10px;
+            margin-top:30px;
+        }
+
+        .back{
+            display:inline-block;
+            margin-top:25px;
+            color:#0a6fb7;
+            font-weight:bold;
+            text-decoration:none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div>
+        <span>Bệnh nhân</span>
+        <span>Chuyên gia</span>
+    </div>
+
+    <div>
+        <span>Đặt lịch</span>
+        <span>Liên hệ</span>
+    </div>
+</div>
+
+<div class="header">
+    <div class="logo">
+        MediCore <span>Health</span>
+    </div>
+
+    <div class="menu">
+        <a href="/index">Trang chủ</a>
+        <a href="/chuyen-khoa">Chuyên khoa</a>
+        <a href="/bac-si">Bác sĩ</a>
+        <a href="/dich-vu">Dịch vụ</a>
+        <a href="/ho-tro">Hỗ trợ</a>
+    </div>
+</div>
+
+<section class="hero">
+    <h1 th:text="${title}">Chi tiết sức khỏe</h1>
+</section>
+
+<div class="container">
+
+    <h2 th:text="${title}">Tiêu đề</h2>
+
+    <p th:text="${content}">
+        Nội dung chi tiết sức khỏe.
+    </p>
+
+    <div class="note">
+        <p>
+            <b>Lưu ý:</b> Thông tin trên chỉ mang tính tham khảo.
+            Người bệnh nên đến cơ sở y tế để được bác sĩ thăm khám và tư vấn chính xác.
+        </p>
+    </div>
+
+    <a href="/index" class="back">⬅ Quay về trang chủ</a>
+
+</div>
+
+</body>
+</html>
