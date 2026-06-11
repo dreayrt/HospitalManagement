@@ -12,7 +12,298 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom Dashboard CSS (same as Admin) -->
     <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    
+
+<style>
+        /* Prescription Modal Styles */
+        .prescription-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .prescription-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+        .prescription-modal {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .prescription-modal-overlay.show .prescription-modal {
+            transform: translateY(0) scale(1);
+        }
+        .prescription-modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            flex-shrink: 0;
+        }
+        .prescription-modal-title {
+            margin: 0;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .prescription-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+        .prescription-modal-close:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .prescription-modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .prescription-modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: var(--bg-card);
+            flex-shrink: 0;
+        }
+        .presc-form-group {
+            margin-bottom: 1.25rem;
+        }
+        .presc-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        .presc-input, .presc-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-body);
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+        .presc-input:focus, .presc-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: var(--bg-card);
+        }
+        .presc-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .presc-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .presc-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .medicine-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .medicine-header {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+<style>
+    /* Prescription Modal Styles */
+    .prescription-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1050;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .prescription-modal-overlay.show {
+        display: flex;
+        opacity: 1;
+    }
+    .prescription-modal {
+        background: var(--bg-card);
+        border-radius: 1rem;
+        width: 100%;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+    .prescription-modal-overlay.show .prescription-modal {
+        transform: translateY(0) scale(1);
+    }
+    .prescription-modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-card);
+        flex-shrink: 0;
+    }
+    .prescription-modal-title {
+        margin: 0;
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .prescription-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+    }
+    .prescription-modal-close:hover {
+        color: var(--danger);
+        background: rgba(239, 68, 68, 0.1);
+    }
+    .prescription-modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        flex: 1;
+    }
+    .prescription-modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        background: var(--bg-card);
+        flex-shrink: 0;
+    }
+    .presc-form-group {
+        margin-bottom: 1.25rem;
+    }
+    .presc-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+        font-size: 0.9rem;
+    }
+    .presc-input, .presc-textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        background: var(--bg-body);
+        color: var(--text-dark);
+        transition: all 0.2s;
+    }
+    .presc-input:focus, .presc-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        background: var(--bg-card);
+    }
+    .presc-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+    
+    .presc-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .presc-col {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .medicine-card {
+        background: var(--bg-body);
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    
+    .medicine-header {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+</style>
 </head>
+
 <body>
 
 <div class="dashboard-wrapper">
@@ -61,21 +352,21 @@
                         <a href="#" class="sidebar-nav-link" data-section="patient-records" data-tooltip="Hồ sơ Bệnh án">
                             <span class="nav-icon"><i class="bi bi-person-vcard-fill"></i></span>
                             <span class="nav-label">Hồ sơ Bệnh án</span>
-                            <span class="nav-badge badge-success">248</span>
+                            <span class="nav-badge badge-success" th:text="${totalPatients ?: 0}">248</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
                         <a href="#" class="sidebar-nav-link" data-section="prescriptions" data-tooltip="Kê đơn thuốc">
                             <span class="nav-icon"><i class="bi bi-capsule-pill"></i></span>
                             <span class="nav-label">Kê đơn thuốc</span>
-                            <span class="nav-badge badge-primary">12</span>
+                            <span class="nav-badge badge-primary" th:text="${pendingPrescriptions ?: 0}">12</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
                         <a href="#" class="sidebar-nav-link" data-section="appointments" data-tooltip="Lịch hẹn">
                             <span class="nav-icon"><i class="bi bi-calendar2-week-fill"></i></span>
                             <span class="nav-label">Lịch hẹn</span>
-                            <span class="nav-badge badge-warning">8</span>
+                            <span class="nav-badge badge-warning" th:text="${newAppointments ?: 0}">8</span>
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
@@ -88,7 +379,7 @@
                         <a href="#" class="sidebar-nav-link" data-section="schedule" data-tooltip="Lịch làm hôm nay">
                             <span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span>
                             <span class="nav-label">Lịch làm hôm nay</span>
-                            <span class="nav-badge badge-danger">4</span>
+                            <span class="nav-badge badge-danger" th:text="${todayAppointments ?: 0}">4</span>
                         </a>
                     </li>
                 </ul>
@@ -187,10 +478,11 @@
                 <!-- Doctor Profile -->
                 <div style="position:relative;">
                     <div class="header-profile" id="profileBtn">
-                        <div class="header-profile-avatar">DN</div>
+                        <div class="header-profile-avatar" th:if="${doctorAvatar == null || doctorAvatar.isEmpty()}" th:text="${doctorInitials ?: 'BS'}">DN</div>
+                        <img th:if="${doctorAvatar != null && !doctorAvatar.isEmpty()}" th:src="${doctorAvatar}" alt="Avatar" class="header-profile-avatar" style="object-fit: cover;" />
                         <div class="header-profile-info">
-                            <span class="header-profile-name">BS. Trần Hoàng Nam</span>
-                            <span class="header-profile-role">Trưởng khoa Tim Mạch</span>
+                            <span class="header-profile-name" th:text="${doctorName != null ? 'BS. ' + doctorName : 'BS. Trần Hoàng Nam'}">BS. Trần Hoàng Nam</span>
+                            <span class="header-profile-role" th:text="${doctorDepartment ?: 'Khoa chung'}">Trưởng khoa Tim Mạch</span>
                         </div>
                         <i class="bi bi-chevron-down header-profile-chevron"></i>
                     </div>
@@ -227,7 +519,7 @@
                 <div class="page-header">
                     <div class="page-header-top">
                         <div>
-                            <h1 class="page-title">Xin chào, Bác sĩ Nam 👨‍⚕️</h1>
+                            <h1 class="page-title">Xin chào, <span th:text="${doctorName != null ? 'Bác sĩ ' + doctorName : 'Bác sĩ Nam'}">Bác sĩ Nam</span> 👨‍⚕️</h1>
                             <p class="page-subtitle">Đây là tổng quan công việc của bạn hôm nay.</p>
                         </div>
                         <div class="page-header-actions">
@@ -254,7 +546,7 @@
                                 <i class="bi bi-arrow-up-short"></i>12%
                             </span>
                         </div>
-                        <div class="stat-card-value" data-count>1,248</div>
+                        <div class="stat-card-value" data-count th:text="${totalPatients ?: 0}">1,248</div>
                         <div class="stat-card-label">Tổng Bệnh Nhân</div>
                         <div class="sparkline-container">
                             <div class="sparkline-bar" style="height:40%"></div>
@@ -276,7 +568,7 @@
                                 <i class="bi bi-arrow-down-short"></i>2%
                             </span>
                         </div>
-                        <div class="stat-card-value" data-count>45</div>
+                        <div class="stat-card-value" data-count th:text="${activeTreatments ?: 0}">45</div>
                         <div class="stat-card-label">Đang Điều Trị</div>
                         <div class="sparkline-container">
                             <div class="sparkline-bar" style="height:60%"></div>
@@ -298,7 +590,7 @@
                                 <i class="bi bi-arrow-up-short"></i>5%
                             </span>
                         </div>
-                        <div class="stat-card-value" data-count>12</div>
+                        <div class="stat-card-value" data-count th:text="${todayAppointments ?: 0}">12</div>
                         <div class="stat-card-label">Chờ Khám Hôm Nay</div>
                         <div class="progress-custom">
                             <div class="progress-custom-bar bar-danger" style="width:60%"></div>
@@ -314,7 +606,7 @@
                                 <i class="bi bi-arrow-up-short"></i>8%
                             </span>
                         </div>
-                        <div class="stat-card-value" data-count>8</div>
+                        <div class="stat-card-value" data-count th:text="${newAppointments ?: 0}">8</div>
                         <div class="stat-card-label">Lịch Hẹn Mới</div>
                         <div class="sparkline-container">
                             <div class="sparkline-bar" style="height:50%"></div>
@@ -433,7 +725,7 @@
                                     </div>
                                     <div>
                                         <div class="quick-action-text">Hồ sơ bệnh án</div>
-                                        <div class="quick-action-sub">248 bệnh nhân đang theo dõi</div>
+                                        <div class="quick-action-sub"><span th:text="${totalPatients ?: 0}">248</span> bệnh nhân đang theo dõi</div>
                                     </div>
                                 </div>
                                 <div class="quick-action-card" data-section="prescriptions">
@@ -442,7 +734,7 @@
                                     </div>
                                     <div>
                                         <div class="quick-action-text">Kê đơn thuốc</div>
-                                        <div class="quick-action-sub">12 đơn chờ xử lý</div>
+                                        <div class="quick-action-sub"><span th:text="${pendingPrescriptions ?: 0}">0</span> đơn chờ xử lý</div>
                                     </div>
                                 </div>
                                 <div class="quick-action-card" data-section="appointments">
@@ -451,7 +743,7 @@
                                     </div>
                                     <div>
                                         <div class="quick-action-text">Lịch hẹn</div>
-                                        <div class="quick-action-sub">8 lịch hẹn mới</div>
+                                        <div class="quick-action-sub"><span th:text="${newAppointments ?: 0}">8</span> lịch hẹn mới</div>
                                     </div>
                                 </div>
                                 <div class="quick-action-card" data-section="schedule">
@@ -460,7 +752,7 @@
                                     </div>
                                     <div>
                                         <div class="quick-action-text">Lịch làm hôm nay</div>
-                                        <div class="quick-action-sub">4 ca trực còn lại</div>
+                                        <div class="quick-action-sub"><span th:text="${todayAppointments ?: 0}">4</span> ca trực còn lại</div>
                                     </div>
                                 </div>
                             </div>
@@ -597,7 +889,7 @@
                             <div class="stat-card-icon"><i class="bi bi-people-fill"></i></div>
                             <span class="stat-card-trend up"><i class="bi bi-arrow-up-short"></i>12%</span>
                         </div>
-                        <div class="stat-card-value">1,248</div>
+                        <div class="stat-card-value" th:text="${totalPatients ?: 0}">1,248</div>
                         <div class="stat-card-label">Tổng Bệnh Nhân</div>
                     </div>
                     <div class="stat-card">
@@ -605,14 +897,14 @@
                             <div class="stat-card-icon"><i class="bi bi-activity"></i></div>
                             <span class="stat-card-trend down"><i class="bi bi-arrow-down-short"></i>2%</span>
                         </div>
-                        <div class="stat-card-value">45</div>
+                        <div class="stat-card-value" th:text="${activeTreatments ?: 0}">45</div>
                         <div class="stat-card-label">Đang Điều Trị</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-card-icon"><i class="bi bi-clock-history"></i></div>
                         </div>
-                        <div class="stat-card-value">12</div>
+                        <div class="stat-card-value" th:text="${todayAppointments ?: 0}">12</div>
                         <div class="stat-card-label">Chờ Khám Hôm Nay</div>
                     </div>
                     <div class="stat-card">
@@ -620,7 +912,7 @@
                             <div class="stat-card-icon"><i class="bi bi-calendar-plus-fill"></i></div>
                             <span class="stat-card-trend up"><i class="bi bi-arrow-up-short"></i>8%</span>
                         </div>
-                        <div class="stat-card-value">8</div>
+                        <div class="stat-card-value" th:text="${newAppointments ?: 0}">8</div>
                         <div class="stat-card-label">Lịch Hẹn Mới</div>
                     </div>
                 </div>
@@ -737,18 +1029,36 @@
                             <p class="page-subtitle">Tạo và quản lý đơn thuốc cho bệnh nhân.</p>
                         </div>
                         <div class="page-header-actions">
-                            <button class="btn-primary-dashboard">
-                                <i class="bi bi-plus-lg"></i>
-                                Tạo đơn thuốc
+                            <button class="btn-outline-dashboard" onclick="loadPrescriptions()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Làm mới
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="dashboard-card">
-                    <div class="dashboard-card-body" style="text-align:center; padding: 3rem;">
-                        <i class="bi bi-capsule-pill" style="font-size: 3.5rem; color: var(--primary); opacity: 0.6; display:block; margin-bottom: 1rem;"></i>
-                        <h3 style="color:var(--text-dark); font-weight:700;">Kê Đơn Thuốc</h3>
-                        <p style="color:var(--text-muted);">Khu vực tạo và quản lý đơn thuốc sẽ được hiển thị ở đây.</p>
+                    <div class="dashboard-card-body" style="padding:0;">
+                        <table class="activity-table" id="prescriptionsTable">
+                            <thead>
+                            <tr>
+                                <th>Bệnh Nhân</th>
+                                <th>Lịch Hẹn</th>
+                                <th>Lý Do Khám</th>
+                                <th>Trạng Thái</th>
+                                <th style="text-align:right;">Thao Tác</th>
+                            </tr>
+                            </thead>
+                            <tbody id="prescriptionsList">
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <div class="mt-2">Đang tải danh sách chờ kê đơn...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -758,22 +1068,40 @@
                 <div class="page-header">
                     <div class="page-header-top">
                         <div>
-                            <h1 class="page-title">Lịch Hẹn 📅</h1>
+                            <h1 class="page-title">Lịch Hẹn</h1>
                             <p class="page-subtitle">Quản lý các lịch hẹn và tái khám của bệnh nhân.</p>
                         </div>
                         <div class="page-header-actions">
-                            <button class="btn-primary-dashboard">
-                                <i class="bi bi-plus-lg"></i>
-                                Tạo lịch hẹn
+                            <button class="btn-outline-dashboard" onclick="loadAppointments()">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Làm mới
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="dashboard-card">
-                    <div class="dashboard-card-body" style="text-align:center; padding: 3rem;">
-                        <i class="bi bi-calendar2-week" style="font-size: 3.5rem; color: var(--primary); opacity: 0.6; display:block; margin-bottom: 1rem;"></i>
-                        <h3 style="color:var(--text-dark); font-weight:700;">Quản Lý Lịch Hẹn</h3>
-                        <p style="color:var(--text-muted);">Danh sách lịch hẹn và tái khám sẽ được hiển thị ở đây.</p>
+                    <div class="dashboard-card-body" style="padding:0;">
+                        <table class="activity-table" id="appointmentsTable">
+                            <thead>
+                            <tr>
+                                <th>Bệnh Nhân</th>
+                                <th>Lịch Hẹn</th>
+                                <th>Lý Do Khám</th>
+                                <th>Trạng Thái</th>
+                                <th style="text-align:right;">Thao Tác</th>
+                            </tr>
+                            </thead>
+                            <tbody id="appointmentsList">
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <div class="mt-2">Đang tải lịch hẹn...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -819,10 +1147,117 @@
     </div><!-- end main-content -->
 </div><!-- end dashboard-wrapper -->
 
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
+
+<!-- Prescription Modal Form -->
+<div class="prescription-modal-overlay" id="prescriptionModalOverlay">
+    <form class="prescription-modal" th:action="@{/doctor/medicalRecord}" method="post" th:object="${CreateMedicalRecordRequest}">
+        <div class="prescription-modal-header">
+            <h4 class="prescription-modal-title">
+                <i class="bi bi-capsule-pill text-primary"></i>
+                Kê Đơn Thuốc - <span id="prescPatientName" class="text-primary">Bệnh Nhân</span>
+            </h4>
+            <button type="button" class="prescription-modal-close" onclick="closePrescriptionModal()">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        <div class="prescription-modal-body">
+            <div id="errorBox" class="alert alert-danger d-none mb-3" style="border-radius: 0.5rem; font-size: 0.9rem;"></div>
+            <!-- Hidden Fields for Backend -->
+            <input type="hidden" id="prescAppointmentId" th:field="*{appointmentId}">
+            
+            <div class="presc-row">
+                <div class="presc-col">
+                    <div class="presc-form-group">
+                        <label class="presc-label">Triệu chứng</label>
+                        <textarea id="prescSymptoms" class="presc-textarea" th:field="*{trieuChung}" placeholder="Nhập triệu chứng của bệnh nhân..." ></textarea>
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('trieuChung')}"
+                             th:errors="*{trieuChung}">
+                        </div>
+                    </div>
+                </div>
+                <div class="presc-col">
+                    <div class="presc-form-group">
+                        <label class="presc-label">Chẩn đoán</label>
+                        <textarea id="prescDiagnosis" class="presc-textarea" th:field="*{chuanDoan}" placeholder="Nhập kết quả chẩn đoán..." ></textarea>
+                        <div class="text-danger"
+                             th:if="${#fields.hasErrors('chuanDoan')}"
+                             th:errors="*{chuanDoan}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="presc-form-group">
+                <label class="presc-label">Liệu trình</label>
+                <input id="prescTreatmentPlan" type="text" class="presc-input" th:field="*{lieuTrinh}" placeholder="Nghỉ ngơi ....." >
+                <div class="text-danger"
+                     th:if="${#fields.hasErrors('lieuTrinh')}"
+                     th:errors="*{lieuTrinh}">
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+                <h5 style="font-weight:700; color:var(--text-dark); margin:0;">
+                    <i class="bi bi-list-check text-primary me-2"></i>Chi tiết Đơn Thuốc
+                </h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addMedicineField()" style="border-radius: 6px; font-weight: 500;">
+                    <i class="bi bi-plus-lg"></i> Thêm Thuốc
+                </button>
+            </div>
+            
+            <div id="medicinesContainer">
+                <!-- Medicine items will be inserted here dynamically -->
+            </div>
+
+            <div class="presc-form-group mt-4">
+                <label class="presc-label">Ghi chú thêm</label>
+                <textarea id="prescNotes" class="presc-textarea" th:field="*{ghiChu}" placeholder="Dặn dò thêm bệnh nhân (nếu có)..."></textarea>
+                <div class="text-danger"
+                     th:if="${#fields.hasErrors('ghiChu')}"
+                     th:errors="*{ghiChu}">
+                </div>
+            </div>
+        </div>
+        <div class="prescription-modal-footer">
+            <button type="button" class="btn btn-outline-secondary" onclick="closePrescriptionModal()" style="border-radius: 0.5rem; font-weight: 500;">Hủy bỏ</button>
+            <button type="submit" class="btn btn-primary" style="border-radius: 0.5rem; font-weight: 500;">
+                <i class="bi bi-save me-1"></i> Gửi Đơn Thuốc
+            </button>
+        </div>
+    </form>
+</div>
+<div class="modal fade"
+     id="successModal">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Thông báo</h5>
+            </div>
+
+            <div class="modal-body">
+                Tạo hồ sơ thành công
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success"
+                        data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
     document.addEventListener('DOMContentLoaded', function () {
 
         // ===== SIDEBAR NAVIGATION (SPA) =====
@@ -976,8 +1411,316 @@
                 if (searchInput) searchInput.focus();
             }
         });
-    });
-</script>
 
+        // ===== LOAD APPOINTMENTS =====
+        window.loadAppointments = function() {
+            const tbody = document.getElementById('appointmentsList');
+            if(!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);"><div class="spinner-border text-primary" role="status"></div><div class="mt-2">Đang tải lịch hẹn...</div></td></tr>';
+
+            fetch('/api/doctor/appointments?status=PENDING')
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Cập nhật số lượng lịch hẹn chờ xác nhận trên giao diện
+                    var pendingCount = data.length;
+                    document.querySelectorAll('.sidebar-nav-link[data-section="appointments"] .nav-badge').forEach(function(badge) {
+                        badge.textContent = pendingCount;
+                    });
+                    document.querySelectorAll('.quick-action-card[data-section="appointments"] .quick-action-sub span').forEach(function(span) {
+                        span.textContent = pendingCount;
+                    });
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">Chưa có lịch hẹn nào.</td></tr>';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    data.forEach(function(apt) {
+                        var statusBadge = '';
+                        var actionsHtml = '';
+
+                        if (apt.status === 'PENDING') {
+                            statusBadge = '<span class="status-badge status-warning">Chờ xác nhận</span>';
+                            actionsHtml = '<button class="btn btn-sm btn-outline-success mx-1" onclick="updateAppointmentStatus(' + apt.id + ', \'accept\')" style="border-radius: 6px; font-weight: 500;">Chấp nhận</button>';
+                        } else if (apt.status === 'CONFIRMED') {
+                            statusBadge = '<span class="status-badge status-success">Đã xác nhận</span>';
+                        } else if (apt.status === 'COMPLETED') {
+                            statusBadge = '<span class="status-badge status-info">Hoàn thành</span>';
+                        } else {
+                            statusBadge = '<span class="status-badge status-info">' + apt.status + '</span>';
+                        }
+
+                        // Extract initials
+                        var initials = apt.patientName.split(' ').map(function(n) { return n[0]; }).join('').substring(0,2).toUpperCase();
+
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = '<td><div class="patient-cell"><div class="patient-avatar bg-1" style="font-size:0.8rem; font-weight:600;">' + initials + '</div><div class="patient-name" style="font-weight:600; color:var(--text-dark);">' + apt.patientName + '</div></div></td>' +
+                            '<td><div style="font-weight:500; color:var(--text-dark);">' + apt.date + '</div><div style="font-size:0.85rem; color:var(--text-muted);">' + apt.time + '</div></td>' +
+                            '<td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + apt.reason + '">' + (apt.reason || '-') + '</td>' +
+                            '<td>' + statusBadge + '</td>' +
+                            '<td style="text-align:right;">' + actionsHtml + '</td>';
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Error fetching appointments:', error);
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-danger);">Lỗi khi tải lịch hẹn. Vui lòng thử lại.</td></tr>';
+                });
+        };
+
+        // ===== UPDATE APPOINTMENT STATUS =====
+        window.updateAppointmentStatus = function(id, action) {
+            var endpoint = '/api/doctor/appointments/' + id + '/' + action;
+
+            fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Update failed');
+                    loadAppointments();
+                })
+                .catch(function(error) {
+                    console.error('Error updating appointment:', error);
+                    alert("Đã xảy ra lỗi khi cập nhật trạng thái!");
+                });
+        };
+
+        // Load appointments when navigating to the section
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function () {
+                if (this.getAttribute('data-section') === 'appointments') {
+                    loadAppointments();
+                } else if (this.getAttribute('data-section') === 'prescriptions') {
+                    loadPrescriptions();
+                }
+            });
+        });
+
+        // Initial load if section is active
+        if (document.querySelector('.sidebar-nav-link[data-section="appointments"]').classList.contains('active')) {
+            loadAppointments();
+        }
+        if (document.querySelector('.sidebar-nav-link[data-section="prescriptions"]').classList.contains('active')) {
+            loadPrescriptions();
+        }
+
+        // ===== LOAD PRESCRIPTIONS =====
+        window.loadPrescriptions = function() {
+            var tbody = document.getElementById('prescriptionsList');
+            if (!tbody) return;
+
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">Đang tải danh sách chờ kê đơn...</td></tr>';
+
+            fetch('/api/doctor/appointments?status=CONFIRMED')
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(function(data) {
+                    tbody.innerHTML = '';
+                    
+                    // Cập nhật số lượng trên giao diện (sidebar và thao tác nhanh)
+                    var pendingCount = data.length;
+                    document.querySelectorAll('.sidebar-nav-link[data-section="prescriptions"] .nav-badge').forEach(function(badge) {
+                        badge.textContent = pendingCount;
+                    });
+                    document.querySelectorAll('.quick-action-card[data-section="prescriptions"] .quick-action-sub span').forEach(function(span) {
+                        span.textContent = pendingCount;
+                    });
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-muted);"><i class="bi bi-check-circle" style="font-size: 2rem; color: var(--success); display:block; margin-bottom: 1rem;"></i>Không có bệnh nhân nào đang chờ kê đơn.</td></tr>';
+                        return;
+                    }
+
+                    data.forEach(function(apt) {
+                        var tr = document.createElement('tr');
+
+                        // Extract initials
+                        var initials = "BN";
+                        if (apt.patientName && apt.patientName !== "Unknown") {
+                            var parts = apt.patientName.split(" ");
+                            initials = parts.length > 0 ? parts[parts.length-1].substring(0, 2).toUpperCase() : "BN";
+                        }
+
+                        var actionsHtml = '<button class="btn btn-sm btn-primary mx-1" onclick="openPrescriptionModal(' + apt.id + ', \'' + apt.patientName.replace(/'/g, "\\'") + '\')" style="border-radius: 6px; font-weight: 500;"><i class="bi bi-capsule-pill me-1"></i> Kê đơn thuốc</button>';
+
+                        tr.innerHTML = '<td><div class="patient-cell"><div class="patient-avatar bg-1" style="background-color: var(--primary); color: white;">' + initials + '</div><div><div class="patient-name">' + apt.patientName + '</div></div></div></td>' +
+                            '<td><div style="font-weight:500; color:var(--text-dark);">' + apt.date + '</div><div style="font-size:0.85rem; color:var(--text-muted);">' + apt.time + '</div></td>' +
+                            '<td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + apt.reason + '">' + (apt.reason || '-') + '</td>' +
+                            '<td><span class="status-badge status-success">Chờ kê đơn</span></td>' +
+                            '<td style="text-align:right;">' + actionsHtml + '</td>';
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Error fetching prescriptions:', error);
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-danger);">Lỗi khi tải danh sách. Vui lòng thử lại.</td></tr>';
+                });
+        };
+        var container = document.getElementById('medicinesContainer');
+        if (container) {
+            if (container.children.length === 0) {
+                addMedicineField();
+            } else {
+                updateMedicineLabels();
+            }
+        }
+    });
+
+    // ===== PRESCRIPTION MODAL LOGIC =====
+    window.openPrescriptionModal = function(appointmentId, patientName) {
+        document.getElementById('prescAppointmentId').value = appointmentId;
+        document.getElementById('prescPatientName').innerText = patientName;
+
+        // Reset form
+        document.getElementById('prescSymptoms').value = '';
+        document.getElementById('prescDiagnosis').value = '';
+        document.getElementById('prescTreatmentPlan').value = '';
+        document.getElementById('prescNotes').value = '';
+        
+        var container = document.getElementById('medicinesContainer');
+        container.innerHTML = '';
+        medicineCount = 0;
+        addMedicineField();
+
+        var modal = document.getElementById('prescriptionModalOverlay');
+        modal.classList.add('show');
+    };
+
+    window.closePrescriptionModal = function() {
+        var modal = document.getElementById('prescriptionModalOverlay');
+        modal.classList.remove('show');
+    };
+
+    var medicineCount = 0;
+
+    window.addMedicineField = function() {
+        medicineCount++;
+        var container = document.getElementById('medicinesContainer');
+        var cardId = 'medicine-card-' + Date.now();
+        var card = document.createElement('div');
+        card.className = 'medicine-card';
+        card.id = cardId;
+        var idx = medicineCount - 1;
+        
+        card.innerHTML = '<div class="medicine-header d-flex justify-content-between align-items-center">' +
+                '<div class="medicine-title"><i class="bi bi-bandaid"></i> Thuốc ' + medicineCount + '</div>' +
+                '<button type="button" class="btn btn-sm btn-outline-danger" onclick="removeMedicineField(\'' + cardId + '\')" style="padding: 2px 8px;"><i class="bi bi-trash"></i> Xóa</button>' +
+            '</div>' +
+            '<div class="presc-row">' +
+                '<div class="presc-col" style="flex: 2;">' +
+                    '<div class="presc-form-group">' +
+                        '<label class="presc-label">Tên thuốc</label>' +
+                        '<input type="text" class="presc-input" name="prescriptionDetailDTO[' + idx + '].medicineName" >' +
+                    '</div>' +
+                '</div>' +
+                '<div class="presc-col">' +
+                    '<div class="presc-form-group">' +
+                        '<label class="presc-label">Liều lượng</label>' +
+                        '<input type="text" class="presc-input" name="prescriptionDetailDTO[' + idx + '].lieuLuong" >' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="presc-row">' +
+                '<div class="presc-col">' +
+                    '<div class="presc-form-group">' +
+                        '<label class="presc-label">Tần suất</label>' +
+                        '<input type="text" class="presc-input" name="prescriptionDetailDTO[' + idx + '].tanSuat" placeholder="Ví dụ: Sáng - Tối" >' +
+                    '</div>' +
+                '</div>' +
+                '<div class="presc-col">' +
+                    '<div class="presc-form-group">' +
+                        '<label class="presc-label">Thời gian điều trị</label>' +
+                        '<input type="text" class="presc-input" name="prescriptionDetailDTO[' + idx + '].lieuTrinh" >' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="presc-form-group mb-0">' +
+                '<label class="presc-label">Lưu ý khi dùng thuốc</label>' +
+                '<input type="text" class="presc-input" name="prescriptionDetailDTO[' + idx + '].gioiThieu" placeholder="Ví dụ: Uống sau khi ăn no">' +
+            '</div>';
+        container.appendChild(card);
+        updateMedicineLabels();
+    };
+
+    window.removeMedicineField = function(cardId) {
+        var container = document.getElementById('medicinesContainer');
+        if (container.children.length <= 1) {
+            alert("Phải có ít nhất 1 loại thuốc trong đơn!");
+            return;
+        }
+        var card = document.getElementById(cardId);
+        if (card) {
+            card.remove();
+            updateMedicineLabels();
+        }
+    };
+
+    window.updateMedicineLabels = function() {
+        var container = document.getElementById('medicinesContainer');
+        var cards = container.querySelectorAll('.medicine-card');
+        cards.forEach(function(card, index) {
+            var title = card.querySelector('.medicine-title');
+            if (title) {
+                title.innerHTML = '<i class="bi bi-bandaid"></i> Thuốc ' + (index + 1);
+            }
+            // Also update name attributes for correct form binding
+            var inputs = card.querySelectorAll('input[name]');
+            inputs.forEach(function(input) {
+                var oldName = input.getAttribute('name');
+                var newName = oldName.replace(/prescriptionDetailDTO\[\d+\]/, 'prescriptionDetailDTO[' + index + ']');
+                input.setAttribute('name', newName);
+            });
+        });
+    };
+
+    var form = document.querySelector(".prescription-modal");
+
+    if (form) {
+        form.addEventListener("submit", async function(e){
+            e.preventDefault();
+
+            var formData = new FormData(form);
+
+            var response = await fetch(
+                "/doctor/medicalRecord",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+            var errorBox = document.getElementById("errorBox");
+
+            if(!response.ok){
+                var errors = await response.json();
+                if (errorBox) {
+                    errorBox.innerHTML = errors.map(function(e) { return '<div>• ' + e + '</div>'; }).join("");
+                    errorBox.classList.remove("d-none");
+                }
+                return;
+            }
+
+            if (errorBox) errorBox.classList.add("d-none");
+            closePrescriptionModal();
+            loadPrescriptions();
+
+            var successModal = document.getElementById('successModal');
+            if (successModal) {
+                var modal = new bootstrap.Modal(successModal);
+                modal.show();
+            }
+        });
+    }
+/*]]>*/
+</script>
 </body>
 </html>

@@ -26,33 +26,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class MedicalRecordService {
-
-    
     private static final String KEY_MEDICAL_HISTORY = "medical:history:patient:";
-    private static final long CACHE_TTL_SECONDS = 120; 
-
+    private static final long CACHE_TTL_SECONDS = 120;
     private final MedicalRecordRepository medicalRecordRepository;
-    
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
     private DoctorRepository doctorRepository;
     @Autowired
     private PatientRepository patientRepository;
-
     @Autowired
     private RedisService redisService; 
 
     private final ObjectMapper objectMapper;
-
     public MedicalRecordService(MedicalRecordRepository medicalRecordRepository) {
         this.medicalRecordRepository = medicalRecordRepository;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
         this.objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
-
-
     @Transactional
     public MedicalRecordDTO createRecord(MedicalRecordDTO dto) {
         MedicalRecords record = new MedicalRecords();
@@ -74,7 +66,6 @@ public class MedicalRecordService {
         }
 
         record.setDiagnosis(dto.getDiagnosis());
-        record.setSymptoms(dto.getSymptoms());
         record.setTreatmentPlan(dto.getTreatmentPlan());
         record.setNotes(dto.getNotes());
         record.setCreatedAt(LocalDateTime.now());
@@ -89,15 +80,9 @@ public class MedicalRecordService {
         return mapToDTO(saved);
     }
 
-    
-
-
     @Transactional(readOnly = true)
     public Page<MedicalRecordDTO> getHistoryByPatient(Long patientId, Pageable pageable) {
-        
         String cacheKey = KEY_MEDICAL_HISTORY + patientId + ":p" + pageable.getPageNumber();
-
-        
         try {
             if (redisService.exists(cacheKey)) {
                 Object rawData = redisService.get(cacheKey);
@@ -113,12 +98,8 @@ public class MedicalRecordService {
             System.out.println("Lỗi đọc Redis Cache bệnh án: " + e.getMessage());
             
         }
-
-        
         Page<MedicalRecords> page = medicalRecordRepository.findByPatientId(patientId, pageable);
         Page<MedicalRecordDTO> result = page.map(this::mapToDTO);
-
-        
         try {
             String json = objectMapper.writeValueAsString(result.getContent());
             redisService.save(cacheKey, json, CACHE_TTL_SECONDS);
@@ -164,7 +145,6 @@ public class MedicalRecordService {
             }
         }
         dto.setDiagnosis(record.getDiagnosis());
-        dto.setSymptoms(record.getSymptoms());
         dto.setTreatmentPlan(record.getTreatmentPlan());
         dto.setNotes(record.getNotes());
         dto.setCreatedAt(record.getCreatedAt());

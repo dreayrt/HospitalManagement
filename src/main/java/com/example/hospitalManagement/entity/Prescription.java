@@ -2,6 +2,7 @@ package com.example.hospitalManagement.entity;
 
 import jakarta.persistence.*;
 
+import javax.print.Doc;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class Prescription {
     @OneToOne
     @JoinColumn(name = "medical_record_id")
     private MedicalRecords medicalRecords;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Doctor doctor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Patient patient;
     @OneToMany(mappedBy = "prescription")
     private List<PrescriptionDetail> prescriptionDetail;
 
@@ -51,5 +56,21 @@ public class Prescription {
 
     public void setPrescriptionDetail(List<PrescriptionDetail> prescriptionDetail) {
         this.prescriptionDetail = prescriptionDetail;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

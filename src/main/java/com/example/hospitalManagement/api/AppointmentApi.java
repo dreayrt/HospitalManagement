@@ -4,6 +4,8 @@ import com.example.hospitalManagement.dto.AppointmentDTO;
 import com.example.hospitalManagement.dto.AppointmentFilterRequestDTO;
 import com.example.hospitalManagement.dto.CreateAppointmentRequestDTO;
 import com.example.hospitalManagement.entity.Enum.AppointmentStatus;
+import com.example.hospitalManagement.entity.User;
+import com.example.hospitalManagement.repository.userRepository;
 import com.example.hospitalManagement.service.AppointmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +13,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
-
-
+import java.util.Optional;
 
 
 @RestController
@@ -30,6 +31,8 @@ public class AppointmentApi {
 
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private userRepository userRepository;
 
     @GetMapping("/statuses")
     public List<Map<String, String>> getStatuses() {
@@ -42,11 +45,6 @@ public class AppointmentApi {
         );
     }
 
-    
-
-
-
-
     @PostMapping
     public ResponseEntity<?> createAppointment(@Valid @RequestBody CreateAppointmentRequestDTO request) {
         try {
@@ -56,11 +54,6 @@ public class AppointmentApi {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
-    
-
-    
-
 
 
     @PutMapping("/{id}/confirm")
@@ -72,12 +65,6 @@ public class AppointmentApi {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
-    
-
-    
-
-
 
 
     @PutMapping("/{id}/cancel")
@@ -93,12 +80,6 @@ public class AppointmentApi {
         }
     }
 
-    
-
-    
-
-
-
 
     @PutMapping("/{id}/reschedule")
     public ResponseEntity<?> rescheduleAppointment(
@@ -113,12 +94,6 @@ public class AppointmentApi {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
-    
-
-    
-
-
 
 
     @GetMapping
@@ -151,8 +126,6 @@ public class AppointmentApi {
         return ResponseEntity.ok(appointmentService.getAppointments(filter));
     }
 
-    
-
 
 
     @GetMapping("/{id}")
@@ -163,11 +136,6 @@ public class AppointmentApi {
             return ResponseEntity.notFound().build();
         }
     }
-
-    
-
-
-
 
     @GetMapping("/doctor/{doctorId}/schedule")
     public ResponseEntity<List<AppointmentDTO>> getDoctorSchedule(
@@ -181,4 +149,6 @@ public class AppointmentApi {
         List<AppointmentDTO> schedule = appointmentService.getDoctorSchedule(doctorId, from, to);
         return ResponseEntity.ok(schedule);
     }
+
+
 }

@@ -26,6 +26,7 @@ public class DepartmentService {
         if (redisService.exists(key)) {
             try {
                 String json = (String) redisService.get(key);
+                //convert JSON -> JAVA Object
                 return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, Departments.class));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -33,8 +34,9 @@ public class DepartmentService {
         }
         List<Departments> departmentsList = departmentRepository.findAll();
         try{
+            //convert JAVA Object -> JSON
             String json = objectMapper.writeValueAsString(departmentsList);
-            redisService.save(key,json,300);
+            redisService.save(key,json,3600);
 
         }catch(Exception e){
             e.printStackTrace();
@@ -57,7 +59,6 @@ public class DepartmentService {
         Departments department =
                 departmentRepository.findById(id)
                         .orElseThrow();
-
         if(department.getStatus()
                 == DepartmentStatus.ACTIVE){
 
@@ -66,12 +67,10 @@ public class DepartmentService {
             );
 
         }else{
-
             department.setStatus(
                     DepartmentStatus.ACTIVE
             );
         }
-
         departmentRepository.save(department);
     }
 }

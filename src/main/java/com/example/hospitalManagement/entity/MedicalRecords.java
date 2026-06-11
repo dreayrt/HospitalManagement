@@ -24,7 +24,6 @@ public class MedicalRecords {
     @OneToOne
     @JoinColumn(name = "appointment_id")
     private Appointments appointment;
-
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;

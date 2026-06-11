@@ -44,12 +44,6 @@ public class AppointmentMapper {
                 dto.setDepartmentName(a.getDoctor().getDepartment().getName());
             }
         }
-
-        
-        if (a.getCreatedBy() != null) {
-            dto.setCreatedByName(a.getCreatedBy().getFullName());
-        }
-
         return dto;
     }
 }

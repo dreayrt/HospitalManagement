@@ -30,15 +30,9 @@ public class Appointments {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private User createdBy;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
-    @OneToOne(mappedBy = "appointments")
-    private CheckIn checkIn;
 
     @OneToOne(mappedBy = "appointment")
     private MedicalRecords medicalRecords;
@@ -100,28 +94,12 @@ public class Appointments {
         this.patient = patient;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Doctor getDoctor() {
         return doctor;
     }
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
-    }
-
-    public CheckIn getCheckIn() {
-        return checkIn;
-    }
-
-    public void setCheckIn(CheckIn checkIn) {
-        this.checkIn = checkIn;
     }
 
     public MedicalRecords getMedicalRecords() {

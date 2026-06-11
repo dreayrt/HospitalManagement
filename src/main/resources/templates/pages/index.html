@@ -274,203 +274,6 @@
             color:#0a6fb7;
         }
 
-        /* AI */
-        .ai{
-            position:fixed;
-            right:20px;
-            bottom:100px;
-            background:white;
-            padding:15px;
-            border-radius:12px;
-            box-shadow:0 5px 15px rgba(0,0,0,0.2);
-            animation:fadeUp 1s ease, pulse 2.5s infinite;
-            z-index:999;
-        }
-
-        .chat-container{
-            position:fixed;
-            right:20px;
-            bottom:30px;
-            z-index:9999;
-            display:flex;
-            flex-direction:column;
-            align-items:flex-end;
-        }
-
-        .chat-box{
-            width:340px;
-            height:420px;
-            background:white;
-            border-radius:15px;
-            box-shadow:0 8px 30px rgba(0,0,0,0.15);
-            display:flex;
-            flex-direction:column;
-            overflow:hidden;
-            margin-bottom:20px;
-            transform-origin:bottom right;
-            transform:scale(0);
-            opacity:0;
-            transition:0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events:none;
-        }
-
-        .chat-box.active{
-            transform:scale(1);
-            opacity:1;
-            pointer-events:auto;
-        }
-
-        .chat-header{
-            background:linear-gradient(135deg, #0a6fb7, #00a6ff);
-            color:white;
-            padding:15px 20px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-
-        .chat-header h4{
-            font-size:16px;
-            display:flex;
-            align-items:center;
-            gap:8px;
-            margin:0;
-        }
-
-        .online-dot{
-            width:8px;
-            height:8px;
-            background:#4CAF50;
-            border-radius:50%;
-            display:inline-block;
-            box-shadow:0 0 5px #4CAF50;
-        }
-
-        .close-chat{
-            cursor:pointer;
-            font-size:14px;
-            transition:0.3s;
-        }
-
-        .close-chat:hover{
-            color:#ffcccc;
-            transform:scale(1.2);
-        }
-
-        .chat-body{
-            flex:1;
-            padding:15px;
-            overflow-y:auto;
-            background:#f8fbff;
-            display:flex;
-            flex-direction:column;
-            gap:12px;
-        }
-
-        .chat-msg{
-            display:flex;
-            gap:10px;
-            align-items:flex-end;
-            max-width:85%;
-        }
-
-        .chat-msg.bot{
-            align-self:flex-start;
-        }
-
-        .chat-msg.user{
-            align-self:flex-end;
-            flex-direction:row-reverse;
-        }
-
-        .chat-msg img{
-            width:32px;
-            height:32px;
-            border-radius:50%;
-            object-fit:cover;
-        }
-
-        .msg-content{
-            background:white;
-            padding:10px 14px;
-            border-radius:15px;
-            font-size:14px;
-            color:#333;
-            box-shadow:0 2px 5px rgba(0,0,0,0.05);
-            line-height:1.4;
-        }
-
-        .chat-msg.bot .msg-content{
-            border-bottom-left-radius:4px;
-        }
-
-        .chat-msg.user .msg-content{
-            background:#0a6fb7;
-            color:white;
-            border-bottom-right-radius:4px;
-        }
-
-        .chat-input{
-            display:flex;
-            padding:12px;
-            background:white;
-            border-top:1px solid #eee;
-            align-items:center;
-            gap:10px;
-        }
-
-        .chat-input input{
-            flex:1;
-            border:none;
-            padding:12px 15px;
-            outline:none;
-            background:#f1f5f9;
-            border-radius:20px;
-            font-size:14px;
-        }
-
-        .chat-input button{
-            background:#0a6fb7;
-            color:white;
-            border:none;
-            width:42px;
-            height:42px;
-            border-radius:50%;
-            cursor:pointer;
-            transition:0.3s;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:16px;
-        }
-
-        .chat-input button:hover{
-            background:#00a6ff;
-            transform:scale(1.05);
-        }
-
-        .call{
-            position:relative;
-            background:#0a6fb7;
-            color:white;
-            width:60px;
-            height:60px;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:28px;
-            animation:pulse 1.8s infinite;
-            transition:0.3s;
-            z-index:999;
-            cursor:pointer;
-            box-shadow:0 4px 15px rgba(10,111,183,0.4);
-        }
-
-        .call:hover{
-            transform:scale(1.1) rotate(5deg);
-        }
-
         /* RESPONSIVE */
         @media(max-width:900px){
             .topbar,
@@ -519,17 +322,6 @@
                 right:10px;
             }
         }
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, sans-serif;
-        }
-
-        body{
-            background:#f4fbff;
-        }
-
         /* ANIMATION */
         @keyframes fadeUp{
             from{opacity:0; transform:translateY(40px);}
@@ -986,6 +778,144 @@
             transform:translateY(-2px);
             box-shadow:0 6px 20px rgba(10,111,183,0.35);
         }
+        /* BOOKING MODAL */
+        .booking-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .booking-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .booking-modal {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transform: translateY(30px) scale(0.95);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .booking-modal-overlay.active .booking-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .booking-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .booking-modal-header h3 {
+            color: #0a6fb7;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .booking-modal-close {
+            background: #f1f5f9;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            color: #333;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .booking-modal-close:hover {
+            background: #ffcccc;
+            color: red;
+            transform: rotate(90deg);
+        }
+
+        .booking-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .booking-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .booking-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .booking-form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .booking-form-group input,
+        .booking-form-group select,
+        .booking-form-group textarea {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            background: #f8fbff;
+            font-family: inherit;
+        }
+
+        .booking-form-group input:focus,
+        .booking-form-group select:focus,
+        .booking-form-group textarea:focus {
+            border-color: #0a6fb7;
+            box-shadow: 0 0 0 3px rgba(10,111,183,0.1);
+            background: white;
+        }
+
+        .booking-submit-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #0a6fb7, #00a6ff);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(10,111,183,0.3);
+        }
+
+        .booking-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(10,111,183,0.4);
+        }
     </style>
 </head>
 
@@ -1050,7 +980,6 @@
     <div class="hero-box reveal zoom-in">
         <h1>Chăm sóc sức khỏe<br>Chuẩn mực - An toàn</h1>
         <p>Giải pháp y tế hiện đại, tận tâm và chuyên nghiệp</p>
-        <button>Đặt lịch khám</button>
     </div>
 </section>
 
@@ -1084,7 +1013,7 @@
 
 
 
-        <a href="#" class="item reveal fade-up" onclick="openLoginModal()">
+        <a href="javascript:void(0)" class="item reveal fade-up" onclick="openBookingModal()">
             <div class="icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg></div>
             <p>Đặt lịch</p>
         </a>
@@ -1176,27 +1105,6 @@
 <section class="pricing">
     ...
 </section>
-<div class="chat-container">
-    <div class="chat-box" id="chatBox">
-        <div class="chat-header">
-            <h4><span class="online-dot"></span>Hỗ trợ trực tuyến</h4>
-            <span class="close-chat" onclick="toggleChat()">✖</span>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-msg bot">
-                <img src="https://ui-avatars.com/api/?name=MediCore&background=0a6fb7&color=fff&size=80" alt="Bot">
-                <div class="msg-content">Xin chào! MediCore Health có thể giúp gì cho bạn?</div>
-            </div>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." onkeypress="handleChatKeyPress(event)">
-            <button onclick="sendChatMessage()">➤</button>
-        </div>
-    </div>
-    <div class="call" onclick="toggleChat()">
-        <span id="chatIcon"><svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></span>
-    </div>
-</div>
 <footer class="footer-med">
     <div class="footer-wrap">
 
@@ -1307,37 +1215,60 @@
 </footer>
 </footer>
 
-<!-- MODAL ĐĂNG NHẬP -->
-<div id="loginModal" class="modal-overlay">
-    <div class="login-box">
-        <span class="close-btn" onclick="closeLoginModal()">×</span>
-
-        <h2 style="text-align:center;color:#0a6fb7">
-            Đăng nhập MediCore Care
-        </h2>
-        <br>
-        <label>Số điện thoại</label>
-        <input type="text" placeholder="Nhập số điện thoại">
-
-        <label>Mật khẩu</label>
-        <input type="password" placeholder="Nhập mật khẩu">
-
-        <button class="login-btn">Đăng nhập</button>
+<!-- BOOKING MODAL -->
+<div class="booking-modal-overlay" id="bookingModalOverlay" onclick="closeBookingModal()">
+    <div class="booking-modal" onclick="event.stopPropagation()">
+        <div class="booking-modal-header">
+            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="#0a6fb7"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg> Đặt lịch khám</h3>
+            <button type="button" class="booking-modal-close" onclick="closeBookingModal()">✖</button>
+        </div>
+        <form method="post" th:action="@{/booking}" th:object="${appointmentRequest}">
+            <div class="booking-form-grid">
+                <div class="booking-form-group">
+                    <label>Họ và tên <span style="color:red">*</span></label>
+                    <input type="text" th:field="*{fullname}" required placeholder="Nhập họ tên...">
+                </div>
+                <div class="booking-form-group">
+                    <label>Số điện thoại <span style="color:red">*</span></label>
+                    <input type="tel" th:field="*{soDienThoai}" required placeholder="Nhập SĐT..." pattern="[0-9]{10}">
+                </div>
+                <div class="booking-form-group full-width">
+                    <label>Địa chỉ email</label>
+                    <input type="email" th:field="*{email}" placeholder="Nhập email (không bắt buộc)...">
+                </div>
+                <div class="booking-form-group full-width">
+                    <label>Triệu chứng <span style="color:red">*</span></label>
+                    <textarea th:field="*{reason}" rows="3" required placeholder="Mô tả sơ bộ triệu chứng của bạn..."></textarea>
+                </div>
+                <div class="booking-form-group">
+                    <label>Chuyên khoa muốn khám <span style="color:red">*</span></label>
+                    <select th:field="*{chuyenKhoa}" required onchange="loadDoctors(this)">
+                        <option value="" data-id="">-- Chọn chuyên khoa --</option>
+                    </select>
+                </div>
+                <div class="booking-form-group">
+                    <label>Bác sĩ muốn khám (Tùy chọn)</label>
+                    <select th:field="*{bacSi}">
+                        <option value="">-- Chọn bác sĩ (Không bắt buộc) --</option>
+                    </select>
+                </div>
+                <div class="booking-form-group">
+                    <label>Ngày khám dự kiến <span style="color:red">*</span></label>
+                    <input type="date" th:field="*{date}" required>
+                </div>
+                <div class="booking-form-group">
+                    <label>Giờ khám dự kiến <span style="color:red">*</span></label>
+                    <input type="time" th:field="*{time}" required>
+                </div>
+            </div>
+            <button type="submit" class="booking-submit-btn">Xác nhận đặt lịch</button>
+        </form>
     </div>
 </div>
-
 
 </body>
 
 <script>
-    function openLoginModal(){
-        document.getElementById("loginModal").style.display="flex";
-    }
-
-    function closeLoginModal(){
-        document.getElementById("loginModal").style.display="none";
-    }
-
     // ===== PROFILE DROPDOWN LOGIC =====
     function toggleProfileDropdown(e){
         e.stopPropagation();
@@ -1422,59 +1353,96 @@
         }
     });
 
+    // ===== BOOKING MODAL LOGIC =====
+    async function openBookingModal() {
+        const overlay = document.getElementById('bookingModalOverlay');
+        overlay.classList.add('active');
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
 
+        // Load danh sách chuyên khoa
+        loadDepartments();
 
-    // Chat Box Logic
-    function toggleChat() {
-        const chatBox = document.getElementById('chatBox');
-        const chatIcon = document.getElementById('chatIcon');
-        if (chatBox.classList.contains('active')) {
-            chatBox.classList.remove('active');
-            chatIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>';
-        } else {
-            chatBox.classList.add('active');
-            chatIcon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
-            document.getElementById('chatInput').focus();
+        const token = localStorage.getItem("accessToken");
+        if(!token){
+            console.log("token khong hop le");
+            return;
+        }
+        try{
+            const response = await fetch('/api/booking-info-current', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            });
+            if(response.ok){
+                const data = await response.json();
+                document.getElementById("fullname").value = data.fullName || '';
+                document.getElementById("soDienThoai").value = data.phone || '';
+                document.getElementById("email").value = data.email || '';
+
+                document.getElementById("fullname").readOnly = true;
+                document.getElementById("soDienThoai").readOnly = true;
+                document.getElementById("email").readOnly = true;
+            }
+        }catch (error) {
+            console.log("Fetch API error:", error);
         }
     }
 
-    function handleChatKeyPress(event) {
-        if (event.key === 'Enter') {
-            sendChatMessage();
+    async function loadDepartments() {
+        try {
+            const response = await fetch('/api/public/departments');
+            if (response.ok) {
+                const departments = await response.json();
+                const deptSelect = document.getElementById('chuyenKhoa');
+                // Giữ lại option đầu tiên
+                deptSelect.innerHTML = '<option value="" data-id="">-- Chọn chuyên khoa --</option>';
+                
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept.name; // Lưu tên vào value
+                    option.setAttribute('data-id', dept.id); // Lưu id để gọi API lấy bác sĩ
+                    option.textContent = dept.name;
+                    deptSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading departments:", error);
         }
     }
 
-    function sendChatMessage() {
-        const input = document.getElementById('chatInput');
-        const message = input.value.trim();
-        if (message) {
-            const chatBody = document.getElementById('chatBody');
-
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-msg user';
-            userMsg.innerHTML = `
-                <img src="https://ui-avatars.com/api/?name=User&background=f1f5f9&color=333&size=80" alt="User">
-                <div class="msg-content">${message}</div>
-            `;
-            chatBody.appendChild(userMsg);
-
-            // Clear input
-            input.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-
-            // Bot reply delay
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'chat-msg bot';
-                botMsg.innerHTML = `
-                    <img src="https://ui-avatars.com/api/?name=MediCore&background=0a6fb7&color=fff&size=80" alt="Bot">
-                    <div class="msg-content">Cảm ơn bạn đã liên hệ. Đội ngũ y bác sĩ sẽ phản hồi bạn sớm nhất!</div>
-                `;
-                chatBody.appendChild(botMsg);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 1000);
+    async function loadDoctors(deptSelect) {
+        const doctorSelect = document.getElementById('bacSi');
+        doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ (Không bắt buộc) --</option>';
+        
+        const selectedOption = deptSelect.options[deptSelect.selectedIndex];
+        const deptId = selectedOption.getAttribute('data-id');
+        
+        if (!deptId) return; // Nếu chọn option trống
+        
+        try {
+            const response = await fetch(`/api/public/doctors?departmentId=${deptId}`);
+            if (response.ok) {
+                const doctors = await response.json();
+                
+                doctors.forEach(doc => {
+                    const option = document.createElement('option');
+                    // Gán nguyên tên gốc (không có "BS. ") vào value để AppointmentRequest nhận đúng fullName
+                    option.value = doc.name.replace("BS. ", ""); 
+                    option.textContent = doc.name;
+                    doctorSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading doctors:", error);
         }
+    }
+
+    function closeBookingModal() {
+        const overlay = document.getElementById('bookingModalOverlay');
+        overlay.classList.remove('active');
     }
 </script>
 <script>

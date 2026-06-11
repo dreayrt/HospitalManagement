@@ -6,20 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-
-
-
-
 public class AppointmentDTO {
-
     private Long id;
-
     
     private Long patientId;
     private String patientName;
     private String patientCode;
     private String patientPhone;
-
     
     private Long doctorId;
     private String doctorName;

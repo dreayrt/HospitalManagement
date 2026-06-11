@@ -18,14 +18,7 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointments, Long> {
-
-    
-
-
     List<Appointments> findByDoctorIdAndAppointmentDate(Long doctorId, LocalDate date);
-
-    
-
 
     boolean existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(
             Long doctorId,
@@ -33,10 +26,6 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
             LocalTime appointmentTime,
             AppointmentStatus status
     );
-
-    
-
-
 
     @Query("""
             SELECT a FROM Appointments a
@@ -64,9 +53,6 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
             Pageable pageable
     );
 
-    
-
-
     @Query("""
             SELECT a FROM Appointments a
             WHERE a.doctor.id = :doctorId
@@ -79,4 +65,7 @@ public interface AppointmentRepository extends JpaRepository<Appointments, Long>
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate
     );
+
+    List<Appointments> findByStatus(AppointmentStatus status);
+    List<Appointments> findByStatusAndDoctorId(AppointmentStatus status, Long doctorId);
 }

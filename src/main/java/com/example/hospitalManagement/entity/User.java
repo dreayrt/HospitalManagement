@@ -46,6 +46,8 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Doctor doctor;
 
+
+
     public long getId() {
         return id;
     }
@@ -157,4 +159,5 @@ public class User {
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
+
 }

@@ -39,6 +39,9 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<MedicalRecords> MedicalRecords;
 
+    @OneToMany(mappedBy = "doctor")
+    private List<Prescription>  Prescriptions;
+
     public long getId() {
         return id;
     }
@@ -117,5 +120,13 @@ public class Doctor {
 
     public void setMedicalRecords(List<MedicalRecords> medicalRecords) {
         MedicalRecords = medicalRecords;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return Prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        Prescriptions = prescriptions;
     }
 }

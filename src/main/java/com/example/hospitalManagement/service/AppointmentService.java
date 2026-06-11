@@ -78,9 +78,6 @@ public class AppointmentService {
         );
     }
 
-    
-
-    
     private String toJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
@@ -98,7 +95,6 @@ public class AppointmentService {
             return null;
         }
     }
-
     
     private List<AppointmentDTO> fromJsonList(Object raw) {
         try {
@@ -112,18 +108,8 @@ public class AppointmentService {
         }
     }
 
-    
-
-    
-
-
-
     public void evictAppointmentCache(Long appointmentId, Long doctorId) {
-        
         redisService.remove(KEY_APPT + appointmentId);
-
-        
-        
         if (doctorId != null) {
             LocalDate today = LocalDate.now();
             for (int i = 0; i < 30; i++) {
@@ -131,12 +117,9 @@ public class AppointmentService {
                 
                 redisService.remove(KEY_DOC_SCHED + doctorId + ":" + d + ":" + d);
             }
-            
             redisService.remove(KEY_DOC_SCHED + doctorId + ":" + today + ":" + today.plusDays(6));
             redisService.remove(KEY_DOC_SCHED + doctorId + ":" + today + ":" + today.plusDays(29));
         }
-
-        
         try {
             Set<String> keys = redisTemplate.keys(KEY_APPT_LIST + "*");
             if (keys != null && !keys.isEmpty()) {
@@ -147,12 +130,9 @@ public class AppointmentService {
 
     @Transactional
     public AppointmentDTO createAppointment(CreateAppointmentRequestDTO request) {
-        
         Doctor doctor = doctorRepository.findById(request.getDoctorId())
                 .orElseThrow(() -> new RuntimeException(
                         "Không tìm thấy bác sĩ với ID: " + request.getDoctorId()));
-
-        
         boolean isConflict = appointmentRepository
                 .existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(
                         request.getDoctorId(),
@@ -165,8 +145,6 @@ public class AppointmentService {
                     + request.getAppointmentDate() + " lúc " + request.getAppointmentTime()
                     + ". Vui lòng chọn khung giờ khác.");
         }
-
-        
         Appointments appointment = new Appointments();
         appointment.setAppointmentDate(request.getAppointmentDate());
         appointment.setAppointmentTime(request.getAppointmentTime());
@@ -182,7 +160,6 @@ public class AppointmentService {
         if (request.getCreatedById() != null) {
             User createdBy = new User();
             createdBy.setId(request.getCreatedById());
-            appointment.setCreatedBy(createdBy);
         }
 
         Appointments saved = appointmentRepository.save(appointment);
@@ -326,13 +303,6 @@ public class AppointmentService {
         return result;
     }
 
-    
-
-    
-
-
-
-
     public Page<AppointmentDTO> getAppointments(AppointmentFilterRequestDTO filter) {
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize());
 
@@ -372,7 +342,6 @@ public class AppointmentService {
 
         return result;
     }
-
     
     private String buildListCacheKey(AppointmentFilterRequestDTO filter) {
         return KEY_APPT_LIST
@@ -404,7 +373,6 @@ public class AppointmentService {
                 .map(appointmentMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám ID: " + id));
 
-        
         String json = toJson(result);
         if (json != null) {
             redisService.save(cacheKey, json, CACHE_TTL);
@@ -426,15 +394,12 @@ public class AppointmentService {
                 return cached; 
             }
         }
-
-        
         List<AppointmentDTO> result = appointmentRepository
                 .findByDoctorIdAndDateRange(doctorId, fromDate, toDate)
                 .stream()
                 .map(appointmentMapper::toDTO)
                 .collect(Collectors.toList());
 
-        
         String json = toJson(result);
         if (json != null) {
             redisService.save(cacheKey, json, CACHE_TTL);

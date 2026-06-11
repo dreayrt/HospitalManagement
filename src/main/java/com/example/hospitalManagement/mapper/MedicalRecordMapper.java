@@ -24,7 +24,6 @@ public class MedicalRecordMapper {
             dto.setPatientId(record.getPatient().getId());
         }
         dto.setDiagnosis(record.getDiagnosis());
-        dto.setSymptoms(record.getSymptoms());
         dto.setTreatmentPlan(record.getTreatmentPlan());
         dto.setNotes(record.getNotes());
         dto.setCreatedAt(record.getCreatedAt());
