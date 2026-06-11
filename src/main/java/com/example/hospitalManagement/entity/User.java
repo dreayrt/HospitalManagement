@@ -1,13 +1,17 @@
 package com.example.hospitalManagement.entity;
 
 import com.example.hospitalManagement.entity.Enum.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name ="users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +42,15 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy ="user",fetch = FetchType.LAZY)
+    @JsonIgnore
     private Patient patient;
 
     @OneToMany(mappedBy = "userId",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<PatienHealthMetric> userIds;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Doctor doctor;
 
 

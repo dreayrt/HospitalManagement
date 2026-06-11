@@ -9,6 +9,7 @@ import com.example.hospitalManagement.repository.PatientRepository;
 import com.example.hospitalManagement.entity.User;
 import com.example.hospitalManagement.entity.Doctor;
 import com.example.hospitalManagement.entity.Enum.AppointmentStatus;
+import com.example.hospitalManagement.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,9 @@ public class HomeController {
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
-    private PatientRepository patientRepository;
+    private com.example.hospitalManagement.repository.MedicalRecordRepository medicalRecordRepository;
+    @Autowired
+    private RoomService roomService;
 
     @GetMapping("/")
     public String Index(Authentication authentication, Model model, @ModelAttribute CreateMedicalRecordRequest createMedicalRecordRequest) {
@@ -59,14 +62,17 @@ public class HomeController {
                     }
                     model.addAttribute("doctorInitials", initials);
 
-                    long totalPatients = patientRepository.count();
+                    java.util.List<com.example.hospitalManagement.entity.MedicalRecords> medicalRecords = medicalRecordRepository.findByDoctorId(doctor.getId());
+                    model.addAttribute("medicalRecords", medicalRecords);
+
+                    long totalPatients = medicalRecords.size();
                     model.addAttribute("totalPatients", totalPatients);
 
                     long todayAppointments = appointmentRepository.findByDoctorIdAndAppointmentDate(doctor.getId(), LocalDate.now()).size();
                     model.addAttribute("todayAppointments", todayAppointments);
 
                     long totalDoctorAppointments = appointmentRepository.findAll().stream()
-                            .filter(a -> a.getDoctor() != null && a.getDoctor().getId() == doctor.getId())
+                            .filter(a -> a.getDoctor() != null && a.getDoctor().getId() == doctor.getId() && a.getStatus() == AppointmentStatus.PENDING)
                             .count();
                     model.addAttribute("newAppointments", totalDoctorAppointments);
                     
@@ -77,8 +83,9 @@ public class HomeController {
                     
                     model.addAttribute("doctorAvatar", optUser.get().getAvatar());
 
-                    // Add mock data for active treatments
-                    model.addAttribute("activeTreatments", 45); 
+                    model.addAttribute("rooms", roomService.getAllRooms());
+
+                    model.addAttribute("activeTreatments", medicalRecords.size()); 
                 }
                 model.addAttribute("CreateMedicalRecordRequest", createMedicalRecordRequest);
                 return "/Dashboard/DoctorDashboard";

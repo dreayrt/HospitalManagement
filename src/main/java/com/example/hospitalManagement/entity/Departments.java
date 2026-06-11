@@ -24,9 +24,6 @@ public class Departments {
     private LocalDateTime createAt;
 
     @OneToMany(mappedBy = "department")
-    private List<Room> rooms;
-
-    @OneToMany(mappedBy = "department")
     private List<Doctor> doctors;
 
     public long getId() {
@@ -67,14 +64,6 @@ public class Departments {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }
-
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
     }
 
     public List<Doctor> getDoctors() {

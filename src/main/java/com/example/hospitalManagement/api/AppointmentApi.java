@@ -39,61 +39,59 @@ public class AppointmentApi {
         return List.of(
                 Map.of("value", AppointmentStatus.PENDING.name(), "label", "Chờ xác nhận"),
                 Map.of("value", AppointmentStatus.CONFIRMED.name(), "label", "Đã xác nhận"),
-                Map.of("value", AppointmentStatus.IN_PROGRESS.name(), "label", "Đang khám"),
-                Map.of("value", AppointmentStatus.COMPLETED.name(), "label", "Hoàn thành"),
-                Map.of("value", AppointmentStatus.CANCELLED.name(), "label", "Đã hủy")
+                Map.of("value", AppointmentStatus.COMPLETED.name(), "label", "Hoàn thành")
         );
     }
 
-    @PostMapping
-    public ResponseEntity<?> createAppointment(@Valid @RequestBody CreateAppointmentRequestDTO request) {
-        try {
-            AppointmentDTO result = appointmentService.createAppointment(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<?> createAppointment(@Valid @RequestBody CreateAppointmentRequestDTO request) {
+//        try {
+//            AppointmentDTO result = appointmentService.createAppointment(request);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+//        }
+//    }
 
 
-    @PutMapping("/{id}/confirm")
-    public ResponseEntity<?> confirmAppointment(@PathVariable Long id) {
-        try {
-            AppointmentDTO result = appointmentService.confirmAppointment(id);
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
-    }
+//    @PutMapping("/{id}/confirm")
+//    public ResponseEntity<?> confirmAppointment(@PathVariable Long id) {
+//        try {
+//            AppointmentDTO result = appointmentService.confirmAppointment(id);
+//            return ResponseEntity.ok(result);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+//        }
+//    }
 
 
-    @PutMapping("/{id}/cancel")
-    public ResponseEntity<?> cancelAppointment(
-            @PathVariable Long id,
-            @RequestBody(required = false) Map<String, String> body) {
-        try {
-            String reason = (body != null) ? body.get("reason") : null;
-            AppointmentDTO result = appointmentService.cancelAppointment(id, reason);
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
-    }
+//    @PutMapping("/{id}/cancel")
+//    public ResponseEntity<?> cancelAppointment(
+//            @PathVariable Long id,
+//            @RequestBody(required = false) Map<String, String> body) {
+//        try {
+//            String reason = (body != null) ? body.get("reason") : null;
+//            AppointmentDTO result = appointmentService.cancelAppointment(id, reason);
+//            return ResponseEntity.ok(result);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+//        }
+//    }
 
 
-    @PutMapping("/{id}/reschedule")
-    public ResponseEntity<?> rescheduleAppointment(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> body) {
-        try {
-            LocalDate newDate = LocalDate.parse(body.get("newDate"));
-            LocalTime newTime = LocalTime.parse(body.get("newTime"));
-            AppointmentDTO result = appointmentService.rescheduleAppointment(id, newDate, newTime);
-            return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
-    }
+//    @PutMapping("/{id}/reschedule")
+//    public ResponseEntity<?> rescheduleAppointment(
+//            @PathVariable Long id,
+//            @RequestBody Map<String, String> body) {
+//        try {
+//            LocalDate newDate = LocalDate.parse(body.get("newDate"));
+//            LocalTime newTime = LocalTime.parse(body.get("newTime"));
+//            AppointmentDTO result = appointmentService.rescheduleAppointment(id, newDate, newTime);
+//            return ResponseEntity.ok(result);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+//        }
+//    }
 
 
     @GetMapping

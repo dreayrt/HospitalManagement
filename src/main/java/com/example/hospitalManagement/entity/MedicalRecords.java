@@ -1,11 +1,14 @@
 package com.example.hospitalManagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "medical_records")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class MedicalRecords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +29,11 @@ public class MedicalRecords {
     private Appointments appointment;
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
+    @JsonIgnore
     private Doctor doctor;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private Patient patient;
     @OneToOne(mappedBy = "medicalRecords")
     private Prescription prescription;

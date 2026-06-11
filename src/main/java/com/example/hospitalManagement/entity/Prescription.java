@@ -1,5 +1,7 @@
 package com.example.hospitalManagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import javax.print.Doc;
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +22,10 @@ public class Prescription {
     @JoinColumn(name = "medical_record_id")
     private MedicalRecords medicalRecords;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Doctor doctor;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Patient patient;
     @OneToMany(mappedBy = "prescription")
     private List<PrescriptionDetail> prescriptionDetail;

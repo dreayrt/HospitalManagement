@@ -157,6 +157,207 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        /* Animated Checkmark Modal */
+        .success-animation {
+            margin: 0 auto;
+            width: 80px;
+            height: 80px;
+        }
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2.5;
+            stroke: var(--success);
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px var(--success);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            position: relative;
+            margin: 0 auto;
+        }
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2.5;
+            stroke-miterlimit: 10;
+            stroke: var(--success);
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+        }
+        @keyframes fill {
+            100% { box-shadow: inset 0px 0px 0px 40px rgba(34, 197, 94, 0.1); }
+        }
+
+        /* Room Card Animations and Styles */
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .room-card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+        .room-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(37,99,235,0) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(37,99,235,0.12);
+            border-color: rgba(37,99,235,0.2);
+        }
+        .room-card:hover::before {
+            opacity: 1;
+        }
+
+        .room-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .room-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, #60a5fa 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+            animation: float 3s ease-in-out infinite;
+        }
+        .room-status {
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .status-available { background: rgba(34,197,94,0.15); color: var(--success); }
+        .status-occupied { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .status-maintenance { background: rgba(245,158,11,0.15); color: var(--warning); }
+
+        .room-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0 0 0.25rem 0;
+        }
+        .room-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .room-details {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .detail-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .detail-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .btn-add-patient {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: none;
+            background: var(--bg-body);
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-add-patient:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-add-patient i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-add-patient:hover i {
+            transform: rotate(90deg);
+        }
+        .btn-add-patient:disabled {
+            background: var(--bg-body);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-add-patient:disabled i {
+            transform: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Staggered animation for loading cards */
+        .room-card {
+            animation: slideUpFade 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 <style>
     /* Prescription Modal Styles */
@@ -373,13 +574,6 @@
                         <a href="#" class="sidebar-nav-link" data-section="rooms" data-tooltip="Danh sách phòng">
                             <span class="nav-icon"><i class="bi bi-door-open-fill"></i></span>
                             <span class="nav-label">Danh sách phòng</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="schedule" data-tooltip="Lịch làm hôm nay">
-                            <span class="nav-icon"><i class="bi bi-calendar-check-fill"></i></span>
-                            <span class="nav-label">Lịch làm hôm nay</span>
-                            <span class="nav-badge badge-danger" th:text="${todayAppointments ?: 0}">4</span>
                         </a>
                     </li>
                 </ul>
@@ -750,10 +944,6 @@
                                     <div class="quick-action-icon qa-red">
                                         <i class="bi bi-calendar-check"></i>
                                     </div>
-                                    <div>
-                                        <div class="quick-action-text">Lịch làm hôm nay</div>
-                                        <div class="quick-action-sub"><span th:text="${todayAppointments ?: 0}">4</span> ca trực còn lại</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -784,80 +974,26 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <tr th:each="mr, iterStat : ${medicalRecords}" th:if="${iterStat.index < 5}">
                                 <td>
                                     <div class="patient-cell">
-                                        <div class="patient-avatar bg-1">LA</div>
+                                        <div th:class="${'patient-avatar bg-' + (iterStat.index % 5 + 1)}" th:text="${mr.patient.user.fullName != null ? mr.patient.user.fullName.substring(0, 2).toUpperCase() : 'BN'}">LA</div>
                                         <div>
-                                            <div class="patient-name">Lê Văn Anh</div>
-                                            <div class="patient-id">Nam, 45 tuổi</div>
+                                            <div class="patient-name" th:text="${mr.patient.user.fullName}">Lê Văn Anh</div>
+                                            <div class="patient-id" th:text="${mr.patient.dateOfBirth != null ? 'Sinh năm: ' + mr.patient.dateOfBirth.year : ''}">Nam, 45 tuổi</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>BN-2024-001</td>
-                                <td>Tăng huyết áp vô căn</td>
-                                <td><span class="status-badge status-success">Đang điều trị</span></td>
-                                <td>Hôm nay, 08:30</td>
+                                <td th:text="${mr.patient.patientCode != null ? mr.patient.patientCode : 'BN-' + mr.patient.id}">BN-2024-001</td>
+                                <td th:text="${mr.diagnosis}">Tăng huyết áp vô căn</td>
+                                <td>
+                                    <span class="status-badge status-success" th:if="${mr.appointment != null and mr.appointment.status.name() == 'COMPLETED'}">Đã hoàn thành</span>
+                                    <span class="status-badge status-warning" th:unless="${mr.appointment != null and mr.appointment.status.name() == 'COMPLETED'}">Đang điều trị</span>
+                                </td>
+                                <td th:text="${#temporals.format(mr.createdAt, 'dd/MM/yyyy HH:mm')}">Hôm nay, 08:30</td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-2">TH</div>
-                                        <div>
-                                            <div class="patient-name">Trần Thị Hoa</div>
-                                            <div class="patient-id">Nữ, 62 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-042</td>
-                                <td>Suy tim độ 2</td>
-                                <td><span class="status-badge status-warning">Chờ tái khám</span></td>
-                                <td>20/05/2024</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-3">MQ</div>
-                                        <div>
-                                            <div class="patient-name">Nguyễn Minh Quân</div>
-                                            <div class="patient-id">Nam, 28 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-089</td>
-                                <td>Rối loạn nhịp tim</td>
-                                <td><span class="status-badge status-info">Khám mới</span></td>
-                                <td>Hôm qua, 14:15</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-4">PH</div>
-                                        <div>
-                                            <div class="patient-name">Phạm Hoàng Cường</div>
-                                            <div class="patient-id">Nam, 58 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-056</td>
-                                <td>Thiếu máu cơ tim</td>
-                                <td><span class="status-badge status-danger">Cần theo dõi</span></td>
-                                <td>19/05/2024</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-5">HN</div>
-                                        <div>
-                                            <div class="patient-name">Hoàng Ngọc Emm</div>
-                                            <div class="patient-id">Nữ, 34 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-071</td>
-                                <td>Van tim hở nhẹ</td>
-                                <td><span class="status-badge status-success">Xuất viện</span></td>
-                                <td>18/05/2024</td>
+                            <tr th:if="${#lists.isEmpty(medicalRecords)}">
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Không có bệnh nhân gần đây.</td>
                             </tr>
                             </tbody>
                         </table>
@@ -945,74 +1081,34 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td><span class="status-badge status-info" style="font-size:0.75rem;">BN-2024-001</span></td>
+                            <tr th:each="mr, iterStat : ${medicalRecords}">
+                                <td><span class="status-badge status-info" style="font-size:0.75rem;" th:text="${mr.patient.patientCode != null ? mr.patient.patientCode : 'BN-' + mr.patient.id}">BN-2024-001</span></td>
                                 <td>
                                     <div class="patient-cell">
-                                        <div class="patient-avatar bg-1">LA</div>
+                                        <div th:class="${'patient-avatar bg-' + (iterStat.index % 5 + 1)}" th:text="${mr.patient.user.fullName != null ? mr.patient.user.fullName.substring(0, 2).toUpperCase() : 'BN'}">LA</div>
                                         <div>
-                                            <div class="patient-name">Lê Văn Anh</div>
-                                            <div class="patient-id">Nam, 45 tuổi</div>
+                                            <div class="patient-name" th:text="${mr.patient.user.fullName}">Lê Văn Anh</div>
+                                            <div class="patient-id" th:text="${mr.patient.dateOfBirth != null ? 'Sinh năm: ' + mr.patient.dateOfBirth.year : ''}">Nam, 45 tuổi</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="patient-name">Tăng huyết áp vô căn</div>
-                                    <div class="patient-id">Đau đầu, chóng mặt nhẹ</div>
+                                    <div class="patient-name" th:text="${mr.diagnosis}">Tăng huyết áp vô căn</div>
+                                    <div class="patient-id" th:text="${mr.symptoms}">Đau đầu, chóng mặt nhẹ</div>
                                 </td>
-                                <td><span class="status-badge status-success">Đang điều trị</span></td>
-                                <td>Hôm nay, 08:30</td>
+                                <td>
+                                    <span class="status-badge status-success" th:if="${mr.appointment != null and mr.appointment.status.name() == 'COMPLETED'}">Đã hoàn thành</span>
+                                    <span class="status-badge status-warning" th:unless="${mr.appointment != null and mr.appointment.status.name() == 'COMPLETED'}">Đang điều trị</span>
+                                </td>
+                                <td th:text="${#temporals.format(mr.createdAt, 'dd/MM/yyyy HH:mm')}">Hôm nay, 08:30</td>
                                 <td style="text-align:right;">
                                     <button class="card-action-btn" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
                                     <button class="card-action-btn" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
                                     <button class="card-action-btn" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><span class="status-badge status-info" style="font-size:0.75rem;">BN-2024-042</span></td>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-2">TH</div>
-                                        <div>
-                                            <div class="patient-name">Trần Thị Hoa</div>
-                                            <div class="patient-id">Nữ, 62 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="patient-name">Suy tim độ 2</div>
-                                    <div class="patient-id">Khó thở khi gắng sức</div>
-                                </td>
-                                <td><span class="status-badge status-warning">Chờ tái khám</span></td>
-                                <td>20/05/2024</td>
-                                <td style="text-align:right;">
-                                    <button class="card-action-btn" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
-                                    <button class="card-action-btn" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
-                                    <button class="card-action-btn" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="status-badge status-info" style="font-size:0.75rem;">BN-2024-089</span></td>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-3">MQ</div>
-                                        <div>
-                                            <div class="patient-name">Nguyễn Minh Quân</div>
-                                            <div class="patient-id">Nam, 28 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="patient-name">Rối loạn nhịp tim</div>
-                                    <div class="patient-id">Hồi hộp, đánh trống ngực</div>
-                                </td>
-                                <td><span class="status-badge status-info">Khám mới</span></td>
-                                <td>Hôm qua, 14:15</td>
-                                <td style="text-align:right;">
-                                    <button class="card-action-btn" title="Xem chi tiết"><i class="bi bi-eye"></i></button>
-                                    <button class="card-action-btn" title="Chỉnh sửa"><i class="bi bi-pencil"></i></button>
-                                    <button class="card-action-btn" title="Lịch sử khám"><i class="bi bi-journal-medical"></i></button>
-                                </td>
+                            <tr th:if="${#lists.isEmpty(medicalRecords)}">
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">Không có dữ liệu hồ sơ bệnh án.</td>
                             </tr>
                             </tbody>
                         </table>
@@ -1116,30 +1212,54 @@
                         </div>
                     </div>
                 </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-card-body" style="text-align:center; padding: 3rem;">
-                        <i class="bi bi-door-open" style="font-size: 3.5rem; color: var(--primary); opacity: 0.6; display:block; margin-bottom: 1rem;"></i>
-                        <h3 style="color:var(--text-dark); font-weight:700;">Danh Sách Phòng</h3>
-                        <p style="color:var(--text-muted);">Giao diện quản lý phòng bệnh và giường bệnh.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== SECTION: LỊCH LÀM HÔM NAY ===== -->
-            <div class="content-section" id="section-schedule">
-                <div class="page-header">
-                    <div class="page-header-top">
-                        <div>
-                            <h1 class="page-title">Lịch Làm Hôm Nay 🗓️</h1>
-                            <p class="page-subtitle">Danh sách ca trực và lịch khám trong ngày.</p>
+                
+                <div class="room-grid">
+                    <!-- Iterating over rooms -->
+                    <div class="room-card" th:each="room, iterStat : ${rooms}" th:style="'animation-delay: ' + (${iterStat.index} * 0.1) + 's;'">
+                        <div class="room-card-header">
+                            <div class="room-icon-box">
+                                <i class="bi bi-door-open-fill"></i>
+                            </div>
+                            <span class="room-status" th:classappend="${room.roomStatus != null and room.roomStatus.name() == 'ACTIVE' ? 'status-available' : (room.roomStatus != null and room.roomStatus.name() == 'INACTIVE' ? 'status-occupied' : 'status-maintenance')}" th:text="${room.roomStatus != null and room.roomStatus.name() == 'ACTIVE' ? 'Trống' : (room.roomStatus != null and room.roomStatus.name() == 'INACTIVE' ? 'Đang sử dụng' : 'Bảo trì')}">
+                                Trống
+                            </span>
+                        </div>
+                        
+                        <h3 class="room-title" th:text="${room.roomName}">Phòng 201</h3>
+                        <p class="room-desc" th:text="${room.description != null ? room.description : 'Phòng bệnh tiêu chuẩn'}">Khoa Nội chung</p>
+                        
+                        <div class="room-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Số lượng BN</span>
+                                <span class="detail-value" th:text="${(room.roomStatus != null and (room.roomStatus.name() == 'ACTIVE' or room.roomStatus.name() == 'INACTIVE')) ? room.currentPatientCount + ' / ' + (room.maxCapacity != null ? room.maxCapacity : 1) : '-'}">0 / 1</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Giường</span>
+                                <span class="detail-value">1 Giường</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-add-patient" style="flex: 1;"
+                                    th:disabled="${room.roomStatus == null or room.roomStatus.name() != 'ACTIVE'}"
+                                    th:onclick="'openAddPatientToRoomModal(' + ${room.id} + ')'">
+                                <i class="bi bi-plus-circle-fill"></i> Thêm
+                            </button>
+                            <button class="btn-add-patient" style="flex: 1; background-color: var(--secondary-color); color: var(--text-dark); border: 1px solid var(--border-color);"
+                                    th:data-room-id="${room.id}"
+                                    th:data-room-name="${room.roomName}"
+                                    onclick="openRoomPatientsModal(this.getAttribute('data-room-id'), this.getAttribute('data-room-name'))">
+                                <i class="bi bi-people-fill"></i> Xem
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="dashboard-card">
-                    <div class="dashboard-card-body" style="text-align:center; padding: 3rem;">
-                        <i class="bi bi-calendar-check" style="font-size: 3.5rem; color: var(--primary); opacity: 0.6; display:block; margin-bottom: 1rem;"></i>
-                        <h3 style="color:var(--text-dark); font-weight:700;">Lịch Trình Hôm Nay</h3>
-                        <p style="color:var(--text-muted);">Danh sách ca trực và lịch khám của bác sĩ.</p>
+                    
+                    <div th:if="${#lists.isEmpty(rooms)}" class="dashboard-card" style="grid-column: 1 / -1;">
+                        <div class="dashboard-card-body" style="text-align:center; padding: 3rem;">
+                            <i class="bi bi-door-closed" style="font-size: 3.5rem; color: var(--text-muted); opacity: 0.6; display:block; margin-bottom: 1rem;"></i>
+                            <h3 style="color:var(--text-dark); font-weight:700;">Chưa có phòng nào</h3>
+                            <p style="color:var(--text-muted);">Hiện tại chưa có dữ liệu phòng trong hệ thống.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1229,30 +1349,167 @@
         </div>
     </form>
 </div>
-<div class="modal fade"
-     id="successModal">
 
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5>Thông báo</h5>
+<!-- Modal Thêm Bệnh Nhân Vào Phòng -->
+<div class="modal-overlay" id="addPatientToRoomModalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <div class="modal-header-left">
+                <div class="modal-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+                <div>
+                    <h4 class="modal-title">Thêm Bệnh Nhân Vào Phòng</h4>
+                    <p class="modal-subtitle">Chọn bệnh nhân đã hoàn thành khám để sắp xếp phòng</p>
+                </div>
             </div>
-
-            <div class="modal-body">
-                Tạo hồ sơ thành công
+            <button type="button" class="modal-close-btn" onclick="closeAddPatientToRoomModal()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- Grid list of completed patients -->
+            <div class="patient-grid-selection" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <th:block th:each="mr : ${medicalRecords}">
+                    <div class="patient-select-card" th:if="${mr.appointment != null and mr.appointment.status != null and mr.appointment.status.name() == 'COMPLETED'}" style="background: var(--bg-body); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'; this.style.boxShadow='var(--shadow-sm)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'; this.style.transform='translateY(0)';">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div th:class="${'patient-avatar bg-' + (mr.patient.id % 5 + 1)}" style="width: 45px; height: 45px; font-size: 1rem;" th:text="${mr.patient.user.fullName != null ? mr.patient.user.fullName.substring(0, 2).toUpperCase() : 'BN'}">BN</div>
+                            <div>
+                                <h6 style="margin: 0; font-weight: 700; color: var(--text-dark); font-size: 0.95rem;" th:text="${mr.patient.user.fullName}">Tên bệnh nhân</h6>
+                                <p style="margin: 0.2rem 0 0 0; font-size: 0.78rem; color: var(--text-muted);" th:text="${'Mã BN: ' + (mr.patient.patientCode != null ? mr.patient.patientCode : 'BN-' + mr.patient.id)}">Mã BN</p>
+                                <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--success); font-weight: 600;">
+                                    <i class="bi bi-check-circle-fill"></i> Đã hoàn thành khám
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary" style="border-radius: 50px; font-weight: 600; padding: 0.4rem 1.25rem; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);" th:onclick="'assignPatientToRoom(' + ${mr.patient.id} + ')'">
+                            Chọn
+                        </button>
+                    </div>
+                </th:block>
+                <!-- Add empty state if no completed patient -->
+                <div th:if="${medicalRecords == null or #lists.isEmpty(medicalRecords.?[appointment != null and appointment.status != null and appointment.status.name() == 'COMPLETED'])}" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted); background: var(--bg-body); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+                    <i class="bi bi-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.5; color: var(--accent);"></i>
+                    <h5 style="color: var(--text-dark); font-weight: 600;">Không có bệnh nhân</h5>
+                    <p style="margin: 0;">Hiện tại không có bệnh nhân nào ở trạng thái hoàn thành khám.</p>
+                </div>
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-success"
-                        data-bs-dismiss="modal">
-                    OK
-                </button>
-            </div>
-
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-btn modal-btn-cancel" onclick="closeAddPatientToRoomModal()">Đóng</button>
         </div>
     </div>
+</div>
 
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="modal-body text-center" style="padding: 3.5rem 2rem;">
+                
+                <!-- Animated Checkmark -->
+                <div class="success-animation" style="margin-bottom: 1.5rem;">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+                
+                <h4 style="color: var(--text-dark); font-weight: 700; margin-bottom: 0.75rem; font-size: 1.5rem;">Thành Công!</h4>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem;">Hồ sơ bệnh án đã được tạo và lưu trữ an toàn.</p>
+                
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="padding: 0.75rem 2.5rem; border-radius: 50px; font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);">
+                    <i class="bi bi-check2-circle me-2"></i>Tiếp Tục
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addPatientSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="modal-body text-center" style="padding: 3.5rem 2rem;">
+                
+                <!-- Animated Checkmark -->
+                <div class="success-animation" style="margin-bottom: 1.5rem;">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+                
+                <h4 style="color: var(--text-dark); font-weight: 700; margin-bottom: 0.75rem; font-size: 1.5rem;">Thành Công!</h4>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem;">Bệnh nhân đã được sắp xếp vào phòng thành công.</p>
+                
+                <button type="button" class="btn btn-primary" onclick="location.reload()" style="padding: 0.75rem 2.5rem; border-radius: 50px; font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);">
+                    <i class="bi bi-check2-circle me-2"></i>Đồng ý
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addPatientErrorModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="modal-body text-center" style="padding: 3.5rem 2rem;">
+                
+                <!-- Error Icon -->
+                <div style="margin-bottom: 1.5rem; color: #dc3545;">
+                    <i class="bi bi-x-circle" style="font-size: 5rem; text-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);"></i>
+                </div>
+                
+                <h4 style="color: var(--text-dark); font-weight: 700; margin-bottom: 0.75rem; font-size: 1.5rem;">Thất Bại!</h4>
+                <p id="addPatientErrorMessage" style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem;">Phòng đã hết giường trống hoặc có lỗi xảy ra.</p>
+                
+                <button type="button" class="btn btn-danger" onclick="location.reload()" style="padding: 0.75rem 2.5rem; border-radius: 50px; font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);">
+                    <i class="bi bi-x-circle me-2"></i>Đóng
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Room Patients Modal -->
+<div class="modal fade" id="roomPatientsModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border: none; border-radius: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="modal-header" style="background: var(--surface-light); border-bottom: 1px solid var(--border-color); padding: 1.5rem 2rem;">
+                <h5 class="modal-title" style="color: var(--text-dark); font-weight: 700;">
+                    <i class="bi bi-people-fill text-primary me-2"></i>Danh Sách Bệnh Nhân - <span id="roomPatientsModalTitle"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div id="roomPatientsLoading" class="text-center my-4 d-none">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-muted">Đang tải dữ liệu...</p>
+                </div>
+                <div id="roomPatientsContent">
+                    <table class="table table-hover align-middle">
+                        <thead style="background: var(--surface-light);">
+                            <tr>
+                                <th>Mã BN</th>
+                                <th>Họ Tên</th>
+                                <th>Thời gian vào</th>
+                                <th class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomPatientsTableBody">
+                            <!-- Dữ liệu sẽ được render bằng JS -->
+                        </tbody>
+                    </table>
+                    <div id="roomPatientsEmpty" class="text-center my-4 d-none">
+                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                        <p class="mt-2 text-muted">Phòng hiện tại chưa có bệnh nhân nào.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1720,6 +1977,120 @@
             }
         });
     }
+
+    // Modal Thêm Bệnh Nhân Vào Phòng
+
+    window.currentSelectedRoomId = null;
+
+    window.openAddPatientToRoomModal = function(roomId) {
+        window.currentSelectedRoomId = roomId;
+        var modalOverlay = document.getElementById('addPatientToRoomModalOverlay');
+        if (modalOverlay) {
+            modalOverlay.classList.add('active');
+        }
+    };
+
+    window.closeAddPatientToRoomModal = function() {
+        window.currentSelectedRoomId = null;
+        var modalOverlay = document.getElementById('addPatientToRoomModalOverlay');
+        if (modalOverlay) {
+            modalOverlay.classList.remove('active');
+        }
+    };
+
+    window.assignPatientToRoom =async function(patientId) {
+        if (!window.currentSelectedRoomId) return;
+        try{
+            const response= await fetch('/api/patientRoom',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    roomId:window.currentSelectedRoomId,
+                    patientId:patientId
+                })
+            });
+            const result= await response.text();
+            if(!response.ok){
+                console.log(result);
+                document.getElementById('addPatientErrorMessage').innerText = result || "Phòng đã đầy hoặc có lỗi xảy ra.";
+                closeAddPatientToRoomModal();
+                var errorModal = new bootstrap.Modal(document.getElementById('addPatientErrorModal'));
+                errorModal.show();
+            } else {
+                closeAddPatientToRoomModal();
+                var successModal = new bootstrap.Modal(document.getElementById('addPatientSuccessModal'));
+                successModal.show();
+            }
+        }catch (e){
+            console.log(e)
+        }
+    };
+    window.openRoomPatientsModal = async function(roomId, roomName) {
+        document.getElementById('roomPatientsModalTitle').innerText = roomName;
+        document.getElementById('roomPatientsTableBody').innerHTML = '';
+        document.getElementById('roomPatientsEmpty').classList.add('d-none');
+        document.getElementById('roomPatientsLoading').classList.remove('d-none');
+        
+        var modal = new bootstrap.Modal(document.getElementById('roomPatientsModal'));
+        modal.show();
+
+        try {
+            const response = await fetch('/api/patientRoom/' + roomId + '/patients');
+            const patients = await response.json();
+            
+            document.getElementById('roomPatientsLoading').classList.add('d-none');
+            
+            if (patients && patients.length > 0) {
+                let html = '';
+                patients.forEach(p => {
+                    let date = new Date(p.checkInTime);
+                    let formattedDate = date.toLocaleString('vi-VN');
+                    html += `
+                        <tr>
+                            <td><strong>${p.patientCode}</strong></td>
+                            <td>${p.fullName}</td>
+                            <td>${formattedDate}</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-danger" onclick="dischargePatient(${roomId}, ${p.patientId})" style="border-radius: 20px;">
+                                    <i class="bi bi-box-arrow-right"></i> Xuất viện
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('roomPatientsTableBody').innerHTML = html;
+            } else {
+                document.getElementById('roomPatientsEmpty').classList.remove('d-none');
+            }
+        } catch (e) {
+            console.error(e);
+            document.getElementById('roomPatientsLoading').classList.add('d-none');
+        }
+    };
+
+    window.dischargePatient = async function(roomId, patientId) {
+        try {
+            const response = await fetch('/api/patientRoom/' + roomId + '/discharge/' + patientId, {
+                method: 'PUT'
+            });
+            const result = await response.text();
+            
+            if (!response.ok) {
+                alert(result || "Đã xảy ra lỗi khi xuất viện.");
+            } else {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('roomPatientsModal'));
+                if (modal) modal.hide();
+                
+                location.reload();
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Lỗi kết nối.");
+        }
+    };
+
 /*]]>*/
 </script>
 </body>

@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "patients")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +40,9 @@ public class Patient {
     private List<MedicalRecords> medicalRecords;
     @OneToMany(mappedBy = "patient")
     private List<Prescription> prescription;
+
+    @OneToMany(mappedBy = "patient")
+    private List<RoomPatient> roomPatients;
 
 
     public long getId() {
@@ -133,5 +139,13 @@ public class Patient {
 
     public void setPrescription(List<Prescription> prescription) {
         this.prescription = prescription;
+    }
+
+    public List<RoomPatient> getRoomPatients() {
+        return roomPatients;
+    }
+
+    public void setRoomPatients(List<RoomPatient> roomPatients) {
+        this.roomPatients = roomPatients;
     }
 }
