@@ -46,7 +46,7 @@ public class ChuyenKhoaController {
 
         // Gán thêm slug cho mỗi khoa để dùng trong link href
         model.addAttribute("departments", departments);
-        return "pages/chuyen_khoa";
+        return "Specialty";
     }
 
     @GetMapping("/chuyen-khoa/{slug}")
@@ -102,7 +102,7 @@ public class ChuyenKhoaController {
             model.addAttribute("intro", specialty[2]);
             model.addAttribute("description", specialty[3]);
             model.addAttribute("strength", specialty[4]);
-            return "pages/chi_tiet_chuyen_khoa";
+            return "SpecialistDetails";
         }
 
         // Thử tìm theo id nếu slug là số

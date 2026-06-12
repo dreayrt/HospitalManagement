@@ -13,7 +13,7 @@ public class HoTroController {
 
     @GetMapping("/ho-tro")
     public String hoTro() {
-        return "pages/ho_tro";
+        return "Support";
     }
 
     @GetMapping("/ho-tro/chi-tiet")
@@ -95,6 +95,6 @@ public class HoTroController {
         model.addAttribute("description", item[2]);
         model.addAttribute("toc", item[3].split("\\|"));
 
-        return "pages/chi_tiet_ho_tro";
+        return "SupportDetails";
     }
 }

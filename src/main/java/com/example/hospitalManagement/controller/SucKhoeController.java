@@ -34,6 +34,6 @@ public class SucKhoeController {
             model.addAttribute("content", "Nội dung đang được cập nhật.");
         }
 
-        return "pages/chi_tiet_suc_khoe";
+        return "HealthDetails";
     }
 }

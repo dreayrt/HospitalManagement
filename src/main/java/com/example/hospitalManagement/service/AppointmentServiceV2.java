@@ -8,6 +8,8 @@ import com.example.hospitalManagement.entity.Patient;
 import com.example.hospitalManagement.repository.AppointmentRepository;
 import com.example.hospitalManagement.repository.DoctorRepository;
 import com.example.hospitalManagement.repository.PatientRepository;
+import com.example.hospitalManagement.kafka.producer.NotificationProducer;
+import com.example.hospitalManagement.dto.AppointmentNotificationMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ public class AppointmentServiceV2 {
     private RedisService redisService;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private NotificationProducer notificationProducer;
 
     public Appointments createAppointment(AppointmentRequest request){
         Long patientId = null;
@@ -103,6 +107,23 @@ public class AppointmentServiceV2 {
         appointments.setStatus(com.example.hospitalManagement.entity.Enum.AppointmentStatus.PENDING);
         appointments.setCreatedAt(LocalDateTime.now());
         appointmentRepository.save(appointments);
+
+        try {
+            String patientEmail = (finalPatient != null && finalPatient.getUser() != null) ? finalPatient.getUser().getEmail() : request.getEmail();
+            if (patientEmail != null && !patientEmail.isEmpty()) {
+                AppointmentNotificationMessage message = new AppointmentNotificationMessage(
+                        request.getFullname(),
+                        patientEmail,
+                        request.getBacSi() != null ? request.getBacSi() : "Bác sĩ",
+                        request.getDate(),
+                        request.getTime(),
+                        fullReason
+                );
+                notificationProducer.sendAppointment(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return appointments;
     }

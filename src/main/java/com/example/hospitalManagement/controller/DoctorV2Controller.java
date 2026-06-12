@@ -1,7 +1,6 @@
 package com.example.hospitalManagement.controller;
 
 import com.example.hospitalManagement.entity.Doctor;
-import com.example.hospitalManagement.service.DoctorService;
 import com.example.hospitalManagement.service.DoctorServiceV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ public class DoctorV2Controller {
         List<Doctor> doctors = doctorServiceV2.getAllDoctors();
         model.addAttribute("doctors", doctors);
         model.addAttribute("departments", departmentService.getListDepartments());
-        return "pages/bac_si";
+        return "doctor";
     }
 
     @GetMapping("/ho-so-bac-si/{id}")
@@ -33,6 +32,6 @@ public class DoctorV2Controller {
         }
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointmentRequest", new com.example.hospitalManagement.dto.AppointmentRequest());
-        return "pages/ho_so_bac_si";
+        return "DoctorProfile";
     }
 }
