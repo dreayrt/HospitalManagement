@@ -3,7 +3,7 @@ package com.example.hospitalManagement.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +16,8 @@ public class HoTroController {
         return "pages/ho_tro";
     }
 
-    @GetMapping("/ho-tro/{slug}")
-    public String chiTietHoTro(@PathVariable String slug, Model model) {
+    @GetMapping("/ho-tro/chi-tiet")
+    public String chiTietHoTro(@RequestParam("id") String slug, Model model) {
 
         Map<String, String[]> data = new HashMap<>();
 

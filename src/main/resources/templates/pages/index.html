@@ -437,10 +437,17 @@
         .footer-logo span{color:#00a6ff}
         .footer-top p{font-size:17px;color:#0b3760;margin-top:8px}
         .social{display:flex;gap:14px;margin-top:20px}
-        .social span{width:40px;height:40px;border-radius:50%;background:#0a6fb7;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold}
-        .social span:nth-child(2){background:red}
-        .social span:nth-child(3){background:white;color:#0a6fb7}
-        .social span:nth-child(4){background:black}
+        .social a{width:40px;height:40px;border-radius:50%;background:#0a6fb7;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;text-decoration:none}
+        .social a:nth-child(2){background:red}
+        .social a:nth-child(3){background:white;color:#0a6fb7}
+        .social a:nth-child(4){background:black}
+        .social a svg{width:20px;height:20px;fill:white}
+        .social a:nth-child(3) svg{fill:#0a6fb7}
+        .facility-icon-wrapper{display:flex;gap:10px;margin-top:15px}
+        .facility-icon-btn{width:35px;height:35px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:0.3s}
+        .facility-icon-btn:hover{background:#0a6fb7}
+        .facility-icon-btn svg{width:18px;height:18px;fill:#0a6fb7;transition:0.3s}
+        .facility-icon-btn:hover svg{fill:white}
         .store{display:flex;gap:12px;margin-top:18px}
         .store button{background:black;color:white;border:none;border-radius:6px;padding:12px 22px;font-weight:bold;font-size:16px}
         .footer-wrap hr{border:none;height:1px;background:#d1edf8}
@@ -557,43 +564,139 @@
             font-weight:bold;
         }
 
-        .feature-box{
-            background:white;
-            border-radius:15px;
-            padding:40px;
-            display:flex;
-            gap:40px;
-            align-items:center;
+        /* REDESIGNED FEATURE TABS */
+        .feature-tabs-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(10,111,183,0.08);
+            display: flex;
+            overflow: hidden;
+            border: 1px solid rgba(10,111,183,0.05);
+            margin-top: 30px;
         }
-
-        .feature-text{
-            flex:1;
+        .feature-tabs-menu {
+            width: 35%;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
         }
-
-        .feature-text h3{
-            color:#0a6fb7;
-            font-size:45px;
-            margin-bottom:20px;
+        .f-tab {
+            padding: 35px 40px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.4s;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
         }
-
-        .feature-text p{
-            font-size:22px;
-            line-height:1.8;
+        .f-tab:last-child {
+            border-bottom: none;
         }
-
-        .feature-text h4{
-            color:#0a6fb7;
-            margin:25px 0;
-            font-size:30px;
+        .f-tab.active {
+            color: #0a6fb7;
+            background: white;
         }
-
-        .feature-image{
-            flex:1;
+        .f-tab.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 6px;
+            background: #0a6fb7;
+            box-shadow: 2px 0 10px rgba(10,111,183,0.3);
         }
-
-        .feature-image img{
-            width:100%;
-            border-radius:15px;
+        .f-tab:hover:not(.active) {
+            background: #f1f5f9;
+            color: #334155;
+            padding-left: 45px;
+        }
+        
+        .feature-tabs-content {
+            width: 65%;
+            position: relative;
+            background: white;
+            min-height: 480px;
+        }
+        .f-pane {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(30px);
+        }
+        .f-pane.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .f-pane-text {
+            flex: 1.1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .f-pane-text h3 {
+            color: #0a6fb7;
+            font-size: 40px;
+            margin-bottom: 25px;
+            animation: fadeLeft 0.5s ease forwards;
+        }
+        .f-pane-text p {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #334155;
+            margin-bottom: 35px;
+            animation: fadeLeft 0.7s ease forwards;
+        }
+        .f-btn {
+            align-self: flex-start;
+            background: #0a6fb7;
+            color: white;
+            padding: 15px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeUp 0.9s ease forwards;
+        }
+        .f-btn:hover {
+            background: #005fa8;
+            box-shadow: 0 10px 20px rgba(10,111,183,0.2);
+            transform: translateY(-3px);
+        }
+        .f-pane-img {
+            flex: 0.9;
+            padding: 30px 30px 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .f-pane-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            animation: zoomIn 0.6s ease forwards;
+        }
+        @media(max-width: 900px) {
+            .feature-tabs-container { flex-direction: column; }
+            .feature-tabs-menu { width: 100%; flex-direction: row; overflow-x: auto; }
+            .f-tab { padding: 20px; font-size: 18px; white-space: nowrap; border-bottom: none; border-right: 1px solid #e2e8f0; }
+            .f-tab.active::before { width: 100%; height: 4px; top: auto; bottom: 0; left: 0; }
+            .feature-tabs-content { width: 100%; min-height: 600px; }
+            .f-pane { flex-direction: column; }
+            .f-pane-text { padding: 30px; }
+            .f-pane-img { padding: 0 30px 30px 30px; }
         }
 
         /* ===== USER PROFILE DROPDOWN ===== */
@@ -983,19 +1086,6 @@
     </div>
 </section>
 
-<section class="health reveal fade-up">
-    <div style="flex:1">
-        <h2>Tìm kiếm thông tin sức khỏe</h2>
-        <div class="search">
-            <input id="healthSearch" placeholder="Nhập thông tin cần tìm...">
-            <button onclick="searchHealth()"><svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
-        </div>
-
-        <div id="searchResult" class="search-result"></div>
-        <div id="healthDetail" class="health-detail"></div>
-    </div>
-</section>
-
 <section class="service">
     <h1 class="reveal fade-up">Bạn cần khám chữa bệnh</h1>
 
@@ -1049,54 +1139,102 @@
         <div class="stats stagger-container">
 
             <div class="stat-box reveal zoom-in">
-                <h3 class="count-up" data-target="2.7" data-decimals="1" data-suffix=" triệu +">0</h3>
+                <h3 class="count-up" data-target="2.7" data-decimals="1" data-suffix=" triệu +">250.000</h3>
                 <p>Lượt khám bệnh / năm</p>
             </div>
 
             <div class="stat-box reveal zoom-in">
-                <h3 class="count-up" data-target="120000" data-suffix=" +">0</h3>
+                <h3 class="count-up" data-target="120000" data-suffix=" +">150.000</h3>
                 <p>Lượt điều trị nội trú / năm</p>
             </div>
 
             <div class="stat-box reveal zoom-in">
-                <h3 class="count-up" data-target="44000" data-suffix=" +">0</h3>
+                <h3 class="count-up" data-target="44000" data-suffix=" +">350.000</h3>
                 <p>Ca phẫu thuật / năm</p>
             </div>
 
         </div>
 
-        <div class="feature-box">
-
-            <div class="feature-text reveal fade-left">
-
-                <h3>Tiên phong</h3>
-
-                <p>
-                    Không ngừng phát triển và ứng dụng các kỹ thuật tiên tiến
-                    vào điều trị, đào tạo và nghiên cứu khoa học,
-                    giúp người bệnh tiếp cận các phương pháp điều trị mới,
-                    hiệu quả và an toàn hơn.
-                </p>
-
-                <a href="#">Tìm hiểu thêm</a>
-
-                <hr>
-
-                <h4>Thấu hiểu</h4>
-                <hr>
-
-                <h4>Chuẩn mực</h4>
-                <hr>
-
-                <h4>An toàn</h4>
-
+        <div class="feature-tabs-container reveal fade-up">
+            <div class="feature-tabs-menu">
+                <div class="f-tab active" data-tab="tp">Tiên phong</div>
+                <div class="f-tab" data-tab="th">Thấu hiểu</div>
+                <div class="f-tab" data-tab="cm">Chuẩn mực</div>
+                <div class="f-tab" data-tab="at">An toàn</div>
             </div>
-
-             <div class="feature-image reveal fade-right">
-                 <img src="/images/phau-thuat.png" alt="Phẫu thuật hiện đại chuyên nghiệp tại MediCore Health">
-             </div>
-
+            
+            <div class="feature-tabs-content">
+                <!-- Tiên Phong -->
+                <div class="f-pane active" id="tab-tp">
+                    <div class="f-pane-text">
+                        <h3>Tiên phong trong y học</h3>
+                        <p>Không ngừng phát triển và ứng dụng các kỹ thuật tiên tiến vào điều trị, đào tạo và nghiên cứu khoa học, giúp người bệnh tiếp cận các phương pháp điều trị mới, hiệu quả và an toàn hơn.</p>
+                        <a href="#" class="f-btn shimmer-btn">Tìm hiểu thêm <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                    <div class="f-pane-img">
+                        <img src="/images/phau-thuat.png" alt="Tiên phong">
+                    </div>
+                </div>
+                <!-- Thấu Hiểu -->
+                <div class="f-pane" id="tab-th">
+                    <div class="f-pane-text">
+                        <h3>Thấu hiểu nỗi đau</h3>
+                        <p>Lắng nghe và đồng cảm với nỗi đau của người bệnh. Chúng tôi cam kết mang đến sự chăm sóc ân cần, chu đáo và tinh tế nhất như đối với chính người thân trong gia đình.</p>
+                        <a href="#" class="f-btn shimmer-btn">Tìm hiểu thêm <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                    <div class="f-pane-img">
+                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80" alt="Thấu hiểu">
+                    </div>
+                </div>
+                <!-- Chuẩn Mực -->
+                <div class="f-pane" id="tab-cm">
+                    <div class="f-pane-text">
+                        <h3>Chuẩn mực quốc tế</h3>
+                        <p>Tuân thủ nghiêm ngặt các quy định y tế chuẩn quốc tế, đảm bảo tính chính xác cao nhất trong chẩn đoán và phác đồ điều trị, mang lại hiệu quả phục hồi tối ưu.</p>
+                        <a href="#" class="f-btn shimmer-btn">Tìm hiểu thêm <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                    <div class="f-pane-img">
+                        <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=800&q=80" alt="Chuẩn mực">
+                    </div>
+                </div>
+                <!-- An Toàn -->
+                <div class="f-pane" id="tab-at">
+                    <div class="f-pane-text">
+                        <h3>An toàn tuyệt đối</h3>
+                        <p>Đặt sự an toàn của người bệnh lên hàng đầu với hệ thống kiểm soát nhiễm khuẩn vô trùng, trang thiết bị hiện đại và quy trình phẫu thuật khép kín.</p>
+                        <a href="#" class="f-btn shimmer-btn">Tìm hiểu thêm <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    </div>
+                    <div class="f-pane-img">
+                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80" alt="An toàn">
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabs = document.querySelectorAll('.f-tab');
+                const panes = document.querySelectorAll('.f-pane');
+                
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        panes.forEach(p => p.classList.remove('active'));
+                        
+                        tab.classList.add('active');
+                        
+                        const targetId = 'tab-' + tab.getAttribute('data-tab');
+                        const targetPane = document.getElementById(targetId);
+                        
+                        // Xóa class active rồi thêm lại sau một khoảng thời gian cực ngắn 
+                        // để kích hoạt lại các CSS animation
+                        setTimeout(() => {
+                            targetPane.classList.add('active');
+                        }, 50);
+                    });
+                });
+            });
+        </script>
 
     </div>
 </section>
@@ -1383,7 +1521,6 @@
                 document.getElementById("email").value = data.email || '';
 
                 document.getElementById("fullname").readOnly = true;
-                document.getElementById("soDienThoai").readOnly = true;
                 document.getElementById("email").readOnly = true;
             }
         }catch (error) {

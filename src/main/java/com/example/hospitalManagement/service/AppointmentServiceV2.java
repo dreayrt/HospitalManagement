@@ -24,24 +24,82 @@ public class AppointmentServiceV2 {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
+    private com.example.hospitalManagement.repository.UserRepository userRepository;
+    @Autowired
     private RedisService redisService;
     @Autowired
     private ObjectMapper objectMapper;
 
     public Appointments createAppointment(AppointmentRequest request){
-        long patientId=patientRepository.findIdByUserFullName(request.getFullname());
-        long doctorId=doctorRepository.findIdByUserFullName(request.getBacSi());
+        Long patientId = null;
+        
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            String username = auth.getName();
+            com.example.hospitalManagement.entity.User loggedInUser = userRepository.findByUserName(username).orElse(null);
+            
+            if (loggedInUser != null) {
+                if (loggedInUser.getPatient() != null) {
+                    patientId = loggedInUser.getPatient().getId();
+                } else {
+                    Patient newPatient = new Patient();
+                    newPatient.setUser(loggedInUser);
+                    newPatient.setCreatedAt(java.time.LocalDate.now());
+                    newPatient.setPatientCode("PAT-" + System.currentTimeMillis());
+                    patientRepository.save(newPatient);
+                    patientId = newPatient.getId();
+                }
+            }
+        }
+        
+        if (patientId == null && request.getFullname() != null && !request.getFullname().trim().isEmpty()) {
+            patientId = patientRepository.findIdByUserFullName(request.getFullname().trim());
+        }
+        
+        if (patientId == null) {
+            com.example.hospitalManagement.entity.User guestUser = new com.example.hospitalManagement.entity.User();
+            guestUser.setFullName(request.getFullname());
+            guestUser.setPhone(request.getSoDienThoai());
+            guestUser.setEmail(request.getEmail());
+            guestUser.setUserName("guest_" + System.currentTimeMillis());
+            guestUser.setPassword("guest");
+            guestUser.setStatus(com.example.hospitalManagement.entity.Enum.UserStatus.ACTIVE);
+            guestUser.setCreatedAt(LocalDateTime.now());
+            userRepository.save(guestUser);
+
+            Patient guestPatient = new Patient();
+            guestPatient.setUser(guestUser);
+            guestPatient.setCreatedAt(java.time.LocalDate.now());
+            guestPatient.setPatientCode("GUEST-" + System.currentTimeMillis());
+            patientRepository.save(guestPatient);
+
+            patientId = guestPatient.getId();
+        }
+
+        Long doctorId = null;
+        if (request.getBacSi() != null && !request.getBacSi().trim().isEmpty()) {
+            doctorId = doctorRepository.findIdByUserFullName(request.getBacSi().trim());
+        }
 
         Appointments appointments = new Appointments();
         appointments.setAppointmentDate(request.getDate());
         appointments.setAppointmentTime(request.getTime());
 
-        Doctor doctor = doctorRepository.getReferenceById(doctorId);
-        Patient patient = patientRepository.getReferenceById(patientId);
+        if (doctorId != null) {
+            Doctor doctor = doctorRepository.findById(doctorId).orElse(null);
+            appointments.setDoctor(doctor);
+        }
+        
+        Patient finalPatient = patientRepository.findById(patientId).orElse(null);
+        appointments.setPatient(finalPatient);
 
-        appointments.setDoctor(doctor);
-        appointments.setPatient(patient);
-        appointments.setReason(request.getReason());
+        // Add the guest info into reason so it's not lost if patient is null
+        String fullReason = request.getReason();
+        if (patientId == null) {
+            fullReason = "Khách: " + request.getFullname() + " - SĐT: " + request.getSoDienThoai() + " - " + fullReason;
+        }
+
+        appointments.setReason(fullReason);
         appointments.setStatus(com.example.hospitalManagement.entity.Enum.AppointmentStatus.PENDING);
         appointments.setCreatedAt(LocalDateTime.now());
         appointmentRepository.save(appointments);

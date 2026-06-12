@@ -2,17 +2,12 @@ package com.example.hospitalManagement.service;
 
 import com.example.hospitalManagement.dto.AppointmentDTO;
 import com.example.hospitalManagement.dto.AppointmentFilterRequestDTO;
-import com.example.hospitalManagement.dto.CreateAppointmentRequestDTO;
 import com.example.hospitalManagement.entity.Appointments;
-import com.example.hospitalManagement.entity.Doctor;
-import com.example.hospitalManagement.entity.Enum.AppointmentStatus;
-import com.example.hospitalManagement.entity.Patient;
-import com.example.hospitalManagement.entity.User;
 import com.example.hospitalManagement.kafka.producer.NotificationProducer;
 import com.example.hospitalManagement.mapper.AppointmentMapper;
 import com.example.hospitalManagement.repository.AppointmentRepository;
 import com.example.hospitalManagement.repository.DoctorRepository;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,10 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,17 +39,10 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    @Autowired
-    private DoctorRepository doctorRepository;
-
-    @Autowired
-    private userRepository userRepo;
 
     @Autowired
     private AppointmentMapper appointmentMapper;
 
-    @Autowired
-    private NotificationProducer notificationProducer;
 
     
     @Autowired
@@ -127,181 +113,6 @@ public class AppointmentService {
             }
         } catch (Exception ignored) {}
     }
-
-//    @Transactional
-//    public AppointmentDTO createAppointment(CreateAppointmentRequestDTO request) {
-//        Doctor doctor = doctorRepository.findById(request.getDoctorId())
-//                .orElseThrow(() -> new RuntimeException(
-//                        "Không tìm thấy bác sĩ với ID: " + request.getDoctorId()));
-//        boolean isConflict = appointmentRepository
-//                .existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(
-//                        request.getDoctorId(),
-//                        request.getAppointmentDate(),
-//                        request.getAppointmentTime(),
-//                        AppointmentStatus.CANCELLED
-//                );
-//        if (isConflict) {
-//            throw new RuntimeException("Bác sĩ đã có lịch khám vào ngày "
-//                    + request.getAppointmentDate() + " lúc " + request.getAppointmentTime()
-//                    + ". Vui lòng chọn khung giờ khác.");
-//        }
-//        Appointments appointment = new Appointments();
-//        appointment.setAppointmentDate(request.getAppointmentDate());
-//        appointment.setAppointmentTime(request.getAppointmentTime());
-//        appointment.setReason(request.getReason());
-//        appointment.setStatus(AppointmentStatus.PENDING);
-//        appointment.setCreatedAt(LocalDateTime.now());
-//        appointment.setDoctor(doctor);
-//
-//        Patient patient = new Patient();
-//        patient.setId(request.getPatientId());
-//        appointment.setPatient(patient);
-//
-//        if (request.getCreatedById() != null) {
-//            User createdBy = new User();
-//            createdBy.setId(request.getCreatedById());
-//        }
-//
-//        Appointments saved = appointmentRepository.save(appointment);
-//
-//
-//        try {
-//            String doctorName = (doctor.getUser() != null) ? doctor.getUser().getFullName() : "Bác sĩ";
-//            String msg = String.format(
-//                    "{\"type\":\"APPOINTMENT_BOOKED\",\"appointmentId\":%d,\"doctorName\":\"%s\",\"date\":\"%s\",\"time\":\"%s\"}",
-//                    saved.getId(), doctorName,
-//                    request.getAppointmentDate(),
-//                    request.getAppointmentTime()
-//            );
-//            notificationProducer.sendAppointment(msg);
-//        } catch (Exception ignored) {}
-//
-//        AppointmentDTO result = appointmentMapper.toDTO(saved);
-//
-//
-//        String json = toJson(result);
-//        if (json != null) {
-//            redisService.save(KEY_APPT + saved.getId(), json, CACHE_TTL);
-//        }
-//
-//
-//        evictAppointmentCache(saved.getId(), request.getDoctorId());
-//
-//        return result;
-//    }
-//    @Transactional
-//    public AppointmentDTO confirmAppointment(Long appointmentId) {
-//        Appointments appointment = appointmentRepository.findById(appointmentId)
-//                .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám ID: " + appointmentId));
-//
-//        if (appointment.getStatus() != AppointmentStatus.PENDING) {
-//            throw new RuntimeException("Chỉ có thể xác nhận lịch khám ở trạng thái PENDING. Trạng thái hiện tại: "
-//                    + appointment.getStatus());
-//        }
-//
-//        appointment.setStatus(AppointmentStatus.CONFIRMED);
-//        Appointments updated = appointmentRepository.save(appointment);
-//        AppointmentDTO result = appointmentMapper.toDTO(updated);
-//
-//
-//        Long doctorId = updated.getDoctor() != null ? updated.getDoctor().getId() : null;
-//        evictAppointmentCache(appointmentId, doctorId);
-//        String json = toJson(result);
-//        if (json != null) redisService.save(KEY_APPT + appointmentId, json, CACHE_TTL);
-//
-//        return result;
-//    }
-//    @Transactional
-//    public AppointmentDTO cancelAppointment(Long appointmentId, String cancelReason) {
-//
-//        Long doctorId = null;
-//
-//        Appointments appointment = appointmentRepository.findById(appointmentId)
-//                .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám ID: " + appointmentId));
-//
-//        if (appointment.getDoctor() != null) {
-//            doctorId = appointment.getDoctor().getId();
-//        }
-//
-//
-//        if (appointment.getStatus() == AppointmentStatus.COMPLETED) {
-//            throw new RuntimeException("Không thể hủy lịch khám đã HOÀN THÀNH.");
-//        }
-//        if (appointment.getStatus() == AppointmentStatus.IN_PROGRESS) {
-//            throw new RuntimeException("Không thể hủy lịch khám đang TRONG TIẾN TRÌNH khám.");
-//        }
-//        if (appointment.getStatus() == AppointmentStatus.CANCELLED) {
-//            throw new RuntimeException("Lịch khám này đã bị hủy trước đó.");
-//        }
-//
-//        appointment.setStatus(AppointmentStatus.CANCELLED);
-//        if (cancelReason != null && !cancelReason.isBlank()) {
-//            appointment.setReason(appointment.getReason() != null
-//                    ? appointment.getReason() + " [HỦY: " + cancelReason + "]"
-//                    : "[HỦY: " + cancelReason + "]");
-//        }
-//
-//        Appointments updated = appointmentRepository.save(appointment);
-//
-//
-//        try {
-//            String msg = String.format(
-//                    "{\"type\":\"APPOINTMENT_CANCELLED\",\"appointmentId\":%d,\"cancelReason\":\"%s\"}",
-//                    updated.getId(), cancelReason != null ? cancelReason : ""
-//            );
-//            notificationProducer.sendCancellation(msg);
-//        } catch (Exception ignored) {}
-//
-//        AppointmentDTO result = appointmentMapper.toDTO(updated);
-//
-//
-//        evictAppointmentCache(appointmentId, doctorId);
-//        String json = toJson(result);
-//        if (json != null) {
-//            redisService.save(KEY_APPT + appointmentId, json, CACHE_TTL);
-//        }
-//
-//        return result;
-//    }
-//    @Transactional
-//    public AppointmentDTO rescheduleAppointment(Long appointmentId,
-//                                                LocalDate newDate,
-//                                                java.time.LocalTime newTime) {
-//        Appointments appointment = appointmentRepository.findById(appointmentId)
-//                .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám ID: " + appointmentId));
-//
-//        if (appointment.getStatus() != AppointmentStatus.PENDING
-//                && appointment.getStatus() != AppointmentStatus.CONFIRMED) {
-//            throw new RuntimeException("Chỉ có thể dời lịch khám ở trạng thái PENDING hoặc CONFIRMED.");
-//        }
-//
-//        boolean isConflict = appointmentRepository
-//                .existsByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatusNot(
-//                        appointment.getDoctor().getId(),
-//                        newDate, newTime,
-//                        AppointmentStatus.CANCELLED
-//                );
-//        if (isConflict) {
-//            throw new RuntimeException("Bác sĩ đã có lịch khám vào ngày " + newDate + " lúc " + newTime);
-//        }
-//
-//        Long doctorId = appointment.getDoctor() != null ? appointment.getDoctor().getId() : null;
-//
-//        appointment.setAppointmentDate(newDate);
-//        appointment.setAppointmentTime(newTime);
-//
-//        Appointments updated = appointmentRepository.save(appointment);
-//        AppointmentDTO result = appointmentMapper.toDTO(updated);
-//
-//
-//        evictAppointmentCache(appointmentId, doctorId);
-//        String json = toJson(result);
-//        if (json != null) {
-//            redisService.save(KEY_APPT + appointmentId, json, CACHE_TTL);
-//        }
-//
-//        return result;
-//    }
 
     public Page<AppointmentDTO> getAppointments(AppointmentFilterRequestDTO filter) {
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize());

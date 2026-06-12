@@ -92,6 +92,101 @@
         .doctor-center-notice.confirm .doctor-center-icon {
             background: var(--danger);
         }
+
+        /* Custom Alert Modal */
+        .custom-alert-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-alert-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .custom-alert-box {
+            background: var(--bg-card, #ffffff);
+            width: min(400px, 90%);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .custom-alert-overlay.show .custom-alert-box {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .custom-alert-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 1.2rem;
+            color: white;
+        }
+
+        .custom-alert-icon.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
+        }
+
+        .custom-alert-icon.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
+        }
+
+        .custom-alert-icon.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.2);
+        }
+
+        .custom-alert-icon.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+        }
+
+        .custom-alert-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark, #1e293b);
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-alert-message {
+            color: var(--text-muted, #64748b);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .custom-alert-btn {
+            padding: 0.6rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+
+        .custom-alert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -154,15 +249,14 @@
                             <span class="nav-badge badge-primary" id="doctor-nav-badge">0</span>
                         </a>
                     </li>
-                    <!-- Added: Menu quản lý lịch khám (Appointment) -->
+                    
+                    <!-- Added: Menu quản lý lịch làm việc -->
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link" data-section="appointments" data-tooltip="Quản lý Lịch khám">
-                            <span class="nav-icon"><i class="bi bi-calendar2-week-fill"></i></span>
-                            <span class="nav-label">Quản lý Lịch khám</span>
-                            <span class="nav-badge badge-warning" id="appointment-nav-badge">0</span>
+                        <a href="#" class="sidebar-nav-link" data-section="schedules" data-tooltip="Quản lý Lịch làm việc">
+                            <span class="nav-icon"><i class="bi bi-calendar-week"></i></span>
+                            <span class="nav-label">Lịch làm việc</span>
                         </a>
                     </li>
-                    
                 </ul>
             </div>
 
@@ -617,85 +711,24 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <tr th:each="patient : ${recentPatients}">
                                 <td>
                                     <div class="patient-cell">
-                                        <div class="patient-avatar bg-1">NV</div>
+                                        <div class="patient-avatar" th:classappend="${patient.bgClass}" th:text="${patient.initials}"></div>
                                         <div>
-                                            <div class="patient-name">Nguyễn Văn An</div>
-                                            <div class="patient-id">Nam, 45 tuổi</div>
+                                            <div class="patient-name" th:text="${patient.fullName}"></div>
+                                            <div class="patient-id" th:text="${patient.ageGender}"></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>BN-2024-0892</td>
-                                <td>Tim mạch</td>
-                                <td>BS. Trần Minh Đức</td>
-                                <td><span class="status-badge status-danger">Cấp cứu</span></td>
-                                <td>22/05/2024</td>
+                                <td th:text="${patient.patientCode}"></td>
+                                <td th:text="${patient.department}"></td>
+                                <td th:text="${patient.doctorName}"></td>
+                                <td><span class="status-badge" th:classappend="${patient.statusClass}" th:text="${patient.status}"></span></td>
+                                <td th:text="${patient.createdAt}"></td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-2">TT</div>
-                                        <div>
-                                            <div class="patient-name">Trần Thị Bích</div>
-                                            <div class="patient-id">Nữ, 32 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0891</td>
-                                <td>Sản khoa</td>
-                                <td>BS. Lê Thị Hoa</td>
-                                <td><span class="status-badge status-warning">Điều trị</span></td>
-                                <td>21/05/2024</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-3">PH</div>
-                                        <div>
-                                            <div class="patient-name">Phạm Hoàng Cường</div>
-                                            <div class="patient-id">Nam, 58 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0890</td>
-                                <td>Nội tiết</td>
-                                <td>BS. Nguyễn Quốc Bảo</td>
-                                <td><span class="status-badge status-info">Khám ngoại trú</span></td>
-                                <td>21/05/2024</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-4">LM</div>
-                                        <div>
-                                            <div class="patient-name">Lê Minh Đạt</div>
-                                            <div class="patient-id">Nam, 27 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0889</td>
-                                <td>Chấn thương chỉnh hình</td>
-                                <td>BS. Võ Thanh Hùng</td>
-                                <td><span class="status-badge status-success">Xuất viện</span></td>
-                                <td>20/05/2024</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="patient-cell">
-                                        <div class="patient-avatar bg-5">HN</div>
-                                        <div>
-                                            <div class="patient-name">Hoàng Ngọc Ema</div>
-                                            <div class="patient-id">Nữ, 19 tuổi</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>BN-2024-0888</td>
-                                <td>Da liễu</td>
-                                <td>BS. Đặng Thu Hà</td>
-                                <td><span class="status-badge status-success">Xuất viện</span></td>
-                                <td>20/05/2024</td>
+                            <tr th:if="${#lists.isEmpty(recentPatients)}">
+                                <td colspan="6" class="text-center py-4 text-muted"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -758,8 +791,8 @@
                         <div class="department-stats">
 
                             <div class="department-stat">
-                                <div class="department-stat-value"
-                                     th:text="${department.rooms.size()}">
+                                <div class="department-stat-value">
+                                     0
                                 </div>
                                 <div class="department-stat-label">Phòng</div>
                             </div>
@@ -883,144 +916,43 @@
                 </div>
             </div>
 
-            <!-- ===== SECTION: APPOINTMENTS (Quản lý Lịch khám) ===== -->
-            <div class="content-section" id="section-appointments">
-                <!-- Header mới -->
-                <div class="admin-section-header">
-                    <div class="admin-section-icon">
-                        <i class="bi bi-calendar2-week-fill"></i>
-                    </div>
-                    <div class="admin-section-info">
-                        <h1 class="admin-section-title">Quản lý Lịch khám</h1>
-                        <p class="admin-section-desc">Xác nhận, hủy, dời lịch và theo dõi trạng thái lịch hẹn của bệnh nhân.</p>
-                    </div>
-                </div>
-
-                <!-- Filter Card mới -->
-                <div class="admin-filter-card">
-                    <div class="filter-group">
-                        <label for="apptFilterSearch">Tìm kiếm</label>
-                        <input type="text" id="apptFilterSearch" placeholder="Tên hoặc mã bệnh nhân" oninput="loadAppointmentData(0)">
-                    </div>
-                    <div class="filter-group">
-                        <label for="apptFilterFrom">Từ ngày</label>
-                        <input type="date" id="apptFilterFrom" onchange="loadAppointmentData(0)">
-                    </div>
-                    <div class="filter-group">
-                        <label for="apptFilterTo">Đến ngày</label>
-                        <input type="date" id="apptFilterTo" onchange="loadAppointmentData(0)">
-                    </div>
-                    <div class="filter-group">
-                        <label for="apptFilterStatus">Trạng thái</label>
-                        <select id="apptFilterStatus" onchange="loadAppointmentData(0)">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="PENDING">⏳ Chờ xác nhận</option>
-                            <option value="CONFIRMED">✅ Đã xác nhận</option>
-                            <option value="IN_PROGRESS">🔵 Đang khám</option>
-                            <option value="COMPLETED">🟢 Hoàn thành</option>
-                            <option value="CANCELLED">🔴 Đã hủy</option>
-                        </select>
-                    </div>
-                    <div class="filter-actions">
-                        <button type="button" class="btn-gradient-outline w-100" onclick="loadAppointmentData(0)">
-                            <i class="bi bi-arrow-clockwise"></i> Làm mới
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Stats Row mới -->
-                <div class="admin-stats-row">
-                    <div class="admin-stat-card stat-warning" onclick="filterApptByStatus('PENDING')">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-hourglass-split"></i></div>
-                            <div class="admin-stat-number" id="apptCountPending">-</div>
+            <!-- ===== SECTION: SCHEDULES (Quản lý lịch làm việc) ===== -->
+            <div class="content-section" id="section-schedules">
+                <div class="page-header">
+                    <div class="page-header-top">
+                        <div>
+                            <h1 class="page-title">Quản lý lịch làm việc 🗓️</h1>
+                            <p class="page-subtitle">Xem và điều chỉnh lịch làm việc của tất cả bác sĩ.</p>
                         </div>
-                        <div class="admin-stat-label">Chờ xác nhận</div>
-                    </div>
-                    <div class="admin-stat-card stat-success" onclick="filterApptByStatus('CONFIRMED')">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-calendar-check"></i></div>
-                            <div class="admin-stat-number" id="apptCountConfirmed">-</div>
-                        </div>
-                        <div class="admin-stat-label">Đã xác nhận</div>
-                    </div>
-                    <div class="admin-stat-card stat-primary" onclick="filterApptByStatus('IN_PROGRESS')">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-activity"></i></div>
-                            <div class="admin-stat-number" id="apptCountInProgress">-</div>
-                        </div>
-                        <div class="admin-stat-label">Đang khám</div>
-                    </div>
-                    <div class="admin-stat-card stat-emerald" onclick="filterApptByStatus('COMPLETED')">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-check2-all"></i></div>
-                            <div class="admin-stat-number" id="apptCountCompleted">-</div>
-                        </div>
-                        <div class="admin-stat-label">Hoàn thành</div>
-                    </div>
-                    <div class="admin-stat-card stat-danger" onclick="filterApptByStatus('CANCELLED')">
-                        <div class="admin-stat-top">
-                            <div class="admin-stat-icon"><i class="bi bi-x-circle"></i></div>
-                            <div class="admin-stat-number" id="apptCountCancelled">-</div>
-                        </div>
-                        <div class="admin-stat-label">Đã hủy</div>
-                    </div>
-                </div>
-
-                <!-- Data Card mới -->
-                <div class="admin-data-card">
-                    <div class="admin-data-header">
-                        <div class="admin-data-title">
-                            <i class="bi bi-list-ul"></i> Danh sách lịch khám
-                        </div>
-                        <div class="admin-data-actions">
-                            <!-- Nút export excel (demo) -->
-                            <button class="btn-gradient-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
-                                <i class="bi bi-download"></i> Xuất Excel
+                        <div class="page-header-actions">
+                            <button type="button" class="btn-outline-dashboard" onclick="loadScheduleDoctors()">
+                                <i class="bi bi-arrow-clockwise"></i> Làm mới
                             </button>
                         </div>
                     </div>
-                    
-                    <div style="overflow-x:auto;">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Bệnh nhân</th>
-                                    <th>Bác sĩ phụ trách</th>
-                                    <th>Khoa/Phòng</th>
-                                    <th>Ngày khám</th>
-                                    <th>Giờ khám</th>
-                                    <th>Lý do</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác Admin</th>
-                                </tr>
-                            </thead>
-                            <tbody id="appointment-table-body">
-                                <tr>
-                                    <td colspan="8">
-                                        <div class="admin-empty-state">
-                                            <div class="admin-empty-icon"><i class="bi bi-inbox"></i></div>
-                                            <div class="admin-empty-title">Chưa có dữ liệu</div>
-                                            <div class="admin-empty-desc">Chọn menu Quản lý Lịch khám để tải dữ liệu.</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+
+                <div class="dashboard-card" style="background: transparent; box-shadow: none; border: none;">
+                    <div class="dashboard-card-header" style="background: var(--bg-card); border-radius: 12px; margin-bottom: 1rem; box-shadow: var(--shadow-sm);">
+                        <div class="dashboard-card-title">
+                            <i class="bi bi-person-lines-fill"></i> Danh sách bác sĩ
+                        </div>
+                        <div class="dashboard-card-actions">
+                             <div class="header-search" style="width: 250px; margin: 0;">
+                                <input type="text" id="scheduleDoctorSearch" placeholder="Tìm theo tên khoa, bác sĩ..." autocomplete="off" oninput="filterScheduleDoctors()">
+                                <i class="bi bi-search search-icon"></i>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Pagination mới -->
-                    <div class="admin-pagination">
-                        <div class="admin-pagination-info" id="apptPageInfo">Trang 1</div>
-                        <div class="admin-pagination-btns" id="apptPaginationControls">
-                            <button type="button" class="admin-page-btn" id="apptPrevBtn" onclick="changeApptPage(-1)" title="Trang trước"><i class="bi bi-chevron-left"></i></button>
-                            <button type="button" class="admin-page-btn" id="apptNextBtn" onclick="changeApptPage(1)" title="Trang sau"><i class="bi bi-chevron-right"></i></button>
+                    <div class="schedule-list-container" id="scheduleListContainer">
+                        <div style="text-align:center;padding:2rem;color:var(--text-muted); background: var(--bg-card); border-radius: 12px;">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <div style="margin-top: 10px;">Đang tải danh sách...</div>
                         </div>
                     </div>
                 </div>
-            </div>            
-
-           
+            </div>
 
             <!-- ===== SECTION: STATISTICS (Thống kê) ===== -->
             <div class="content-section" id="section-statistics">
@@ -2367,11 +2299,11 @@
         const payload = {
             departmentId: Number(document.getElementById(`${prefix}DoctorDepartmentId`).value),
             fullName: document.getElementById(`${prefix}DoctorFullName`).value.trim(),
-            email: document.getElementById(`${prefix}DoctorEmail`).value.trim(),
-            phone: document.getElementById(`${prefix}DoctorPhone`).value.trim(),
+            email: document.getElementById(`${prefix}DoctorEmail`).value.trim() || null,
+            phone: document.getElementById(`${prefix}DoctorPhone`).value.trim() || null,
             licenseNumber: document.getElementById(`${prefix}DoctorLicenseNumber`).value.trim(),
             experienceYears: Number(document.getElementById(`${prefix}DoctorExperienceYears`).value),
-            specialization: document.getElementById(`${prefix}DoctorSpecialization`).value.trim(),
+            specialization: document.getElementById(`${prefix}DoctorSpecialization`).value.trim() || null,
             status: document.getElementById(`${prefix}DoctorStatus`).value
         };
 
@@ -2943,4 +2875,94 @@
     })
 </script>
 
+    <!-- Custom Alert Modal -->
+    <div class="custom-alert-overlay" id="customAlertOverlay">
+        <div class="custom-alert-box" id="customAlertBox">
+            <div class="custom-alert-icon" id="customAlertIcon">
+                <i class="bi bi-info-circle"></i>
+            </div>
+            <h4 class="custom-alert-title" id="customAlertTitle">Thông báo</h4>
+            <p class="custom-alert-message" id="customAlertMessage">Nội dung thông báo</p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-secondary custom-alert-btn" id="customAlertCancelBtn" style="display: none; background: #e2e8f0; color: #475569; border: none;">Hủy</button>
+                <button class="btn btn-primary custom-alert-btn" id="customAlertOkBtn">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let customAlertResolve = null;
+
+        window.showCustomAlert = function(title, message, type = 'info') {
+            return showModal(title, message, type, false);
+        };
+
+        window.showCustomConfirm = function(title, message, type = 'warning') {
+            return showModal(title, message, type, true);
+        };
+
+        function showModal(title, message, type, isConfirm) {
+            return new Promise((resolve) => {
+                customAlertResolve = resolve;
+
+                const overlay = document.getElementById('customAlertOverlay');
+                const icon = document.getElementById('customAlertIcon');
+                const titleEl = document.getElementById('customAlertTitle');
+                const messageEl = document.getElementById('customAlertMessage');
+                const cancelBtn = document.getElementById('customAlertCancelBtn');
+                const okBtn = document.getElementById('customAlertOkBtn');
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+
+                // Reset icon classes
+                icon.className = 'custom-alert-icon ' + type;
+                
+                if (type === 'success') {
+                    icon.innerHTML = '<i class="bi bi-check-lg"></i>';
+                    okBtn.className = 'btn btn-success custom-alert-btn';
+                } else if (type === 'error') {
+                    icon.innerHTML = '<i class="bi bi-x-lg"></i>';
+                    okBtn.className = 'btn btn-danger custom-alert-btn';
+                } else if (type === 'warning') {
+                    icon.innerHTML = '<i class="bi bi-exclamation-triangle"></i>';
+                    okBtn.className = 'btn btn-warning custom-alert-btn text-white';
+                } else {
+                    icon.innerHTML = '<i class="bi bi-info-circle"></i>';
+                    okBtn.className = 'btn btn-primary custom-alert-btn';
+                }
+
+                if (isConfirm) {
+                    cancelBtn.style.display = 'inline-block';
+                } else {
+                    cancelBtn.style.display = 'none';
+                }
+
+                overlay.classList.add('show');
+                
+                // Auto focus button for easy closing
+                setTimeout(() => {
+                    okBtn.focus();
+                }, 100);
+            });
+        }
+
+        document.getElementById('customAlertOkBtn').addEventListener('click', () => {
+            document.getElementById('customAlertOverlay').classList.remove('show');
+            if (customAlertResolve) customAlertResolve(true);
+        });
+
+        document.getElementById('customAlertCancelBtn').addEventListener('click', () => {
+            document.getElementById('customAlertOverlay').classList.remove('show');
+            if (customAlertResolve) customAlertResolve(false);
+        });
+
+        window.closeCustomAlert = function() {
+            document.getElementById('customAlertOverlay').classList.remove('show');
+            if (customAlertResolve) customAlertResolve(false);
+        };
+    </script>
+
+<!-- Script Quản lý Lịch làm việc -->
+<script th:src="@{/js/schedule-management.js}"></script>
 </html>

@@ -2,7 +2,7 @@ package com.example.hospitalManagement.api;
 
 import com.example.hospitalManagement.entity.Appointments;
 import com.example.hospitalManagement.entity.User;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.service.AppointmentServiceV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class AppointmentApiV2 {
     @Autowired
     private AppointmentServiceV2 appointmentServiceV2;
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/doctor/appointments")
     public ResponseEntity<?> getDoctorAppointments(Authentication authentication, @RequestParam(required = false) String status) {

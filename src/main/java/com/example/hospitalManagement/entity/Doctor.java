@@ -4,6 +4,8 @@ import com.example.hospitalManagement.entity.Enum.UserStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "doctors")
@@ -24,23 +26,29 @@ public class Doctor {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    @JsonIgnoreProperties("doctors")
     private Departments department;
 
     @JoinColumn(name = "user_id")
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("doctor")
     private User user;
 
     @OneToMany(mappedBy = "doctor")
-    private List<DoctorSchedules> DoctorSchedules;
+    @JsonIgnore
+    private List<DoctorSchedules> doctorSchedules;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Appointments> Appointments;
+    @JsonIgnore
+    private List<Appointments> appointments;
 
     @OneToMany(mappedBy = "doctor")
-    private List<MedicalRecords> MedicalRecords;
+    @JsonIgnore
+    private List<MedicalRecords> medicalRecords;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Prescription>  Prescriptions;
+    @JsonIgnore
+    private List<Prescription> prescriptions;
 
     public long getId() {
         return id;
@@ -99,34 +107,34 @@ public class Doctor {
     }
 
     public List<DoctorSchedules> getDoctorSchedules() {
-        return DoctorSchedules;
+        return doctorSchedules;
     }
 
     public void setDoctorSchedules(List<DoctorSchedules> doctorSchedules) {
-        DoctorSchedules = doctorSchedules;
+        this.doctorSchedules = doctorSchedules;
     }
 
     public List<Appointments> getAppointments() {
-        return Appointments;
+        return appointments;
     }
 
     public void setAppointments(List<Appointments> appointments) {
-        Appointments = appointments;
+        this.appointments = appointments;
     }
 
     public List<MedicalRecords> getMedicalRecords() {
-        return MedicalRecords;
+        return medicalRecords;
     }
 
     public void setMedicalRecords(List<MedicalRecords> medicalRecords) {
-        MedicalRecords = medicalRecords;
+        this.medicalRecords = medicalRecords;
     }
 
     public List<Prescription> getPrescriptions() {
-        return Prescriptions;
+        return prescriptions;
     }
 
     public void setPrescriptions(List<Prescription> prescriptions) {
-        Prescriptions = prescriptions;
+        this.prescriptions = prescriptions;
     }
 }

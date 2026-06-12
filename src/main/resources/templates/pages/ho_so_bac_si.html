@@ -1,189 +1,617 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Hồ sơ bác sĩ</title>
-
+    <title>Hồ Sơ Bác Sĩ - MediCore Health</title>
     <style>
-        *{box-sizing:border-box;font-family:Arial}
-        body{margin:0;background:#f5f7fa}
-
-        /* layout */
-        .container{
-            width:88%;
-            margin:40px auto;
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:30px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
         }
 
-        /* card */
-        .card{
-            background:white;
-            border-radius:12px;
-            box-shadow:0 6px 18px rgba(0,0,0,.1);
-            overflow:hidden;
+        body {
+            background: #f4fbff;
+            color: #334155;
+            overflow-x: hidden;
         }
 
-        /* profile */
-        .profile{
-            display:flex;
-            gap:20px;
-            padding:25px;
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .profile img{
-            width:180px;
-            height:200px;
-            object-fit:cover;
-            border:2px solid #039be5;
-            border-radius:8px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .degree{color:#0872b8;font-weight:bold}
-        .name{font-size:26px;font-weight:bold;margin:6px 0}
-
-        .btn{
-            display:block;
-            background:#0a6fb7;
-            color:white;
-            padding:12px;
-            text-align:center;
-            border-radius:8px;
-            margin-top:10px;
-            text-decoration:none;
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(10, 111, 183, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(10, 111, 183, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(10, 111, 183, 0); }
         }
 
-        /* section */
-        .title{
-            background:#0a6fb7;
-            color:white;
-            padding:14px;
-            font-weight:bold;
+        @keyframes floatPic {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .body{
-            padding:20px;
+        /* --- Header --- */
+        .header {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 10%;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 99;
         }
 
-        /* rating */
-        .rating{color:#ffc107;font-size:18px}
+        .logo { font-size: 26px; font-weight: bold; color: #0a6fb7; text-decoration:none;}
+        .logo span { color: #00a6ff; }
+        .logo small { display:block; font-size: 12px; color: #64748b; font-weight: normal; margin-top: 3px; }
 
-        /* textarea */
-        textarea{
-            width:100%;
-            height:90px;
-            border-radius:8px;
-            border:1px solid #ccc;
-            padding:10px;
+        .menu a {
+            text-decoration: none;
+            color: #334155;
+            margin-left: 25px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .menu a:hover, .menu a.active { color: #0a6fb7; }
+
+        /* --- Container --- */
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 40px auto 80px;
         }
 
-        /* responsive */
-        @media(max-width:900px){
-            .container{grid-template-columns:1fr}
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 25px;
+            transition: color 0.3s, transform 0.3s;
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .btn-back:hover {
+            color: #0a6fb7;
+            transform: translateX(-5px);
+        }
+
+        /* --- Profile Layout --- */
+        .profile-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        /* Profile Left Sidebar */
+        .profile-sidebar {
+            width: 35%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border: 1px solid rgba(10,111,183,0.1);
+            animation: fadeUp 0.8s ease forwards;
+            position: sticky;
+            top: 100px;
+        }
+
+        .img-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            box-shadow: 0 15px 35px rgba(14,165,233,0.2);
+            animation: floatPic 4s ease-in-out infinite;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+        }
+
+        .profile-sidebar h1 {
+            font-size: 28px;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .dept-badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .btn-book-now {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0a6fb7, #00a6ff);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(10,111,183,0.25);
+            animation: pulseGlow 2s infinite;
+        }
+        .btn-book-now:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(10,111,183,0.35);
+        }
+
+        /* Profile Main Content */
+        .profile-main {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border: 1px solid rgba(10,111,183,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
+            background: linear-gradient(to bottom, #0ea5e9, #38bdf8);
+        }
+
+        .info-card h3 {
+            font-size: 22px;
+            color: #0a6fb7;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-card h3 svg { fill: #0a6fb7; width: 24px; height: 24px; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .info-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 13px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-item p {
+            font-size: 16px;
+            color: #0f172a;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        /* --- Modal CSS --- */
+        .booking-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s ease;
+        }
+        .booking-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .booking-modal {
+            background: white;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            transform: translateY(40px) scale(0.95);
+            opacity: 0;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .booking-modal-overlay.active .booking-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .booking-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+        .booking-modal-header h3 {
+            color: #0a6fb7;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .booking-modal-close {
+            background: #f1f5f9;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            color: #64748b;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .booking-modal-close:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .booking-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .booking-form-group { display: flex; flex-direction: column; gap: 8px; }
+        .booking-form-group.full-width { grid-column: 1 / -1; }
+        .booking-form-group label { font-size: 14px; font-weight: 600; color: #334155; }
+        .booking-form-group input, .booking-form-group select, .booking-form-group textarea {
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            background: #f8fafc;
+        }
+        .booking-form-group input:focus, .booking-form-group select:focus, .booking-form-group textarea:focus {
+            border-color: #0a6fb7;
+            box-shadow: 0 0 0 4px rgba(10,111,183,0.1);
+            background: white;
+        }
+
+        .booking-submit-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #0a6fb7, #00a6ff);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(10,111,183,0.3);
+        }
+        .booking-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(10,111,183,0.4);
+        }
+
+        /* Custom scrollbar for modal */
+        .booking-modal::-webkit-scrollbar { width: 8px; }
+        .booking-modal::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px;}
+        .booking-modal::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .booking-modal::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        @media(max-width: 900px) {
+            .profile-wrapper { flex-direction: column; }
+            .profile-sidebar { width: 100%; position: static; }
+            .profile-main { width: 100%; }
+            .info-grid { grid-template-columns: 1fr; }
+            .booking-form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-
 <body>
 
+<header class="header">
+    <a href="/index" class="logo">
+        MediCore <span>Health</span>
+        <small>Chăm sóc tận tâm - Niềm tin của bạn</small>
+    </a>
+    <nav class="menu">
+        <a href="/index">Về Bệnh viện</a>
+        <a href="/chuyen-khoa">Chuyên khoa</a>
+        <a href="/bac-si" class="active">Bác sĩ</a>
+        <a href="/dich-vu">Dịch vụ</a>
+    </nav>
+</header>
+
 <div class="container">
+    <a href="/bac-si" class="btn-back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Trở về danh sách bác sĩ
+    </a>
 
-    <!-- LEFT -->
-    <div>
-
-        <!-- PROFILE -->
-        <div class="card profile">
-            <img th:src="${image}">
-            <div>
-                <div class="degree" th:text="${degree}"></div>
-                <div class="name" th:text="${name}"></div>
-                <p th:text="${department}"></p>
-
-                <p>
-                    Đánh giá:
-                    <span class="rating">★★★★★</span>
-                    <b style="color:#0a6fb7">4.5/5</b>
-                </p>
-
-                <a href="#" class="btn">Đặt lịch khám 📅</a>
+    <div class="profile-wrapper">
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+            <div class="img-wrapper">
+                <img th:src="${doctor.user != null && doctor.user.avatar != null && doctor.user.avatar.trim() != '' ? doctor.user.avatar : 'https://ui-avatars.com/api/?name=' + (doctor.user != null && doctor.user.fullName != null ? doctor.user.fullName : 'BS') + '&background=ffffff&color=0284c7&size=200'}" class="profile-img" alt="Doctor Image" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=BS&background=ffffff&color=0284c7&size=200';">
             </div>
+            <div class="dept-badge" th:text="${doctor.department != null ? doctor.department.name : 'Chuyên khoa'}">Khoa Tim Mạch</div>
+            <h1 th:text="${doctor.user != null ? doctor.user.fullName : 'Đang cập nhật'}">Tên bác sĩ</h1>
+            <p style="color: #64748b; margin-bottom: 30px; font-size: 15px;">Bác sĩ chuyên khoa</p>
+
+            <button class="btn-book-now" onclick="openBookingModal()">
+                Đặt Lịch Hẹn Khám
+            </button>
         </div>
 
-        <!-- LỊCH KHÁM -->
-        <div class="card">
-            <div class="title">Lịch khám</div>
-            <div class="body">
-                <p><b th:text="${specialty}"></b></p>
-                <p th:text="${schedule}"></p>
+        <!-- Main Content -->
+        <div class="profile-main">
+            <div class="info-card">
+                <h3>
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    Thông Tin Chuyên Môn
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Chuyên môn chính</label>
+                        <p th:text="${doctor.specialization != null ? doctor.specialization : 'Đang cập nhật'}">...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Kinh nghiệm làm việc</label>
+                        <p th:text="${doctor.experienceYears != null ? doctor.experienceYears + ' năm' : 'Đang cập nhật'}">...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Số chứng chỉ hành nghề</label>
+                        <p th:text="${doctor.licenseNumber != null ? doctor.licenseNumber : 'Đang cập nhật'}">...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Đơn vị công tác</label>
+                        <p th:text="${doctor.department != null ? doctor.department.name : 'Bệnh viện MediCore'}">...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card" style="animation-delay: 0.2s;">
+                <h3>
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    Thông Tin Liên Hệ
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Địa chỉ Email</label>
+                        <p th:text="${doctor.user != null && doctor.user.email != null ? doctor.user.email : 'Đang cập nhật'}">...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Số điện thoại</label>
+                        <p th:text="${doctor.user != null && doctor.user.phone != null ? doctor.user.phone : 'Đang cập nhật'}">...</p>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- ĐÁNH GIÁ -->
-        <div class="card">
-            <div class="title">Cảm nhận của người bệnh</div>
-            <div class="body">
-
-                <p><b>Viết đánh giá của bạn</b></p>
-
-                <textarea placeholder="Chia sẻ trải nghiệm khám bệnh..."></textarea>
-
-                <button style="margin-top:10px;padding:10px 20px;border:none;background:#999;color:white;border-radius:8px">
-                    Gửi đánh giá
-                </button>
-
-                <hr style="margin:20px 0">
-
-                <p><b>Đánh giá từ người bệnh</b></p>
-                <p>Nguyễn Hoàn Phúc ⭐⭐⭐⭐☆ 4.5/5</p>
-
-            </div>
-        </div>
-
     </div>
-
-    <!-- RIGHT -->
-    <div>
-
-        <!-- CHUYÊN MÔN -->
-        <div class="card">
-            <div class="body">
-                <h3>Lĩnh vực chuyên môn</h3>
-                <p th:text="${expertise}"></p>
-
-                <hr>
-
-                <h3>Ngôn ngữ</h3>
-                <p>Tiếng Việt, Tiếng Anh</p>
-            </div>
-        </div>
-
-        <!-- ĐÀO TẠO -->
-        <div class="card">
-            <div class="title">Quá trình đào tạo</div>
-            <div class="body">
-                <p>• 2020: Sau đại học chuyên ngành <span th:text="${specialty}"></span></p>
-                <p>• 2010: Bác sĩ chuyên khoa</p>
-                <p>• 2005: Bác sĩ đa khoa</p>
-            </div>
-        </div>
-
-        <!-- CÔNG TÁC -->
-        <div class="card">
-            <div class="title">Quá trình công tác</div>
-            <div class="body">
-                <p>• 2010 - nay: Bác sĩ tại <span th:text="${department}"></span></p>
-                <p>• 2007 - 2010: Bác sĩ điều trị</p>
-            </div>
-        </div>
-
-    </div>
-
 </div>
 
-<a href="/bac-si" style="display:block;text-align:center;margin:30px;color:#0a6fb7;font-weight:bold">
-    ⬅ Quay về danh sách bác sĩ
-</a>
+<!-- BOOKING MODAL -->
+<div class="booking-modal-overlay" id="bookingModalOverlay" onclick="closeBookingModal()">
+    <div class="booking-modal" onclick="event.stopPropagation()">
+        <div class="booking-modal-header">
+            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="#0a6fb7"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg> Đặt lịch khám</h3>
+            <button type="button" class="booking-modal-close" onclick="closeBookingModal()">✖</button>
+        </div>
+        <form method="post" th:action="@{/booking}" th:object="${appointmentRequest}">
+            <div class="booking-form-grid">
+                <div class="booking-form-group">
+                    <label>Họ và tên <span style="color:red">*</span></label>
+                    <input type="text" th:field="*{fullname}" id="fullname" required placeholder="Nhập họ tên...">
+                </div>
+                <div class="booking-form-group">
+                    <label>Số điện thoại <span style="color:red">*</span></label>
+                    <input type="tel" th:field="*{soDienThoai}" id="soDienThoai" required placeholder="Nhập SĐT..." pattern="[0-9]{10}">
+                </div>
+                <div class="booking-form-group full-width">
+                    <label>Địa chỉ email</label>
+                    <input type="email" th:field="*{email}" id="email" placeholder="Nhập email (không bắt buộc)...">
+                </div>
+                <div class="booking-form-group full-width">
+                    <label>Triệu chứng <span style="color:red">*</span></label>
+                    <textarea th:field="*{reason}" rows="3" required placeholder="Mô tả sơ bộ triệu chứng của bạn..."></textarea>
+                </div>
+                <div class="booking-form-group">
+                    <label>Chuyên khoa muốn khám <span style="color:red">*</span></label>
+                    <select th:field="*{chuyenKhoa}" id="chuyenKhoa" required onchange="loadDoctors(this)">
+                        <option value="" data-id="">-- Chọn chuyên khoa --</option>
+                    </select>
+                </div>
+                <div class="booking-form-group">
+                    <label>Bác sĩ muốn khám (Tùy chọn)</label>
+                    <select th:field="*{bacSi}" id="bacSi">
+                        <option value="">-- Chọn bác sĩ (Không bắt buộc) --</option>
+                    </select>
+                </div>
+                <div class="booking-form-group">
+                    <label>Ngày khám dự kiến <span style="color:red">*</span></label>
+                    <input type="date" th:field="*{date}" id="date" required>
+                </div>
+                <div class="booking-form-group">
+                    <label>Giờ khám dự kiến <span style="color:red">*</span></label>
+                    <input type="time" th:field="*{time}" required>
+                </div>
+            </div>
+            <button type="submit" class="booking-submit-btn">Xác nhận đặt lịch</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ===== Lấy dữ liệu profile bác sĩ hiện tại để pre-select modal (tuỳ chọn) =====
+    // Đây là data được Thymeleaf render thẳng vào JS để tiện xử lý
+    const currentDoctorName = "[[${doctor.user != null ? doctor.user.fullName : ''}]]";
+    const currentDeptName = "[[${doctor.department != null ? doctor.department.name : ''}]]";
+    const currentDeptId = "[[${doctor.department != null ? doctor.department.id : ''}]]";
+
+    // ===== BOOKING MODAL LOGIC (copied from index.html) =====
+    async function openBookingModal() {
+        const overlay = document.getElementById('bookingModalOverlay');
+        overlay.classList.add('active');
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').min = today;
+
+        // Load danh sách chuyên khoa
+        await loadDepartments();
+
+        // Điền sẵn thông tin user (nếu đã đăng nhập)
+        const token = localStorage.getItem("accessToken");
+        if(token){
+            try{
+                const response = await fetch('/api/booking-info-current', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                });
+                if(response.ok){
+                    const data = await response.json();
+                    document.getElementById("fullname").value = data.fullName || '';
+                    document.getElementById("soDienThoai").value = data.phone || '';
+                    document.getElementById("email").value = data.email || '';
+
+                    document.getElementById("fullname").readOnly = true;
+                    document.getElementById("email").readOnly = true;
+                }
+            }catch (error) {
+                console.log("Fetch API error:", error);
+            }
+        }
+    }
+
+    async function loadDepartments() {
+        try {
+            const response = await fetch('/api/public/departments');
+            if (response.ok) {
+                const departments = await response.json();
+                const deptSelect = document.getElementById('chuyenKhoa');
+                
+                deptSelect.innerHTML = '<option value="" data-id="">-- Chọn chuyên khoa --</option>';
+                
+                let foundDept = false;
+
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept.name; 
+                    option.setAttribute('data-id', dept.id);
+                    option.textContent = dept.name;
+                    deptSelect.appendChild(option);
+
+                    // Nếu dept.name khớp với tên khoa của profile hiện tại thì tự động chọn
+                    if (dept.name === currentDeptName) {
+                        option.selected = true;
+                        foundDept = true;
+                    }
+                });
+
+                // Nếu đã chọn tự động khoa, load bác sĩ tương ứng
+                if (foundDept) {
+                    await loadDoctors(deptSelect);
+                }
+            }
+        } catch (error) {
+            console.error("Error loading departments:", error);
+        }
+    }
+
+    async function loadDoctors(deptSelect) {
+        const doctorSelect = document.getElementById('bacSi');
+        doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ (Không bắt buộc) --</option>';
+        
+        const selectedOption = deptSelect.options[deptSelect.selectedIndex];
+        const deptId = selectedOption.getAttribute('data-id');
+        
+        if (!deptId) return; 
+        
+        try {
+            const response = await fetch(`/api/public/doctors?departmentId=${deptId}`);
+            if (response.ok) {
+                const doctors = await response.json();
+                
+                doctors.forEach(doc => {
+                    const option = document.createElement('option');
+                    option.value = doc.name.replace("BS. ", ""); 
+                    option.textContent = doc.name;
+                    doctorSelect.appendChild(option);
+
+                    // Tự động chọn bác sĩ hiện tại nếu khớp
+                    if (option.value === currentDoctorName || doc.name === currentDoctorName || doc.name === "BS. " + currentDoctorName) {
+                        option.selected = true;
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error loading doctors:", error);
+        }
+    }
+
+    function closeBookingModal() {
+        const overlay = document.getElementById('bookingModalOverlay');
+        overlay.classList.remove('active');
+    }
+</script>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -445,19 +445,44 @@
             // User's backend logic will go here
 
             try{
-                const newPassword=document.querySelector("#newPassword").value;
-                const response = await fetch('/api/profile/changePassword',{
+                // Gọi API cập nhật thông tin cơ bản
+                const fullName = document.querySelector("#employeeName").value;
+                const email = document.querySelector("#gmail").value;
+                const phone = document.querySelector("#phone").value;
+                
+                const updateResponse = await fetch('/api/profile/update', {
                     method: "PATCH",
                     headers:{
                         "Content-Type":"application/json",
                         "Authorization": "Bearer "+localStorage.getItem("accessToken")
                     },
-                    body:JSON.stringify({
-                        newPassword: newPassword
+                    body: JSON.stringify({
+                        fullName: fullName,
+                        email: email,
+                        phone: phone
                     })
-                })
-                if (!response.ok){
-                    throw new Error("Update password failed");
+                });
+
+                if (!updateResponse.ok){
+                    throw new Error("Cập nhật thông tin thất bại");
+                }
+
+                // Nếu có nhập mật khẩu mới thì gọi thêm API đổi mật khẩu
+                const newPassword=document.querySelector("#newPassword").value;
+                if (newPassword && newPassword.trim() !== '') {
+                    const passResponse = await fetch('/api/profile/changePassword',{
+                        method: "PATCH",
+                        headers:{
+                            "Content-Type":"application/json",
+                            "Authorization": "Bearer "+localStorage.getItem("accessToken")
+                        },
+                        body:JSON.stringify({
+                            newPassword: newPassword
+                        })
+                    })
+                    if (!passResponse.ok){
+                        throw new Error("Update password failed");
+                    }
                 }
                 // Add a small success animation to the button
                 const btnSaveEdit = document.getElementById('btnSaveEdit');

@@ -3,7 +3,7 @@ package com.example.hospitalManagement.service;
 import com.example.hospitalManagement.dto.registerDTO;
 import com.example.hospitalManagement.entity.User;
 import com.example.hospitalManagement.entity.Enum.UserStatus;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Service
 public class RegisterService {
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
     @Transactional
     public User registerUser(registerDTO dto) {
         User user = new User();

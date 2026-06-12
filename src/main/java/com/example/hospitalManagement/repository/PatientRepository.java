@@ -13,4 +13,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     Optional<Patient> findByPatientCode(String patientCode);
     @Query("SELECT p.id FROM Patient p WHERE p.user.fullName = :fullName")
     Long findIdByUserFullName(@Param("fullName") String fullName);
+    
+    java.util.List<Patient> findTop5ByOrderByIdDesc();
 }

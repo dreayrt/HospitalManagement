@@ -16,7 +16,7 @@ import com.example.hospitalManagement.repository.DeparmentRepository;
 import com.example.hospitalManagement.repository.DoctorRepository;
 import com.example.hospitalManagement.repository.DoctorScheduleRepository;
 import com.example.hospitalManagement.repository.RoleRepository;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.util.HashUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +51,7 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
     private final DeparmentRepository deparmentRepository;
-    private final userRepository userRepository;
+    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DoctorMapper doctorMapper;
     private final RedisService redisService;
@@ -64,7 +64,7 @@ public class DoctorService {
             DoctorRepository doctorRepository,
             DoctorScheduleRepository doctorScheduleRepository,
             DeparmentRepository deparmentRepository,
-            userRepository userRepository,
+            UserRepository userRepository,
             RoleRepository roleRepository,
             DoctorMapper doctorMapper,
             RedisService redisService,
@@ -108,7 +108,7 @@ public class DoctorService {
     @Transactional(readOnly = true)
     public DoctorDTO findById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay bac si"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bác sĩ"));
         DoctorDTO dto = toDoctorDTO(doctor);
         dto.setSchedules(findSchedules(id));
         return dto;
@@ -124,7 +124,7 @@ public class DoctorService {
                 : createDoctorUser(request);
 
         if (user.getDoctor() != null) {
-            throw new IllegalStateException("Tai khoan nay da co ho so bac si");
+            throw new IllegalStateException("Tài khoản này đã có hồ sơ bác sĩ");
         }
         validateUserRole(user);
 
@@ -140,12 +140,12 @@ public class DoctorService {
     @Transactional
     public DoctorDTO update(Long id, DoctorDTO request) {
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay bac si"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bác sĩ"));
         validateDoctorRequest(request, id);
 
         User user = findUserById(request.getUserId());
         if (user.getDoctor() != null && user.getDoctor().getId() != doctor.getId()) {
-            throw new IllegalStateException("Tai khoan nay da gan voi bac si khac");
+            throw new IllegalStateException("Tài khoản này đẫ gắn với bác sĩ khác");
         }
         validateUserRole(user);
 
@@ -161,44 +161,34 @@ public class DoctorService {
     public void delete(Long id) {
         
         Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay bac si"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bác sĩ"));
 
         
         if (doctor.getAppointments() != null && !doctor.getAppointments().isEmpty()) {
-            throw new IllegalStateException("Khong the xoa bac si da co lich hen");
+            throw new IllegalStateException("Không thể xóa bác sĩ đã có lịch hẹnn");
         }
         if (doctor.getMedicalRecords() != null && !doctor.getMedicalRecords().isEmpty()) {
-            throw new IllegalStateException("Khong the xoa bac si da co ho so benh an");
+            throw new IllegalStateException("Không thể xóa bác sĩ đã có hồ sơ bệnh án");
         }
         if (doctor.getDoctorSchedules() != null && !doctor.getDoctorSchedules().isEmpty()) {
-            throw new IllegalStateException("Khong the xoa bac si khi van con lich lam viec");
+            throw new IllegalStateException("Không thể xóa bác sĩ khi vẫn còn lịch làm việc");
         }
-
-        
         User user = doctor.getUser();
-
-        
         if (user != null) {
             user.setDoctor(null);
         }
         doctor.setUser(null);
-
-        
         doctorRepository.delete(doctor);
-
-        
         if (user != null) {
             userRepository.delete(user);
         }
-
-        
         invalidateDoctorCache();
     }
 
     @Transactional(readOnly = true)
     public List<DoctorScheduleDTO> findSchedules(Long doctorId) {
         if (!doctorRepository.existsById(doctorId)) {
-            throw new NoSuchElementException("Khong tim thay bac si");
+            throw new NoSuchElementException("Không tìm thấy bác sĩ");
         }
         return doctorScheduleRepository.findByDoctorIdOrderByWorkDateAscStartTimeAsc(doctorId).stream()
                 .map(doctorMapper::toScheduleDTO)
@@ -208,7 +198,7 @@ public class DoctorService {
     @Transactional
     public DoctorScheduleDTO createSchedule(Long doctorId, DoctorScheduleDTO request) {
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay bac si"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy bác sĩ"));
         validateScheduleRequest(doctorId, request, null);
 
         DoctorSchedules schedule = new DoctorSchedules();
@@ -225,9 +215,9 @@ public class DoctorService {
     @Transactional
     public DoctorScheduleDTO updateSchedule(Long doctorId, Long scheduleId, DoctorScheduleDTO request) {
         DoctorSchedules schedule = doctorScheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay lich lam viec"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy lịch làm việc"));
         if (schedule.getDoctor() == null || schedule.getDoctor().getId() != doctorId) {
-            throw new IllegalStateException("Lich lam viec khong thuoc bac si nay");
+            throw new IllegalStateException("Lịch làm việc không thuộc bác sĩ này");
         }
         validateScheduleRequest(doctorId, request, scheduleId);
 
@@ -243,9 +233,9 @@ public class DoctorService {
     @Transactional
     public void deleteSchedule(Long doctorId, Long scheduleId) {
         DoctorSchedules schedule = doctorScheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay lich lam viec"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy lịch làm việc"));
         if (schedule.getDoctor() == null || schedule.getDoctor().getId() != doctorId) {
-            throw new IllegalStateException("Lich lam viec khong thuoc bac si nay");
+            throw new IllegalStateException("Lịch làm việc không thuộc bác sĩ");
         }
         doctorScheduleRepository.delete(schedule);
         invalidateDoctorCache();
@@ -368,10 +358,10 @@ public class DoctorService {
 
     private String resolveWorkingStatus(Doctor doctor, List<DoctorSchedules> schedules) {
         if (doctor.getUserStatus() == UserStatus.LOCKED) {
-            return "Bi khoa";
+            return "Bị khóa";
         }
         if (doctor.getUserStatus() == UserStatus.INACTIVE) {
-            return "Tam ngung";
+            return "Tạm ngưng";
         }
 
         LocalDate today = LocalDate.now();
@@ -388,17 +378,17 @@ public class DoctorService {
                                 && now.isBefore(schedule.getEndTime())
                 );
         if (onShift) {
-            return "Dang lam viec";
+            return "Đang làm việc";
         }
 
         boolean hasShiftToday = schedules.stream()
                 .filter(schedule -> schedule.getStatus() == DoctorSchedulesStatus.AVAILABLE)
                 .anyMatch(schedule -> schedule.getWorkDate() != null && schedule.getWorkDate().isEqual(today));
         if (hasShiftToday) {
-            return "Co lich hom nay";
+            return "Có lịch làm việc hôm nay";
         }
 
-        return "Chua xep lich";
+        return "Chưa xếp lịch";
     }
 
     private void updateUserDetails(User user, DoctorDTO request) {
@@ -421,37 +411,37 @@ public class DoctorService {
 
     private void validateDoctorRequest(DoctorDTO request, Long doctorId) {
         if (request == null) {
-            throw new IllegalArgumentException("Du lieu bac si khong hop le");
+            throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ");
         }
         if (!StringUtils.hasText(request.getFullName())) {
-            throw new IllegalArgumentException("Ho ten bac si khong duoc de trong");
+            throw new IllegalArgumentException("Họ tên bác sĩ không được để trống");
         }
         if (!StringUtils.hasText(request.getLicenseNumber())) {
-            throw new IllegalArgumentException("So chung chi hanh nghe khong duoc de trong");
+            throw new IllegalArgumentException("Số chứng chỉ hành nghề không được để trống");
         }
         if (request.getExperienceYears() == null || request.getExperienceYears() < 0 || request.getExperienceYears() > 60) {
-            throw new IllegalArgumentException("So nam kinh nghiem khong hop le");
+            throw new IllegalArgumentException("Số năm kinh nghiệm không hợp lệ");
         }
         if (request.getDepartmentId() == null) {
-            throw new IllegalArgumentException("Khoa phong lam viec khong duoc de trong");
+            throw new IllegalArgumentException("Khoa phòng làm việc không để trống");
         }
         if (request.getStatus() == null) {
-            throw new IllegalArgumentException("Trang thai bac si khong duoc de trong");
+            throw new IllegalArgumentException("Trạng thái bác sĩ không được để trống");
         }
         if (doctorId == null && doctorRepository.existsByLicenseNumber(request.getLicenseNumber().trim())) {
-            throw new IllegalStateException("So chung chi hanh nghe da ton tai");
+            throw new IllegalStateException("Số chứng chỉ hành nghề đã tồn tại");
         }
         if (doctorId != null && doctorRepository.existsByLicenseNumberAndIdNot(request.getLicenseNumber().trim(), doctorId)) {
-            throw new IllegalStateException("So chung chi hanh nghe da ton tai");
+            throw new IllegalStateException("Số chứng chỉ hành nghề đã tồn tại");
         }
     }
 
     private void validateScheduleRequest(Long doctorId, DoctorScheduleDTO request, Long scheduleId) {
         if (request.getEndTime().isBefore(request.getStartTime()) || request.getEndTime().equals(request.getStartTime())) {
-            throw new IllegalArgumentException("Gio ket thuc phai sau gio bat dau");
+            throw new IllegalArgumentException("Giờ kết thúc phải sau giờ bắt đầu");
         }
         if (request.getWorkDate().isBefore(LocalDate.now().minusMonths(1))) {
-            throw new IllegalArgumentException("Khong the tao lich qua cu cho bac si");
+            throw new IllegalArgumentException("Không thể tạo lịch quá cũ cho bác sĩ");
         }
         if (doctorScheduleRepository.existsOverlappingSchedule(
                 doctorId,
@@ -460,7 +450,7 @@ public class DoctorService {
                 request.getEndTime(),
                 scheduleId
         )) {
-            throw new IllegalStateException("Lich lam viec bi trung voi ca khac cua bac si");
+            throw new IllegalStateException("Lịch làm việc bị trùng ca khác với bác sĩ");
         }
     }
 
@@ -468,42 +458,42 @@ public class DoctorService {
         if (user.getRole() != null
                 && StringUtils.hasText(user.getRole().getName())
                 && !"DOCTOR".equalsIgnoreCase(user.getRole().getName())) {
-            throw new IllegalStateException("Chi tai khoan co role DOCTOR moi duoc gan ho so bac si");
+            throw new IllegalStateException("Chỉ tài khoản có role DOCTOR mới được gán hồ sơ bác sĩ");
         }
     }
 
     private Departments findDepartmentById(Long departmentId) {
         if (departmentId == null || !deparmentRepository.existsById(departmentId)) {
-            throw new NoSuchElementException("Khong tim thay khoa phong");
+            throw new NoSuchElementException("Không tìm thấy khoa phòng");
         }
         return entityManager.getReference(Departments.class, departmentId);
     }
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay tai khoan nguoi dung"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy tài khoản người dùng"));
     }
 
     private User createDoctorUser(DoctorDTO request) {
         
         if (!StringUtils.hasText(request.getUserName())) {
-            throw new IllegalArgumentException("Ten dang nhap tai khoan bac si khong duoc de trong");
+            throw new IllegalArgumentException("Tên đăng nhập tài khoản bác sĩ không được để trống");
         }
         if (!StringUtils.hasText(request.getPassword())) {
-            throw new IllegalArgumentException("Mat khau tai khoan bac si khong duoc de trong");
+            throw new IllegalArgumentException("Mật khẩu tài khoản bác sĩ không được để trống");
         }
         if (request.getPassword().trim().length() < 6) {
-            throw new IllegalArgumentException("Mat khau tai khoan bac si toi thieu 6 ky tu");
+            throw new IllegalArgumentException("Mật khẩu tối thiểu 6 ký tự");
         }
         if (userRepository.existsByUserName(request.getUserName().trim())) {
-            throw new IllegalStateException("Ten dang nhap da ton tai");
+            throw new IllegalStateException("Tên đăng nhập đã tồn tại");
         }
         if (StringUtils.hasText(request.getEmail()) && userRepository.existsByEmail(request.getEmail().trim())) {
-            throw new IllegalStateException("Email nay da duoc su dung boi tai khoan khac");
+            throw new IllegalStateException("Email này đã được sử dụng");
         }
 
         Role doctorRole = roleRepository.findByNameIgnoreCase("DOCTOR")
-                .orElseThrow(() -> new NoSuchElementException("Khong tim thay role DOCTOR"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy role DOCTOR"));
 
         
         User user = new User();

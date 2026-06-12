@@ -1,7 +1,7 @@
 package com.example.hospitalManagement.controller;
 
 import com.example.hospitalManagement.dto.registerDTO;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.service.RegisterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class RegisterController {
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private RegisterService registerService;
     @GetMapping("/register")

@@ -51,6 +51,7 @@ public class DepartmentService {
         departments.setDescription(dto.getDepartmentDescription());
         departments.setStatus(DepartmentStatus.valueOf(dto.getDepartmentStatus()));
         departmentRepository.save(departments);
+        redisService.remove("departments");
         return departments;
 
     }
@@ -72,5 +73,6 @@ public class DepartmentService {
             );
         }
         departmentRepository.save(department);
+        redisService.remove("departments");
     }
 }

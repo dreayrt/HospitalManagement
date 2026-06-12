@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.naming.Binding;
 
@@ -17,5 +18,13 @@ public class LoginController {
     public String loginPage(Model model) {
         model.addAttribute("LoginDTO", new LoginDTO());
         return "pages/LoginPage";
+    }
+
+    @GetMapping("/oauth2-success")
+    public String oauth2Success(
+            @RequestParam String token,
+            Model model) {
+        model.addAttribute("token", token);
+        return "pages/OAuth2Success";
     }
 }

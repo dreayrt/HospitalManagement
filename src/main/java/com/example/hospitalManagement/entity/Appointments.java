@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "appointments")
@@ -35,6 +36,7 @@ public class Appointments {
     private Doctor doctor;
 
     @OneToOne(mappedBy = "appointment")
+    @JsonIgnore
     private MedicalRecords medicalRecords;
 
 

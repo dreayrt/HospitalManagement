@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface userRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String Phone);
     boolean existsByUserName(String userName);
@@ -23,4 +23,6 @@ public interface userRepository extends JpaRepository<User, Integer> {
             order by u.fullName asc
             """)
     List<User> findUsersWithoutDoctorProfile();
+
+    User findByEmail(String email);
 }

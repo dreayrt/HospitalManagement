@@ -2,26 +2,18 @@ package com.example.hospitalManagement.api;
 
 import com.example.hospitalManagement.dto.AppointmentDTO;
 import com.example.hospitalManagement.dto.AppointmentFilterRequestDTO;
-import com.example.hospitalManagement.dto.CreateAppointmentRequestDTO;
 import com.example.hospitalManagement.entity.Enum.AppointmentStatus;
-import com.example.hospitalManagement.entity.User;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.service.AppointmentService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -32,7 +24,7 @@ public class AppointmentApi {
     @Autowired
     private AppointmentService appointmentService;
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/statuses")
     public List<Map<String, String>> getStatuses() {
@@ -42,57 +34,6 @@ public class AppointmentApi {
                 Map.of("value", AppointmentStatus.COMPLETED.name(), "label", "Hoàn thành")
         );
     }
-
-//    @PostMapping
-//    public ResponseEntity<?> createAppointment(@Valid @RequestBody CreateAppointmentRequestDTO request) {
-//        try {
-//            AppointmentDTO result = appointmentService.createAppointment(request);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-//        }
-//    }
-
-
-//    @PutMapping("/{id}/confirm")
-//    public ResponseEntity<?> confirmAppointment(@PathVariable Long id) {
-//        try {
-//            AppointmentDTO result = appointmentService.confirmAppointment(id);
-//            return ResponseEntity.ok(result);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-//        }
-//    }
-
-
-//    @PutMapping("/{id}/cancel")
-//    public ResponseEntity<?> cancelAppointment(
-//            @PathVariable Long id,
-//            @RequestBody(required = false) Map<String, String> body) {
-//        try {
-//            String reason = (body != null) ? body.get("reason") : null;
-//            AppointmentDTO result = appointmentService.cancelAppointment(id, reason);
-//            return ResponseEntity.ok(result);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-//        }
-//    }
-
-
-//    @PutMapping("/{id}/reschedule")
-//    public ResponseEntity<?> rescheduleAppointment(
-//            @PathVariable Long id,
-//            @RequestBody Map<String, String> body) {
-//        try {
-//            LocalDate newDate = LocalDate.parse(body.get("newDate"));
-//            LocalTime newTime = LocalTime.parse(body.get("newTime"));
-//            AppointmentDTO result = appointmentService.rescheduleAppointment(id, newDate, newTime);
-//            return ResponseEntity.ok(result);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-//        }
-//    }
-
 
     @GetMapping
     public ResponseEntity<Page<AppointmentDTO>> getAppointments(

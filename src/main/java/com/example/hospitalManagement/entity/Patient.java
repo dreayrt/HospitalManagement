@@ -3,8 +3,9 @@ package com.example.hospitalManagement.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDate;
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -33,15 +34,21 @@ public class Patient {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    
     @OneToMany(mappedBy = "patient")
+    @JsonIgnore
     private List<PatienHealthMetric> patienHealthMetrics;
 
     @OneToMany(mappedBy = "patient")
+    @JsonIgnore
     private List<MedicalRecords> medicalRecords;
+    
     @OneToMany(mappedBy = "patient")
+    @JsonIgnore
     private List<Prescription> prescription;
 
     @OneToMany(mappedBy = "patient")
+    @JsonIgnore
     private List<RoomPatient> roomPatients;
 
 

@@ -32,7 +32,7 @@ public class DoctorDTO {
     private String phone;
 
     @NotBlank(message = "Số chứng chỉ hành nghề không được để trống")
-    @Size(min = 6, max = 30, message = "Số chứng chỉ hành nghề phải từ 6 đến 30 ký tự")
+    @Size(max = 30, message = "Số chứng chỉ hành nghề không được vượt quá 30 ký tự")
     private String licenseNumber;
 
     @NotNull(message = "Số năm kinh nghiệm không được để trống")

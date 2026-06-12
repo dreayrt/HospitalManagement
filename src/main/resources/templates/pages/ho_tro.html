@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -221,7 +221,7 @@
             margin-top:20px;
         }
 
-        .social span{
+        .social a{
             width:40px;
             height:40px;
             border-radius:50%;
@@ -231,11 +231,48 @@
             align-items:center;
             justify-content:center;
             font-weight:bold;
+            text-decoration:none;
         }
 
-        .social span:nth-child(2){background:red}
-        .social span:nth-child(3){background:white;color:#0a6fb7}
-        .social span:nth-child(4){background:black}
+        .social a:nth-child(2){background:red}
+        .social a:nth-child(3){background:white;color:#0a6fb7}
+        .social a:nth-child(4){background:black}
+        
+        .social a svg { width: 20px; height: 20px; fill: white; }
+        .social a:nth-child(3) svg { fill: #0a6fb7; }
+
+        .facility-icon-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .facility-icon-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        
+        .facility-icon-btn:hover {
+            background: #0a6fb7;
+        }
+        
+        .facility-icon-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #0a6fb7;
+            transition: 0.3s;
+        }
+        
+        .facility-icon-btn:hover svg {
+            fill: white;
+        }
 
         .store{
             display:flex;
@@ -311,17 +348,6 @@
 
 <body>
 
-<div class="topbar">
-    <div>
-        <span>Bệnh nhân</span>
-        <span>Chuyên gia</span>
-    </div>
-    <div>
-        <span>Đặt lịch</span>
-        <span>Liên hệ</span>
-    </div>
-</div>
-
 <div class="header">
     <div class="logo">
         MediCore <span>Health</span>
@@ -349,47 +375,47 @@
 
     <div class="grid">
 
-        <a href="/ho-tro/huong-dan-dat-lich" class="card">
+        <a href="/ho-tro/chi-tiet?id=huong-dan-dat-lich" class="card">
             <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=800">
             <h3>Hướng dẫn đặt lịch khám bệnh trực tuyến</h3>
         </a>
 
-        <a href="/ho-tro/bao-hiem-y-te" class="card">
+        <a href="/ho-tro/chi-tiet?id=bao-hiem-y-te" class="card">
             <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800">
             <h3>Hướng dẫn thủ tục khám chữa bệnh bảo hiểm y tế</h3>
         </a>
 
-        <a href="/ho-tro/bao-lanh-vien-phi" class="card">
+        <a href="/ho-tro/chi-tiet?id=bao-lanh-vien-phi" class="card">
             <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f4df?w=800">
             <h3>Hướng dẫn thực hiện thủ tục bảo lãnh viện phí</h3>
         </a>
 
-        <a href="/ho-tro/noi-tru" class="card">
+        <a href="/ho-tro/chi-tiet?id=noi-tru" class="card">
             <img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=800">
             <h3>Thông tin cần biết cho người bệnh nội trú</h3>
         </a>
 
-        <a href="/ho-tro/thanh-toan-vien-phi" class="card">
+        <a href="/ho-tro/chi-tiet?id=thanh-toan-vien-phi" class="card">
             <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=800">
             <h3>Hướng dẫn thanh toán viện phí không dùng tiền mặt</h3>
         </a>
 
-        <a href="/ho-tro/hoa-don-vat" class="card">
+        <a href="/ho-tro/chi-tiet?id=hoa-don-vat" class="card">
             <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800">
             <h3>Hướng dẫn phát hành hóa đơn VAT</h3>
         </a>
 
-        <a href="/ho-tro/hoan-tien" class="card">
+        <a href="/ho-tro/chi-tiet?id=hoan-tien" class="card">
             <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800">
             <h3>Quy trình hoàn tiền phí dịch vụ</h3>
         </a>
 
-        <a href="/ho-tro/xac-nhan-bhyt" class="card">
+        <a href="/ho-tro/chi-tiet?id=xac-nhan-bhyt" class="card">
             <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800">
             <h3>Xác nhận bảo hiểm y tế khi đặt khám</h3>
         </a>
 
-        <a href="/ho-tro/mua-thuoc" class="card">
+        <a href="/ho-tro/chi-tiet?id=mua-thuoc" class="card">
             <img src="https://images.unsplash.com/photo-1585435557343-3b092031d4f7?w=800">
             <h3>Hướng dẫn mua thuốc tại nhà thuốc bệnh viện</h3>
         </a>

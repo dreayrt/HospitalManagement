@@ -4077,3 +4077,138 @@ body {
         font-size: 1.15rem;
     }
 }
+
+/* --- Schedule Accordion Styles --- */
+.schedule-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.schedule-accordion-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.schedule-accordion-item:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+}
+
+.schedule-accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    background: var(--bg-card);
+    transition: background 0.2s;
+    gap: 1rem;
+}
+
+.schedule-accordion-header:hover {
+    background: var(--bg-hover);
+}
+
+.schedule-accordion-header .doctor-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.schedule-accordion-header .doctor-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.schedule-accordion-header .doctor-details h5 {
+    margin: 0 0 0.2rem 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.schedule-accordion-header .doctor-details p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.schedule-accordion-header .chevron-icon {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.schedule-accordion-item.active .chevron-icon {
+    transform: rotate(180deg);
+    color: var(--accent);
+}
+
+.schedule-accordion-item.active {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(13, 110, 253, 0.1);
+}
+
+.schedule-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+    background: var(--bg-hover);
+}
+
+.schedule-accordion-item.active .schedule-accordion-body {
+    max-height: 1500px;
+    transition: max-height 0.6s ease-in-out;
+}
+
+.schedule-body-content {
+    padding: 1.25rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.schedule-table th, .schedule-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.schedule-table th {
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.02);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.schedule-table tr:last-child td {
+    border-bottom: none;
+}
+
+.schedule-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}

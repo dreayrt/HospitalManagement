@@ -106,26 +106,4 @@ public class DoctorApi {
         return doctorService.getActivityStatus(doctorId);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Map<String, String>> handleNotFound(NoSuchElementException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody(exception.getMessage()));
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
-    public ResponseEntity<Map<String, String>> handleBadRequest(RuntimeException exception) {
-        return ResponseEntity.badRequest().body(errorBody(exception.getMessage()));
-    }
-
-    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
-    public ResponseEntity<Map<String, String>> handleValidationException(Exception exception) {
-        Map<String, String> body = new LinkedHashMap<>();
-        body.put("message", "Dữ liệu đầu vào không hợp lệ");
-        return ResponseEntity.badRequest().body(body);
-    }
-
-    private Map<String, String> errorBody(String message) {
-        Map<String, String> body = new LinkedHashMap<>();
-        body.put("message", message);
-        return body;
-    }
 }

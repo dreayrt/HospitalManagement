@@ -3,7 +3,7 @@ package com.example.hospitalManagement.api;
 import com.example.hospitalManagement.dto.LoginDTO;
 import com.example.hospitalManagement.dto.RefreshTokenDTO;
 import com.example.hospitalManagement.entity.User;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,7 +26,7 @@ public class AuthenticationApi {
     @Autowired
     private AuthenticationManager  authenticationManager;
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private JWTUtil jwtUtil;
 

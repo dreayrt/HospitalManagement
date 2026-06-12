@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "departments")
@@ -24,6 +25,7 @@ public class Departments {
     private LocalDateTime createAt;
 
     @OneToMany(mappedBy = "department")
+    @JsonIgnoreProperties("department")
     private List<Doctor> doctors;
 
     public long getId() {

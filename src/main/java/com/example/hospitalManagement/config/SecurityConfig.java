@@ -18,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Autowired
     private JWTAuthenticationFilter jwtAuthenticationFilter;
-
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -39,7 +40,11 @@ public class SecurityConfig {
                                 "/index",
                                 "/",
                                 "/error",
-                                "/profile"
+                                "/profile",
+                                "/oauth2/**",
+                                "/login/oauth2/**",
+                                "/oauth2-success",
+                                "bac-si"
                         ).permitAll()
                         .requestMatchers("/DashBoard/AdminDashboard").hasAuthority("ADMIN")
                         .requestMatchers("/DashBoard/DoctorDashboard").hasAuthority("DOCTOR")
@@ -57,6 +62,10 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
+                )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .successHandler(oAuth2SuccessHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -2,7 +2,7 @@ package com.example.hospitalManagement.api;
 
 import com.example.hospitalManagement.dto.ChangePasswordDTO;
 import com.example.hospitalManagement.entity.User;
-import com.example.hospitalManagement.repository.userRepository;
+import com.example.hospitalManagement.repository.UserRepository;
 import com.example.hospitalManagement.service.R2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/api/profile")
 public class ProfileApi{
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private R2Service r2Service;
     @GetMapping
@@ -45,6 +45,33 @@ public class ProfileApi{
     }
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateProfile(Authentication authentication, @RequestBody com.example.hospitalManagement.dto.ProfileUpdateDTO request) {
+        String userName = authentication.getName();
+        Optional<User> user = userRepository.findByUserName(userName);
+        if (user.isPresent()) {
+            User u = user.get();
+            if (request.getFullName() != null && !request.getFullName().isEmpty()) {
+                u.setFullName(request.getFullName());
+            }
+            if (request.getEmail() != null && !request.getEmail().isEmpty()) {
+                // Kiểm tra xem email/username mới đã tồn tại chưa để tránh lỗi
+                Optional<User> existing = userRepository.findByUserName(request.getEmail());
+                if (existing.isPresent() && existing.get().getId() != u.getId()) {
+                    return ResponseEntity.badRequest().body("Email đã được sử dụng");
+                }
+                u.setEmail(request.getEmail());
+                u.setUserName(request.getEmail());
+            }
+            if (request.getPhone() != null && !request.getPhone().isEmpty()) {
+                u.setPhone(request.getPhone());
+            }
+            userRepository.save(u);
+            return ResponseEntity.ok("Profile updated");
+        }
+        return ResponseEntity.badRequest().body("User not found");
+    }
+
     @PatchMapping("/changePassword")
     public ResponseEntity<?>  changePassword (Authentication authentication, @RequestBody ChangePasswordDTO request)
     {
