@@ -35,6 +35,8 @@ public class HomeController {
     private RoomService roomService;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private com.example.hospitalManagement.repository.DoctorScheduleRepository doctorScheduleRepository;
 
     @GetMapping("/")
     public String Index(Authentication authentication, Model model, @ModelAttribute CreateMedicalRecordRequest createMedicalRecordRequest) {
@@ -155,6 +157,9 @@ public class HomeController {
                     model.addAttribute("rooms", roomService.getAllRooms());
 
                     model.addAttribute("activeTreatments", medicalRecords.size()); 
+
+                    java.util.List<com.example.hospitalManagement.entity.DoctorSchedules> doctorSchedules = doctorScheduleRepository.findByDoctorIdOrderByWorkDateAscStartTimeAsc(doctor.getId());
+                    model.addAttribute("doctorSchedules", doctorSchedules);
                 }
                 model.addAttribute("CreateMedicalRecordRequest", createMedicalRecordRequest);
                 return "/Dashboard/DoctorDashboard";

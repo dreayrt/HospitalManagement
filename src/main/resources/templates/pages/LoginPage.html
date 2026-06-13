@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -152,7 +152,7 @@
                            th:if="${#fields.hasErrors('rememberMe')}"
                            th:errors="*{rememberMe}">
                     </small>
-                    <a href="#" class="auth-link">Quên mật khẩu?</a>
+                    <a href="#" class="auth-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Quên mật khẩu?</a>
                 </div>
 
                 
@@ -199,6 +199,160 @@
     </div>
 </div>
 
+<!-- Forgot Password Modal -->
+<style>
+    /* Custom Modal Animations and Styling */
+    .auth-modal {
+        border-radius: 24px;
+        border: none;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        overflow: hidden;
+    }
+    .auth-modal-header {
+        background: #ffffff;
+        padding: 30px 30px 10px;
+        border-bottom: none;
+        position: relative;
+    }
+    .auth-modal-icon-container {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .auth-modal-icon {
+        width: 75px;
+        height: 75px;
+        background: linear-gradient(135deg, #eef2fa 0%, #e0e7ff 100%);
+        color: #0d6efd;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        box-shadow: 0 10px 20px rgba(13,110,253,0.1);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .auth-modal-icon:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+    .auth-modal-body {
+        padding: 10px 35px 35px;
+    }
+    .step-container {
+        animation: slideUpFade 0.5s ease-out forwards;
+    }
+    @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .btn-auth-action {
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        background: linear-gradient(to right, #0d6efd, #0b5ed7);
+        border: none;
+    }
+    .btn-auth-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(13,110,253,0.3);
+    }
+    .btn-auth-action:active {
+        transform: translateY(-1px);
+    }
+    .form-floating-modern > .form-control {
+        border-radius: 14px;
+        border: 2px solid #edf2f7;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+        padding-left: 20px;
+    }
+    .form-floating-modern > .form-control:focus {
+        border-color: #0d6efd;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(13,110,253,0.15);
+    }
+    .form-floating-modern > label {
+        color: #64748b;
+        padding-left: 20px;
+    }
+    .btn-link-hover {
+        color: #6c757d;
+        transition: color 0.2s;
+    }
+    .btn-link-hover:hover {
+        color: #0d6efd;
+    }
+</style>
+
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-modal">
+            <div class="modal-header auth-modal-header d-flex flex-column align-items-center">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-4" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="auth-modal-icon-container w-100" id="modalIconContainer">
+                    <div class="auth-modal-icon">
+                        <i class="bi bi-envelope-paper" style="transition: opacity 0.3s ease;"></i>
+                    </div>
+                </div>
+                <h4 class="modal-title fw-bold text-dark mt-2" id="forgotPasswordModalLabel">Khôi phục mật khẩu</h4>
+            </div>
+            <div class="modal-body auth-modal-body">
+                <div id="fpAlert" class="alert d-none shadow-sm rounded-3 fw-medium" style="font-size: 0.95rem;" role="alert"></div>
+
+                <!-- Step 1: Email -->
+                <div id="step1" class="step-container">
+                    <p class="text-center text-secondary mb-4">Nhập địa chỉ email của bạn, chúng tôi sẽ gửi mã xác minh gồm 6 chữ số.</p>
+                    <div class="form-floating form-floating-modern mb-4">
+                        <input type="email" class="form-control" id="fpEmail" placeholder="name@example.com">
+                        <label for="fpEmail"><i class="bi bi-envelope me-2"></i>Địa chỉ Email</label>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-auth-action w-100" id="btnSendOtp">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                        Gửi mã OTP
+                    </button>
+                </div>
+
+                <!-- Step 2: OTP -->
+                <div id="step2" class="step-container d-none">
+                    <p class="text-center text-secondary mb-4">Mã OTP đã được gửi đến <strong id="displayEmail" class="text-dark"></strong>.<br>Vui lòng kiểm tra hộp thư của bạn.</p>
+                    <div class="form-floating form-floating-modern mb-4">
+                        <input type="text" class="form-control text-center fw-bold fs-3 text-primary" id="fpOtp" placeholder="123456" maxlength="6" style="letter-spacing: 12px;">
+                        <label for="fpOtp"><i class="bi bi-shield-lock me-2"></i>Mã OTP 6 số</label>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-auth-action w-100" id="btnVerifyOtp">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                        Xác nhận OTP
+                    </button>
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-decoration-none btn-link-hover" id="btnBackToStep1">
+                            <i class="bi bi-arrow-left me-1"></i> Nhập lại email
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Step 3: New Password -->
+                <div id="step3" class="step-container d-none">
+                    <p class="text-center text-secondary mb-4">Xác thực thành công! Vui lòng tạo mật khẩu mới cho tài khoản của bạn.</p>
+                    <div class="form-floating form-floating-modern mb-3">
+                        <input type="password" class="form-control" id="fpNewPassword" placeholder="Mật khẩu mới">
+                        <label for="fpNewPassword"><i class="bi bi-key me-2"></i>Mật khẩu mới</label>
+                    </div>
+                    <div class="form-floating form-floating-modern mb-4">
+                        <input type="password" class="form-control" id="fpConfirmPassword" placeholder="Xác nhận mật khẩu mới">
+                        <label for="fpConfirmPassword"><i class="bi bi-check2-circle me-2"></i>Xác nhận mật khẩu</label>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-auth-action w-100" id="btnResetPassword">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                        Lưu mật khẩu mới
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer class="auth-page-footer">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
@@ -319,6 +473,174 @@
                 errorElement.innerText = "Có lỗi xảy ra kết nối tới máy chủ!";
             }
         });
+</script>
+
+<script>
+    // Forgot Password Logic
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById('forgotPasswordModal');
+        const fpAlert = document.getElementById('fpAlert');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+
+        const btnSendOtp = document.getElementById('btnSendOtp');
+        const btnVerifyOtp = document.getElementById('btnVerifyOtp');
+        const btnResetPassword = document.getElementById('btnResetPassword');
+        const btnBackToStep1 = document.getElementById('btnBackToStep1');
+
+        let currentEmail = '';
+        let currentOtp = '';
+
+        modal.addEventListener('hidden.bs.modal', function () {
+            // Reset modal state on close
+            step1.classList.remove('d-none');
+            step2.classList.add('d-none');
+            step3.classList.add('d-none');
+            fpAlert.classList.add('d-none');
+            document.getElementById('fpEmail').value = '';
+            document.getElementById('fpOtp').value = '';
+            document.getElementById('fpNewPassword').value = '';
+            document.getElementById('fpConfirmPassword').value = '';
+            updateModalIcon('bi-envelope-paper');
+        });
+
+        function showAlert(message, type) {
+            fpAlert.className = `alert alert-${type} shadow-sm rounded-3 fw-medium`;
+            fpAlert.innerText = message;
+            fpAlert.classList.remove('d-none');
+        }
+
+        function updateModalIcon(iconClass) {
+            const iconElement = document.querySelector('#modalIconContainer i');
+            iconElement.style.opacity = '0';
+            setTimeout(() => {
+                iconElement.className = `bi ${iconClass}`;
+                iconElement.style.opacity = '1';
+            }, 300);
+        }
+
+        function toggleLoading(btn, isLoading) {
+            const spinner = btn.querySelector('.spinner-border');
+            if (isLoading) {
+                btn.disabled = true;
+                spinner.classList.remove('d-none');
+            } else {
+                btn.disabled = false;
+                spinner.classList.add('d-none');
+            }
+        }
+
+        btnSendOtp.addEventListener('click', async () => {
+            const email = document.getElementById('fpEmail').value.trim();
+            if (!email) {
+                showAlert('Vui lòng nhập email', 'danger');
+                return;
+            }
+
+            toggleLoading(btnSendOtp, true);
+            try {
+                const res = await fetch('/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    currentEmail = email;
+                    document.getElementById('displayEmail').innerText = email;
+                    showAlert(data.message || 'Mã OTP đã được gửi', 'success');
+                    step1.classList.add('d-none');
+                    step2.classList.remove('d-none');
+                    updateModalIcon('bi-shield-check');
+                } else {
+                    showAlert(data.message || 'Có lỗi xảy ra', 'danger');
+                }
+            } catch (err) {
+                showAlert('Không thể kết nối đến máy chủ', 'danger');
+            } finally {
+                toggleLoading(btnSendOtp, false);
+            }
+        });
+
+        btnVerifyOtp.addEventListener('click', async () => {
+            const otp = document.getElementById('fpOtp').value.trim();
+            if (!otp) {
+                showAlert('Vui lòng nhập mã OTP', 'danger');
+                return;
+            }
+
+            toggleLoading(btnVerifyOtp, true);
+            try {
+                const res = await fetch('/api/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail, otp: otp })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    currentOtp = otp;
+                    showAlert('Xác thực OTP thành công', 'success');
+                    step2.classList.add('d-none');
+                    step3.classList.remove('d-none');
+                    updateModalIcon('bi-unlock');
+                } else {
+                    showAlert(data.message || 'OTP không hợp lệ', 'danger');
+                }
+            } catch (err) {
+                showAlert('Không thể kết nối đến máy chủ', 'danger');
+            } finally {
+                toggleLoading(btnVerifyOtp, false);
+            }
+        });
+
+        btnResetPassword.addEventListener('click', async () => {
+            const newPassword = document.getElementById('fpNewPassword').value;
+            const confirmPassword = document.getElementById('fpConfirmPassword').value;
+
+            if (!newPassword || newPassword.length < 6) {
+                showAlert('Mật khẩu mới phải có ít nhất 6 ký tự', 'danger');
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                showAlert('Mật khẩu xác nhận không khớp', 'danger');
+                return;
+            }
+
+            toggleLoading(btnResetPassword, true);
+            try {
+                const res = await fetch('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail, otp: currentOtp, newPassword: newPassword })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showAlert('Đổi mật khẩu thành công. Bạn có thể đăng nhập ngay bây giờ.', 'success');
+                    step3.classList.add('d-none');
+                    // auto close modal after 3 seconds
+                    setTimeout(() => {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        modalInstance.hide();
+                    }, 3000);
+                } else {
+                    showAlert(data.message || 'Có lỗi xảy ra', 'danger');
+                }
+            } catch (err) {
+                showAlert('Không thể kết nối đến máy chủ', 'danger');
+            } finally {
+                toggleLoading(btnResetPassword, false);
+            }
+        });
+
+        btnBackToStep1.addEventListener('click', (e) => {
+            e.preventDefault();
+            step2.classList.add('d-none');
+            step1.classList.remove('d-none');
+            fpAlert.classList.add('d-none');
+            updateModalIcon('bi-envelope-paper');
+        });
+    });
 </script>
 
 </body>
